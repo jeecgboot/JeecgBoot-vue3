@@ -32,7 +32,7 @@
     import {BasicTable, TableAction} from '/@/components/Table';
     import {useModal} from '/@/components/Modal';
     import {getPositionList, deletePosition, batchDeletePosition,customUpload,getExportUrl,getImportUrl} from './position.api';
-    import {columns, searchFormSchema} from './Position.data';
+    import {columns, searchFormSchema} from './position.data';
     import PositionModal from './PositionModal.vue';
     import {useMessage} from "/@/hooks/web/useMessage";
     import { useListPage } from '/@/hooks/system/useListPage'
