@@ -10,6 +10,8 @@
   import {BasicDrawer, useDrawerInner} from '/@/components/Drawer';
   import {list, saveOrUpdateMenu} from './menu.api';
   import { useAdapt } from '/@/hooks/system/useAutoAdapt.ts';
+  import { filterTree } from '/@/utils/tree';
+
   // 声明Emits
   const emit = defineEmits(['success', 'register']);
   const {width}= useAdapt();
@@ -36,8 +38,15 @@
     isUpdate.value = !!data?.isUpdate;
     menuType.value = data?.record?.menuType;
 
-   //获取下拉树信息
-    const treeData = await list();
+    // 获取当前 record 的 id
+    const currentId = data?.record?.id;
+
+    //获取下拉树信息
+    let treeData = await list();
+    if (currentId) {
+      treeData = filterTree(treeData, (item: any) => item.id !== currentId);
+    }
+
     updateSchema([{
       field: 'parentId',
       componentProps: {treeData},
