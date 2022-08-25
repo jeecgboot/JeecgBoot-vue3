@@ -5,7 +5,7 @@ import { filterMultiDictText } from '/@/utils/dict/JDictSelectUtil.js';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { OnlineColumn } from '/@/components/jeecg/OnLine/types/onlineConfig';
 import { h } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useMethods } from '/@/hooks/system/useMethods';
 import { importViewsFile } from '/@/utils';
 
@@ -405,6 +405,7 @@ export function usePopBiz(props, tableRef?) {
 
   // 获取路由器对象 href跳转用到
   let router = useRouter();
+  let route = useRoute();
   /**
    * href 点击事件
    * @param field
@@ -512,6 +513,7 @@ export function usePopBiz(props, tableRef?) {
         //查询条件加载后再请求数据
         if (data) {
           setDataSource(data);
+          loadData(1);
         } else {
           //没有传递data时查询数据
           loadData(1);
@@ -531,6 +533,7 @@ export function usePopBiz(props, tableRef?) {
       pagination.current = 1;
     }
     let params = getQueryParams(); //查询条件
+    console.log('params', params);
     loading.value = true;
     let url = `${configUrl.getData}${unref(cgRpConfigId)}`;
     //缓存key
@@ -598,6 +601,8 @@ export function usePopBiz(props, tableRef?) {
       queryParam.value = { ...queryTemp };
     }
     let dynamicTemp = {};
+    props.param = { ...route.query };
+    // console.log('props', props);
     if (props.param) {
       Object.keys(props.param).map((key) => {
         let str = props.param[key];
@@ -611,7 +616,10 @@ export function usePopBiz(props, tableRef?) {
         dynamicTemp[key] = props.param[key];
       });
     }
+    // dynamicTemp['name'] = '小红帽4——prod';
     dynamicParam.value = { ...dynamicTemp };
+    console.log('dynamicTemp', dynamicTemp);
+    console.log('dynamicParam', dynamicParam.value);
   }
 
   /**
