@@ -1,6 +1,14 @@
 <template>
-  <div class="bg-white m-4 mr-0 overflow-hidden">
-    <BasicTree title="部门列表" toolbar search :clickRowToExpand="false" :treeData="treeData" :replaceFields="{ key: 'id', title: 'deptName' }" @select="handleSelect" />
+  <div class="m-4 mr-0 overflow-hidden bg-white">
+    <BasicTree
+      title="部门列表"
+      toolbar
+      search
+      :clickRowToExpand="false"
+      :treeData="treeData"
+      :fieldNames="{ key: 'id', title: 'deptName' }"
+      @select="handleSelect"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -24,6 +32,7 @@
       function handleSelect(keys) {
         emit('select', keys[0]);
       }
+
       onMounted(() => {
         fetch();
       });

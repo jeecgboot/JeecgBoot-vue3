@@ -1,5 +1,10 @@
 <template>
-  <PageWrapper title="后台权限示例" contentBackground contentClass="p-4" content="目前mock了两组数据， id为1 和 2 具体返回的菜单可以在mock/sys/menu.ts内查看">
+  <PageWrapper
+    title="后台权限示例"
+    contentBackground
+    contentClass="p-4"
+    content="目前mock了两组数据， id为1 和 2 具体返回的菜单可以在mock/sys/menu.ts内查看"
+  >
     <CurrentPermissionMode />
 
     <Alert class="mt-4" type="info" message="点击后请查看左侧菜单变化" show-icon />

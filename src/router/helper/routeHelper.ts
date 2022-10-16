@@ -8,6 +8,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import { getTenantId, getToken } from '/@/utils/auth';
 import { URL_HASH_TAB } from '/@/utils';
 import { packageViews } from '/@/utils/monorepo/dynamicRouter';
+import {useI18n} from "/@/hooks/web/useI18n";
 
 export type LayoutMapKey = 'LAYOUT';
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue');
@@ -31,6 +32,17 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   }
   if (!routes) return;
   routes.forEach((item) => {
+
+    //【jeecg-boot/issues/I5N2PN】左侧动态菜单怎么做国际化处理  2022-10-09
+    //菜单支持国际化翻译
+    if (item?.meta?.title) {
+      const { t } = useI18n();
+      if(item.meta.title.includes('t(\'') && t){
+        item.meta.title = eval(item.meta.title);
+        //console.log('译后: ',item.meta.title)
+      }
+    }
+   
     // update-begin--author:sunjianlei---date:20210918---for:适配旧版路由选项 --------
     // @ts-ignore 适配隐藏路由
     if (item?.hidden) {
@@ -48,10 +60,7 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
     let tenantId = getTenantId();
     // URL支持{{ window.xxx }}占位符变量
     //update-begin---author:wangshuai ---date:20220711  for：[VUEN-1638]菜单tenantId需要动态生成------------
-    item.component = (item.component || '')
-      .replace(/{{([^}}]+)?}}/g, (s1, s2) => eval(s2))
-      .replace('${token}', token)
-      .replace('${tenantId}', tenantId);
+    item.component = (item.component || '').replace(/{{([^}}]+)?}}/g, (s1, s2) => eval(s2)).replace('${token}', token).replace('${tenantId}', tenantId);
     //update-end---author:wangshuai ---date:20220711  for：[VUEN-1638]菜单tenantId需要动态生成------------
     // 适配 iframe
     if (/^\/?http(s)?/.test(item.component as string)) {
@@ -112,7 +121,9 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
     const matchKey = matchKeys[0];
     return dynamicViewsModules[matchKey];
   } else if (matchKeys?.length > 1) {
-    warn('Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure');
+    warn(
+      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure'
+    );
     return;
   }
 }

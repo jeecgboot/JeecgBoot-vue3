@@ -1,5 +1,5 @@
 module.exports = {
-  printWidth: 200,
+  printWidth: 150,
   tabWidth: 2,
   useTabs: false,
   semi: true, //语句末尾使用分号

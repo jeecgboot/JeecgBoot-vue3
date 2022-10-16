@@ -1,7 +1,15 @@
 import type { ProjectConfig } from '/#/config';
 import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum';
 import { CacheTypeEnum } from '/@/enums/cacheEnum';
-import { ContentEnum, PermissionModeEnum, ThemeEnum, RouterTransitionEnum, SettingButtonPositionEnum, SessionTimeoutProcessingEnum, TabsThemeEnum } from '/@/enums/appEnum';
+import {
+  ContentEnum,
+  PermissionModeEnum,
+  ThemeEnum,
+  RouterTransitionEnum,
+  SettingButtonPositionEnum,
+  SessionTimeoutProcessingEnum,
+  TabsThemeEnum,
+} from '/@/enums/appEnum';
 import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting';
 import { primaryColor } from '../../build/config/themeConfig';
 

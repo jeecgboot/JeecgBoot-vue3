@@ -102,17 +102,17 @@
         };
         console.info(param);
         loadTreeData(param).then((res) => {
-          if (res && res.length > 0) {
-            for (let i of res) {
-              i.value = i.key;
-              if (i.leaf == false) {
-                i.isLeaf = false;
-              } else if (i.leaf == true) {
-                i.isLeaf = true;
-              }
-            }
-            treeData.value = res;
-          }
+            if(res && res.length>0){
+                for (let i of res) {
+                    i.value = i.key;
+                    if (i.leaf == false) {
+                        i.isLeaf = false;
+                    } else if (i.leaf == true) {
+                        i.isLeaf = true;
+                    }
+                }
+                treeData.value = res;
+						}
         });
       }
 
@@ -149,13 +149,12 @@
 
       function asyncLoadTreeData(treeNode) {
         let dataRef = treeNode.dataRef;
-        return new Promise((resolve) => {
-          if (treeNode.children.length > 0) {
+        return new Promise<void>((resolve) => {
+          if (treeNode.children && treeNode.children.length > 0) {
             resolve();
             return;
           }
           let pid = dataRef.key;
-          console.info(treeNode);
           let param = {
             pid: pid,
             condition: props.condition,
@@ -178,7 +177,6 @@
       }
 
       function addChildren(pid, children, treeArray) {
-        console.info('treeArray', treeArray);
         if (treeArray && treeArray.length > 0) {
           for (let item of treeArray) {
             if (item.key == pid) {

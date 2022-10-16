@@ -1,6 +1,6 @@
 <template>
-  <div :class="getClass" :style="{ width: closeWidth + 'px' }">
-    <template v-if="canFullscreen">
+  <div :class="getClass">
+    <template v-if="fullScreenStatus">
       <Tooltip :title="t('component.modal.restore')" placement="bottom" v-if="fullScreen">
         <FullscreenExitOutlined role="full" @click="handleFullScreen" />
       </Tooltip>
@@ -11,14 +11,14 @@
 
     <!-- 是否开启评论区域 -->
     <template v-if="enableComment">
-      <Tooltip title="关闭" placement="bottom" v-if="commentSpan > 0">
-        <RightSquareOutlined @click="handleCloseComment" style="font-size: 16px" />
+      <Tooltip title="关闭" placement="bottom" v-if="commentSpan>0">
+        <RightSquareOutlined @click="handleCloseComment" style="font-size: 16px"/>
       </Tooltip>
       <Tooltip title="展开" placement="bottom" v-else>
-        <LeftSquareOutlined @click="handleOpenComment" style="font-size: 16px" />
+        <LeftSquareOutlined @click="handleOpenComment" style="font-size: 16px"/>
       </Tooltip>
     </template>
-
+    
     <Tooltip :title="t('component.modal.close')" placement="bottom">
       <CloseOutlined @click="handleCancel" />
     </Tooltip>
@@ -62,29 +62,19 @@
       function handleFullScreen(e: Event) {
         e?.stopPropagation();
         e?.preventDefault();
-        if (props.commentSpan == 0 || props.enableComment == false) {
+        if(props.commentSpan==0 || props.enableComment == false){
           emit('fullscreen');
         }
       }
-
-      //update-begin-author:taoyan date:2022-7-18 for: 关闭按钮的区域宽度 取决于是否有其他图标
-      const closeWidth = computed(() => {
-        if (props.canFullscreen && props.enableComment) {
-          return 140;
-        } else {
-          return 96;
-        }
-      });
-      //update-end-author:taoyan date:2022-7-18 for: 关闭按钮的区域宽度 取决于是否有其他图标
 
       /**
        * 开启评论区域
        * @param e
        */
-      function handleOpenComment(e: Event) {
+      function handleOpenComment(e: Event){
         e?.stopPropagation();
         e?.preventDefault();
-        if (props.fullScreen == false) {
+        if(props.fullScreen==false){
           emit('fullscreen');
         }
         emit('comment', true);
@@ -94,21 +84,32 @@
        * 关闭评论区域
        * @param e
        */
-      function handleCloseComment(e: Event) {
+      function handleCloseComment(e: Event){
         e?.stopPropagation();
         e?.preventDefault();
         emit('comment', false);
       }
 
+      /**
+       * 有评论的时候不需要设置全屏
+       */
+      const fullScreenStatus = computed(()=>{
+        if(props.enableComment===true){
+          return false
+        }else{
+          return props.canFullscreen;
+        }
+      });
+      
       return {
         t,
         getClass,
         prefixCls,
         handleCancel,
         handleFullScreen,
-        closeWidth,
         handleOpenComment,
         handleCloseComment,
+        fullScreenStatus
       };
     },
   });
@@ -119,10 +120,6 @@
     display: flex;
     height: 95%;
     align-items: center;
-
-    .ant-modal-close-x {
-      width: 140px !important;
-    }
 
     > span {
       margin-left: 48px;
@@ -141,12 +138,6 @@
           font-weight: 700;
         }
       }
-      /** 展开/关闭 评论图标样式*/
-      > span:nth-child(2) {
-        &:hover {
-          font-weight: 700;
-        }
-      }
     }
 
     & span:nth-child(1) {
@@ -157,17 +148,9 @@
         color: @primary-color;
       }
     }
-    /** 展开/关闭 评论图标样式*/
-    & span:nth-child(2) {
-      display: inline-block;
-      padding: 10px 10px 10px 0;
-
-      &:hover {
-        color: @primary-color;
-      }
-    }
 
     & span:last-child {
+      padding: 10px 10px 10px 0;
       &:hover {
         color: @error-color;
       }

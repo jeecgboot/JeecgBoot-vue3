@@ -36,7 +36,7 @@
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
   import DataRuleList from './DataRuleList.vue';
-  import { columns } from './menu.data';
+  import { columns,searchFormSchema } from './menu.data';
   import { list, deleteMenu, batchDeleteMenu } from './menu.api';
 
   const checkedKeys = ref<Array<string | number>>([]);
@@ -53,11 +53,17 @@
       pagination: false,
       isTreeTable: true,
       striped: true,
-      useSearchForm: false,
+      useSearchForm: true,
       showTableSetting: true,
       bordered: true,
       showIndexColumn: false,
       tableSetting: { fullScreen: true },
+      formConfig: {
+        schemas: searchFormSchema,
+        autoAdvancedCol: 4,
+        baseColProps: { xs: 24, sm: 12, md: 6, lg: 6, xl: 6, xxl: 6 },
+        actionColOptions: { xs: 24, sm: 12, md: 6, lg: 6, xl: 6, xxl: 6 },
+      },
       actionColumn: {
         width: 120,
       },

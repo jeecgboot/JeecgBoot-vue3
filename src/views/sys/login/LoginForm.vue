@@ -17,7 +17,12 @@
       </ACol>
       <ACol :span="8">
         <FormItem :style="{ 'text-align': 'right', 'margin-left': '20px' }" class="enter-x">
-          <img v-if="randCodeData.requestCodeSuccess" style="margin-top: 2px; max-width: initial" :src="randCodeData.randCodeImage" @click="handleChangeCheckCode" />
+          <img
+            v-if="randCodeData.requestCodeSuccess"
+            style="margin-top: 2px; max-width: initial"
+            :src="randCodeData.randCodeImage"
+            @click="handleChangeCheckCode"
+          />
           <img v-else style="margin-top: 2px; max-width: initial" src="../../../assets/images/checkcode.png" @click="handleChangeCheckCode" />
         </FormItem>
       </ACol>
@@ -84,7 +89,7 @@
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import { GithubFilled, WechatFilled, DingtalkCircleFilled, QuestionCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
+  import { GithubFilled, WechatFilled, DingtalkCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import ThirdModal from './ThirdModal.vue';
   import { useI18n } from '/@/hooks/web/useI18n';

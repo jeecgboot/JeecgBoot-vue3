@@ -43,7 +43,8 @@
       const dragBarRef = ref<ElRef>(null);
       const sideRef = ref<ElRef>(null);
 
-      const { getCollapsed, getMenuWidth, getSplit, getMenuTheme, getRealWidth, getMenuHidden, getMenuFixed, getIsMixMode, toggleCollapsed } = useMenuSetting();
+      const { getCollapsed, getMenuWidth, getSplit, getMenuTheme, getRealWidth, getMenuHidden, getMenuFixed, getIsMixMode, toggleCollapsed } =
+        useMenuSetting();
 
       const { prefixCls } = useDesign('layout-sideBar');
 

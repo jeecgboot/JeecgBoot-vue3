@@ -14,7 +14,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { useAttrs } from '/@/hooks/core/useAttrs';
-  import { SelectTypes } from 'ant-design-vue/es/select';
+  import { SelectValue } from 'ant-design-vue/es/select';
 
   export default defineComponent({
     name: 'JSelectUser',
@@ -39,14 +39,14 @@
       },
     },
     emits: ['options-change', 'change', 'update:value'],
-    setup(props, { emit, refs }) {
-      const emitData = ref<object>();
+    setup(props, { emit }) {
+      const emitData = ref<any[]>();
       //注册model
       const [regModal, { openModal }] = useModal();
       //表单值
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
       //下拉框选项值
-      const selectOptions = ref<SelectTypes['options']>([]);
+      const selectOptions = ref<SelectValue>([]);
       //下拉框选中值
       let selectValues = reactive<Recordable>({
         value: [],

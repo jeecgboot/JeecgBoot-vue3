@@ -206,7 +206,7 @@ export function useListTable(tableProps: TableProps): [
       // 紧凑模式
       compact: true,
       // label默认宽度
-      labelWidth: 120,
+      // labelWidth: 120,
       // 按下回车后自动提交
       autoSubmitOnEnter: true,
       // 默认 row 配置
@@ -248,9 +248,9 @@ export function useListTable(tableProps: TableProps): [
     showIndexColumn: false,
     // 显示表格设置
     showTableSetting: true,
-    // 表格设置
+    // 表格全屏设置
     tableSetting: {
-      fullScreen: true,
+      fullScreen: false,
     },
     // 是否显示操作列
     showActionColumn: true,

@@ -88,7 +88,12 @@
         </a-col>
         <a-col :span="24">
           <a-form-item label="分类字典树" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.flzds">
-            <JCategorySelect @change="(value) => handleFormChange('flzds', value)" v-model:value="formState.flzds" pcode="B02" placeholder="请选择分类字典树" />
+            <JCategorySelect
+              @change="(value) => handleFormChange('flzds', value)"
+              v-model:value="formState.flzds"
+              pcode="B02"
+              placeholder="请选择分类字典树"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -125,12 +130,21 @@
 
         <a-col :span="24">
           <a-form-item label="JInputPop" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.ldzje">
-            <JInputPop v-model:value="formState.ldzje" placeholder="请输入JInputPop" @change="(value) => handleFormChange('ldzje', value)"></JInputPop>
+            <JInputPop
+              v-model:value="formState.ldzje"
+              placeholder="请输入JInputPop"
+              @change="(value) => handleFormChange('ldzje', value)"
+            ></JInputPop>
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="JSelectInput" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.ldzjs">
-            <JSelectInput v-model:value="formState.ldzjs" placeholder="请选择JSelectInput" :options="ldzjsOptions" @change="(value) => handleFormChange('ldzjs', value)"></JSelectInput>
+            <JSelectInput
+              v-model:value="formState.ldzjs"
+              placeholder="请选择JSelectInput"
+              :options="ldzjsOptions"
+              @change="(value) => handleFormChange('ldzjs', value)"
+            ></JSelectInput>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -145,7 +159,11 @@
         </a-col>
         <a-col :span="24">
           <a-form-item label="职务" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.zhiWu">
-            <JSelectPosition v-model:value="formState.zhiWu" placeholder="请选择职务" @change="(value) => handleFormChange('zhiWu', value)"></JSelectPosition>
+            <JSelectPosition
+              v-model:value="formState.zhiWu"
+              placeholder="请选择职务"
+              @change="(value) => handleFormChange('zhiWu', value)"
+            ></JSelectPosition>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -155,7 +173,15 @@
         </a-col>
         <a-col :span="24">
           <a-form-item label="自定义树" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.zdys">
-            <JTreeSelect ref="treeSelect" placeholder="请选择自定义树" v-model:value="formState.zdys" dict="sys_category,name,id" pidValue="0" loadTriggleChange> </JTreeSelect>
+            <JTreeSelect
+              ref="treeSelect"
+              placeholder="请选择自定义树"
+              v-model:value="formState.zdys"
+              dict="sys_category,name,id"
+              pidValue="0"
+              loadTriggleChange
+            >
+            </JTreeSelect>
           </a-form-item>
         </a-col>
 
@@ -171,12 +197,20 @@
         </a-col>
         <a-col :span="24">
           <a-form-item label="JTreeDict" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.zdbxl">
-            <JTreeDict v-model:value="formState.zdbxl" placeholder="请选择JTreeDict" @change="(value) => handleFormChange('zdbxl', value)"></JTreeDict>
+            <JTreeDict
+              v-model:value="formState.zdbxl"
+              placeholder="请选择JTreeDict"
+              @change="(value) => handleFormChange('zdbxl', value)"
+            ></JTreeDict>
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="JCodeEditor" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.zdmrz">
-            <JCodeEditor v-model:value="formState.zdmrz" placeholder="请输入JCodeEditor" @change="(value) => handleFormChange('zdmrz', value)"></JCodeEditor>
+            <JCodeEditor
+              v-model:value="formState.zdmrz"
+              placeholder="请输入JCodeEditor"
+              @change="(value) => handleFormChange('zdmrz', value)"
+            ></JCodeEditor>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -193,7 +227,7 @@
   import { ref, reactive, defineExpose, nextTick } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import { TimePicker, Form } from 'ant-design-vue';
   import JCheckbox from '/@/components/Form/src/jeecg/components/JCheckbox.vue';
   import JDictSelectTag from '/@/components/Form/src/jeecg/components/JDictSelectTag.vue';
@@ -271,37 +305,37 @@
   const confirmLoading = ref<boolean>(false);
   //表单验证
   const validatorRules = {
-    name: [{ required: true, message: '请输入文本!' }],
-    miMa: [{ required: true, message: '请输入密码!' }],
+    name: [{ required: false, message: '请输入文本!' }],
+    miMa: [{ required: false, message: '请输入密码!' }],
     ywzz: [{ required: false }, { pattern: '^[a-z|A-Z]{2,10}$', message: '不符合校验规则!' }],
-    xiala: [{ required: true, message: '请选择下拉组件!' }],
-    danxuan: [{ required: true, message: '请选择单选组件!' }],
-    duoxuan: [{ required: true, message: '请选择多选组件!' }],
-    riqi: [{ required: true, message: '请选择日期!' }],
-    shijian: [{ required: true, message: '请选择时间!' }],
-    wenjian: [{ required: true, message: '请上传文件!' }],
-    tupian: [{ required: true, message: '请上传图片!' }],
-    dhwb: [{ required: true, message: '请填写多行文本!' }],
-    xlss: [{ required: true, message: '请选择字典下拉搜索!' }],
-    popup: [{ required: true, message: '请选择popup弹窗!' }],
-    flzds: [{ required: true, message: '请选择分类字典树!' }],
-    yhxz: [{ required: true, message: '请选择用户!' }],
-    fwb: [{ required: true, message: '请填写富文本!' }],
-    shq: [{ required: true, message: '请选择省市级!' }],
-    ldzje: [{ required: true, message: '请输入JInputPop!' }],
-    ldzjs: [{ required: true, message: '请选择下拉输入框!' }],
-    zddtjxl: [{ required: true, message: '请选择多选输入框!' }],
-    yongHu: [{ required: true, message: '请选择用户!' }],
-    zhiWu: [{ required: true, message: '请选择职务!' }],
-    jueSe: [{ required: true, message: '请选择角色!' }],
-    zdys: [{ required: true, message: '请选择自定义树!' }],
-    jssq: [{ required: true, message: '请选择三级联动!' }],
-    zdbxl: [{ required: true, message: '请选择JTreeDict!' }],
-    zdmrz: [{ required: true, message: '请输入JCodeEditor!' }],
-    jsonParam: [{ required: true, message: '请输入参数!' }],
-    bmxz: [{ required: true, message: '请选择部门!' }],
-    yuanjia: [{ required: true, message: '请输入数值!' }],
-    nyrsfm: [{ required: true, message: '请选择年月日时分秒!' }],
+    xiala: [{ required: false, message: '请选择下拉组件!' }],
+    danxuan: [{ required: false, message: '请选择单选组件!' }],
+    duoxuan: [{ required: false, message: '请选择多选组件!' }],
+    riqi: [{ required: false, message: '请选择日期!' }],
+    shijian: [{ required: false, message: '请选择时间!' }],
+    wenjian: [{ required: false, message: '请上传文件!' }],
+    tupian: [{ required: false, message: '请上传图片!' }],
+    dhwb: [{ required: false, message: '请填写多行文本!' }],
+    xlss: [{ required: false, message: '请选择字典下拉搜索!' }],
+    popup: [{ required: false, message: '请选择popup弹窗!' }],
+    flzds: [{ required: false, message: '请选择分类字典树!' }],
+    yhxz: [{ required: false, message: '请选择用户!' }],
+    fwb: [{ required: false, message: '请填写富文本!' }],
+    shq: [{ required: false, message: '请选择省市级!' }],
+    ldzje: [{ required: false, message: '请输入JInputPop!' }],
+    ldzjs: [{ required: false, message: '请选择下拉输入框!' }],
+    zddtjxl: [{ required: false, message: '请选择多选输入框!' }],
+    yongHu: [{ required: false, message: '请选择用户!' }],
+    zhiWu: [{ required: false, message: '请选择职务!' }],
+    jueSe: [{ required: false, message: '请选择角色!' }],
+    zdys: [{ required: false, message: '请选择自定义树!' }],
+    jssq: [{ required: false, message: '请选择三级联动!' }],
+    zdbxl: [{ required: false, message: '请选择JTreeDict!' }],
+    zdmrz: [{ required: false, message: '请输入JCodeEditor!' }],
+    jsonParam: [{ required: false, message: '请输入参数!' }],
+    bmxz: [{ required: false, message: '请选择部门!' }],
+    yuanjia: [{ required: false, message: '请输入数值!' }],
+    nyrsfm: [{ required: false, message: '请选择年月日时分秒!' }],
   };
   //update-begin---author:wangshuai ---date:20220616  for：报表示例验证修改------------
   const { resetFields, validate, validateInfos } = useForm(formState, validatorRules, { immediate: false });
@@ -416,8 +450,6 @@
 
 <style lang="less" scoped>
   .antd-modal-form {
-    height: 500px !important;
-    overflow-y: auto;
     padding: 24px 24px 24px 24px;
   }
 </style>

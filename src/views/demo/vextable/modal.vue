@@ -63,7 +63,11 @@
                 </a-form-item>
               </a-col>
               <a-col :span="6">
-                <a-form-item :name="['jeecgOrderCustomerList', index, 'idcard']" :rules="[{ required: true, message: '请输入身份证号', trigger: 'blur' }]" :key="index">
+                <a-form-item
+                  :name="['jeecgOrderCustomerList', index, 'idcard']"
+                  :rules="[{ required: true, message: '请输入身份证号', trigger: 'blur' }]"
+                  :key="index"
+                >
                   <a-input placeholder="身份证号" v-model:value="item.idcard" />
                 </a-form-item>
               </a-col>
@@ -98,7 +102,10 @@
               </a-form-item>
             </a-col>
             <a-col :span="6">
-              <a-form-item :name="['jeecgOrderTicketList', index, 'ticketCode']" :rules="{ required: true, message: '请输入航班号', trigger: 'blur' }">
+              <a-form-item
+                :name="['jeecgOrderTicketList', index, 'ticketCode']"
+                :rules="{ required: true, message: '请输入航班号', trigger: 'blur' }"
+              >
                 <a-input placeholder="航班号" v-model:value="item.ticketCode" />
               </a-form-item>
             </a-col>

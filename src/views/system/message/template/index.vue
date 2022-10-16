@@ -94,7 +94,7 @@
   function onDelete(record) {
     if (record) {
       //update-begin-author:taoyan date:2022-7-14 for: VUEN-1652【bug】应用状态下不允许删除
-      if (record.useStatus == '1') {
+      if(record.useStatus == '1'){
         createMessage.warning('该模板已被应用禁止删除!');
         return;
       }
@@ -125,8 +125,8 @@
     try {
       //update-begin-author:taoyan date:2022-7-14 for: VUEN-1652【bug】应用状态下不允许删除
       let arr = toRaw(selectedRows.value);
-      let temp = arr.filter((item) => item.useStatus == '1');
-      if (temp.length > 0) {
+      let temp = arr.filter(item=>item.useStatus=='1')
+      if(temp.length>0){
         createMessage.warning('选中的模板已被应用禁止删除!');
         return;
       }

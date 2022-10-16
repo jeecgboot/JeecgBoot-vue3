@@ -133,6 +133,8 @@ export interface DrawerProps extends DrawerFooterProps {
    * The class name of the container of the Drawer dialog.
    * @type string
    */
+  class?: string;
+  // 兼容老版本的写法（后续可能会删除，优先写class）
   wrapClassName?: string;
 
   /**

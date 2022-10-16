@@ -1,5 +1,14 @@
 <template>
-  <BasicDrawer title="部门角色权限配置" :width="650" :loading="loading" showFooter okText="保存并关闭" @ok="onSubmit(true)" @close="onClose" @register="registerDrawer">
+  <BasicDrawer
+    title="部门角色权限配置"
+    :width="650"
+    :loading="loading"
+    showFooter
+    okText="保存并关闭"
+    @ok="onSubmit(true)"
+    @close="onClose"
+    @register="registerDrawer"
+  >
     <div>
       <a-spin :spinning="loading">
         <template v-if="treeData.length > 0">
@@ -111,7 +120,7 @@
 
   // tree选中事件
   function onSelect($selectedKeys, { selectedNodes }) {
-    if (selectedNodes[0]?.props?.ruleFlag) {
+    if (selectedNodes[0]?.ruleFlag) {
       let functionId = $selectedKeys[0];
       dataRuleDrawer.openDrawer(true, { roleId, departId, functionId });
     }

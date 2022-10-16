@@ -10,7 +10,17 @@
 
     <p> 以下示例开启了拖拽排序，排序值保存字段为 sortNum，排序起始值为 3<br /> </p>
 
-    <JVxeTable ref="tableRef1" toolbar dragSort sortKey="sortNum" :sortBegin="3" rowSelection :maxHeight="580" :columns="table1.columns" :dataSource="table1.data">
+    <JVxeTable
+      ref="tableRef1"
+      toolbar
+      dragSort
+      sortKey="sortNum"
+      :sortBegin="3"
+      rowSelection
+      :maxHeight="580"
+      :columns="table1.columns"
+      :dataSource="table1.data"
+    >
       <template #toolbarSuffix>
         <a-button @click="onGetData1">获取数据</a-button>
       </template>

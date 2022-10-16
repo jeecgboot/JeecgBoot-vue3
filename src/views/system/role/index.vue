@@ -67,6 +67,11 @@
         width: 120,
       },
       rowSelection: null,
+      //自定义默认排序
+      defSort: {
+        column: 'id',
+        order: 'desc',
+      },
     },
     exportConfig: {
       name: '角色列表',

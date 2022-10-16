@@ -41,7 +41,17 @@
     setup(props) {
       const go = useGo();
 
-      const { getMenuMode, getMenuType, getMenuTheme, getCollapsed, getCollapsedShowTitle, getAccordion, getIsHorizontal, getIsSidebarType, getSplit } = useMenuSetting();
+      const {
+        getMenuMode,
+        getMenuType,
+        getMenuTheme,
+        getCollapsed,
+        getCollapsedShowTitle,
+        getAccordion,
+        getIsHorizontal,
+        getIsSidebarType,
+        getSplit,
+      } = useMenuSetting();
       const { getShowLogo } = useRootSetting();
 
       const { prefixCls } = useDesign('layout-menu');
@@ -57,7 +67,10 @@
       const getIsShowLogo = computed(() => unref(getShowLogo) && unref(getIsSidebarType));
 
       const getUseScroll = computed(() => {
-        return !unref(getIsHorizontal) && (unref(getIsSidebarType) || props.splitType === MenuSplitTyeEnum.LEFT || props.splitType === MenuSplitTyeEnum.NONE);
+        return (
+          !unref(getIsHorizontal) &&
+          (unref(getIsSidebarType) || props.splitType === MenuSplitTyeEnum.LEFT || props.splitType === MenuSplitTyeEnum.NONE)
+        );
       });
 
       const getWrapperStyle = computed((): CSSProperties => {
@@ -128,7 +141,14 @@
         return !props.isHorizontal ? (
           <SimpleMenu {...menuProps} isSplitMenu={unref(getSplit)} items={menus} />
         ) : (
-          <BasicMenu {...(menuProps as any)} isHorizontal={props.isHorizontal} type={unref(getMenuType)} showLogo={unref(getIsShowLogo)} mode={unref(getComputedMenuMode as any)} items={menus} />
+          <BasicMenu
+            {...(menuProps as any)}
+            isHorizontal={props.isHorizontal}
+            type={unref(getMenuType)}
+            showLogo={unref(getIsShowLogo)}
+            mode={unref(getComputedMenuMode as any)}
+            items={menus}
+          />
         );
       }
 

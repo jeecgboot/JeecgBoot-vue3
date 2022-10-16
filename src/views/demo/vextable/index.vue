@@ -14,7 +14,7 @@
         </a-dropdown>
       </template>
       <template #ctype="{ text }">
-        {{ text === 1 ? '国内订单' : text === 2 ? '国际订单' : '' }}
+        {{ text === '1' ? '国内订单' : text === '2' ? '国际订单' : text }}
       </template>
       <template #action="{ record }">
         <TableAction :actions="getAction(record)" :dropDownActions="getDropDownActions(record)" />
@@ -40,6 +40,7 @@
   import { useModal } from '/@/components/Modal';
   import { columns } from './data';
   import { list, deleteOne } from './api';
+  import { defHttp } from '/@/utils/http/axios';
 
   const [registerModal, { openModal }] = useModal();
   const [registerOneToOneModal, { openModal: openOneToOneModal }] = useModal();
@@ -86,7 +87,9 @@
   //注册table数据
   const [registerTable, { reload }, { rowSelection }] = tableContext;
   //新增类型
-  const addType = ref(1);
+  //update-begin---author:wangshuai ---date:20220720  for：[VUEN-1661]一对多示例，编辑的时候，有时候是一对一，有时候是一对多，默认一对多------------
+  const addType = ref(3);
+  //update-end---author:wangshuai ---date:20220720  for：[VUEN-1661]一对多示例，编辑的时候，有时候是一对一，有时候是一对多，默认一对多--------------
   //添加事件
   function handleCreate(e) {
     addType.value = e.key;

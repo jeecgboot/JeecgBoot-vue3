@@ -9,7 +9,13 @@
         <Input size="large" v-model:value="formData.mobile" :placeholder="t('sys.login.mobile')" class="fix-auto-fill" />
       </FormItem>
       <FormItem name="sms" class="enter-x">
-        <CountdownInput size="large" class="fix-auto-fill" v-model:value="formData.sms" :placeholder="t('sys.login.smsCode')" :sendCodeApi="sendCodeApi" />
+        <CountdownInput
+          size="large"
+          class="fix-auto-fill"
+          v-model:value="formData.sms"
+          :placeholder="t('sys.login.smsCode')"
+          :sendCodeApi="sendCodeApi"
+        />
       </FormItem>
       <FormItem name="password" class="enter-x">
         <StrengthMeter size="large" v-model:value="formData.password" :placeholder="t('sys.login.password')" />

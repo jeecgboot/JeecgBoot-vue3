@@ -38,7 +38,11 @@ export function useThirdLogin() {
   //第三方登录
   function onThirdLogin(source) {
     let url = `${glob.uploadUrl}/sys/thirdLogin/render/${source}`;
-    window.open(url, `login ${source}`, 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no');
+    window.open(
+      url,
+      `login ${source}`,
+      'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no'
+    );
     thirdType.value = source;
     thirdLoginInfo.value = {};
     thirdLoginState.value = false;

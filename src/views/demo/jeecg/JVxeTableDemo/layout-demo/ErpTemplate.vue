@@ -303,7 +303,7 @@
         height: 0 !important;
       }
 
-      ::v-deep(.ant-tabs-bar) {
+      ::v-deep(.ant-tabs-nav) {
         border-color: transparent !important;
       }
 

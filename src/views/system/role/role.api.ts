@@ -92,7 +92,8 @@ export const saveRolePermission = (params) => defHttp.post({ url: Api.saveRolePe
 /**
  * 查询角色数据规则
  */
-export const queryDataRule = (params) => defHttp.get({ url: `${Api.queryDataRule}/${params.functionId}/${params.roleId}` }, { isTransformResponse: false });
+export const queryDataRule = (params) =>
+  defHttp.get({ url: `${Api.queryDataRule}/${params.functionId}/${params.roleId}` }, { isTransformResponse: false });
 /**
  * 保存角色数据规则
  */

@@ -1,6 +1,15 @@
 <template>
   <div :class="getWrapClass">
-    <Tabs type="editable-card" size="small" :animated="false" :hideAdd="true" :tabBarGutter="3" :activeKey="activeKeyRef" @change="handleChange" @edit="handleEdit">
+    <Tabs
+      type="editable-card"
+      size="small"
+      :animated="false"
+      :hideAdd="true"
+      :tabBarGutter="3"
+      :activeKey="activeKeyRef"
+      @change="handleChange"
+      @edit="handleEdit"
+    >
       <template v-for="item in getTabsState" :key="item.query ? item.fullPath : item.path">
         <TabPane :closable="!(item && item.meta && item.meta.affix)">
           <template #tab>
@@ -9,7 +18,7 @@
         </TabPane>
       </template>
 
-      <template #tabBarExtraContent v-if="getShowRedo || getShowQuick">
+      <template #rightExtra v-if="getShowRedo || getShowQuick">
         <TabRedo v-if="getShowRedo" />
         <TabContent isExtra :tabItem="$route" v-if="getShowQuick" />
         <FoldButton v-if="getShowFold" />

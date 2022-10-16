@@ -1,5 +1,12 @@
 <template>
-  <Menu v-bind="getBindValues" :activeName="activeName" :openNames="getOpenKeys" :class="prefixCls" :activeSubMenuNames="activeSubMenuNames" @select="handleSelect">
+  <Menu
+    v-bind="getBindValues"
+    :activeName="activeName"
+    :openNames="getOpenKeys"
+    :class="prefixCls"
+    :activeSubMenuNames="activeSubMenuNames"
+    @select="handleSelect"
+  >
     <template v-for="item in items" :key="item.path">
       <SimpleSubMenu :item="item" :parent="true" :collapsedShowTitle="collapsedShowTitle" :collapse="collapse" />
     </template>

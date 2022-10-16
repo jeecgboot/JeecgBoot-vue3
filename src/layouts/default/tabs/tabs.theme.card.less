@@ -35,14 +35,15 @@ html[data-theme='light'] {
   }
 
   .ant-tabs.ant-tabs-card {
-    .ant-tabs-card-bar {
+    .ant-tabs-nav {
       height: @multiple-card-height;
       margin: 0;
       background-color: @component-background;
       border: 0;
       box-shadow: none;
+      padding-left: 10px;
 
-      .ant-tabs-nav-container {
+      .ant-tabs-nav-wrap {
         height: @tabHeight;
         margin-top: 4px;
         padding-top: 0;
@@ -56,10 +57,14 @@ html[data-theme='light'] {
         padding: 0 20px 0 30px;
         margin: 0 10px 0 0 !important;
 
+        .ant-tabs-tab-btn {
+          color: @text-color-call-out;
+        }
+
         &:hover {
           //padding: 0 36px 0 30px;
 
-          .ant-tabs-close-x {
+          .ant-tabs-tab-remove .anticon-close {
             opacity: 1;
 
             &:hover {
@@ -69,25 +74,30 @@ html[data-theme='light'] {
           }
         }
 
-        .ant-tabs-close-x {
-          position: relative;
-          width: 14px;
-          height: 14px;
-          font-size: 13px;
-          color: inherit;
-          opacity: 0;
-          transition: opacity 0.15s;
-          top: 0;
-          left: 6px;
-          vertical-align: middle;
-          line-height: 12px;
-          overflow: hidden;
-          transform-origin: 100% 50%;
-          border-radius: 100%;
+        .ant-tabs-tab-remove {
+          top: 5px;
+          left: 4px;
 
-          &:hover {
-            svg {
-              fill: #fff;
+          .anticon-close {
+            position: relative;
+            width: 14px;
+            height: 14px;
+            font-size: 13px;
+            color: inherit;
+            opacity: 0;
+            transition: opacity 0.15s;
+            top: 0;
+            left: 6px;
+            vertical-align: middle;
+            line-height: 10px;
+            overflow: hidden;
+            transform-origin: 100% 50%;
+            border-radius: 100%;
+
+            &:hover {
+              svg {
+                fill: #fff;
+              }
             }
           }
         }
@@ -107,6 +117,8 @@ html[data-theme='light'] {
       }
 
       .ant-tabs-tab:not(.ant-tabs-tab-active) {
+        border: none !important;
+
         &:hover {
           color: @primary-color !important;
           background-color: inherit;
@@ -120,7 +132,11 @@ html[data-theme='light'] {
         border-bottom: 1px solid @primary-color !important;
         font-weight: inherit;
 
-        .ant-tabs-close-x {
+        .ant-tabs-tab-btn {
+          color: @primary-color;
+        }
+
+        .ant-tabs-tab-remove .anticon-close {
           opacity: 0;
 
           svg {
@@ -132,10 +148,6 @@ html[data-theme='light'] {
           width: inherit;
           fill: @primary-color;
         }
-      }
-
-      .ant-tabs-nav-scroll {
-        padding-left: 20px;
       }
     }
 
@@ -149,7 +161,7 @@ html[data-theme='light'] {
   }
 
   .ant-tabs-tab:not(.ant-tabs-tab-active) {
-    .anticon-close {
+    .ant-tabs-tab-remove .anticon-close {
       font-size: 12px;
 
       svg {
@@ -160,7 +172,7 @@ html[data-theme='light'] {
 
   .ant-tabs-extra-content {
     position: relative;
-    top: -12px;
+    top: 0;
     line-height: @multiple-card-height !important;
   }
 
@@ -169,7 +181,7 @@ html[data-theme='light'] {
   }
 
   .@{prefix-cls}--hide-close {
-    .ant-tabs-close-x {
+    .ant-tabs-tab-remove .anticon-close {
       opacity: 0 !important;
     }
   }

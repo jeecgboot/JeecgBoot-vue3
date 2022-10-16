@@ -8,7 +8,14 @@
         </a>
       </template>
     </a-input>
-    <EasyCronModal @register="registerModal" v-model:value="editCronValue" :exeStartTime="exeStartTime" :hideYear="hideYear" :remote="remote" :hideSecond="hideSecond" />
+    <EasyCronModal
+      @register="registerModal"
+      v-model:value="editCronValue"
+      :exeStartTime="exeStartTime"
+      :hideYear="hideYear"
+      :remote="remote"
+      :hideSecond="hideSecond"
+    />
   </div>
 </template>
 

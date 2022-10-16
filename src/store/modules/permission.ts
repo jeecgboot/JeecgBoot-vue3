@@ -18,7 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList } from '/@/api/sys/menu';
+import { getMenuList,switchVue3Menu } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -242,12 +242,15 @@ export const usePermissionStore = defineStore({
               setTimeout(
                 () =>
                   createWarningModal({
-                    title: '提示',
+                    title: '检测提示',
                     content:
-                      '检测到当前菜单表是 <b>Vue2版本</b> 的，这将导致菜单加载异常，请更换成vue3版本的表！' +
-                      '<br>切换文档：<a href="http://vue3.jeecg.com/2671576" target="_blank">http://vue3.jeecg.com/2671576</a>',
+                      '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
+                    onOk:function () {
+                      switchVue3Menu();
+                      location.reload();
+                    }
                   }),
-                1500
+                100
               );
             }
             // update-end----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---

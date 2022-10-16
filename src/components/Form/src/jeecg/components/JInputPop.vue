@@ -1,5 +1,11 @@
 <template>
-  <a-popover trigger="contextmenu" v-model:visible="visible" :overlayClassName="`${prefixCls}-popover`" :getPopupContainer="getPopupContainer" :placement="position">
+  <a-popover
+    trigger="contextmenu"
+    v-model:visible="visible"
+    :overlayClassName="`${prefixCls}-popover`"
+    :getPopupContainer="getPopupContainer"
+    :placement="position"
+  >
     <template #title>
       <span>{{ title }}</span>
       <span style="float: right" title="关闭">

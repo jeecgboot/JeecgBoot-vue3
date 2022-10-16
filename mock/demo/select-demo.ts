@@ -20,9 +20,9 @@ export default [
     timeout: 1000,
     method: 'get',
     response: ({ query }) => {
-      const { keyword, count } = query;
+      const { keyword,count} = query;
       console.log(keyword);
-      return resultSuccess(demoList(keyword, count));
+      return resultSuccess(demoList(keyword,count));
     },
   },
 ] as MockMethod[];

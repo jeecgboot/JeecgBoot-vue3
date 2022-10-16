@@ -12,10 +12,10 @@
   </div>
 </template>
 <script lang="ts" name="monitor-mynews" setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import DetailModal from './DetailModal.vue';
-  import { getMyNewsList, editCementSend, syncNotic, readAllMsg } from './mynews.api';
+  import { getMyNewsList, editCementSend, syncNotic, readAllMsg, getOne } from './mynews.api';
   import { columns, searchFormSchema } from './mynews.data';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getToken } from '/@/utils/auth';
@@ -29,6 +29,12 @@
   const [register, { openModal: openDetail }] = useModal();
   import { useListPage } from '/@/hooks/system/useListPage';
   import { getLogList } from '/@/views/monitor/log/log.api';
+  import { useRouter } from 'vue-router';
+  import { useAppStore } from '/@/store/modules/app';
+  import { useMessageHref } from '/@/views/system/message/components/useSysMessage';
+  const appStore = useAppStore();
+
+  const {goPage} = useMessageHref()
 
   const { prefixCls, tableContext } = useListPage({
     designScope: 'mynews-list',
@@ -65,10 +71,14 @@
       reload();
       syncNotic({ anntId: anntId });
     });
-    openDetail(true, {
-      record,
-      isUpdate: true,
-    });
+    const openModalFun = ()=>{
+      openDetail(true, {
+        record,
+        isUpdate: true,
+      });
+    }
+    goPage(record, openModalFun);
+   
   }
   // 日志类型
   function callback(key) {
@@ -87,4 +97,35 @@
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
+  
+  //update-begin-author:taoyan date:2022-8-23 for: 消息跳转，打开详情表单
+  onMounted(()=>{
+    initHrefModal();
+  });
+  function initHrefModal(){
+    let params = appStore.getMessageHrefParams;
+    if(params){
+      let anntId = params.id;
+      if(anntId){
+        editCementSend({ anntId: anntId }).then(() => {
+          reload();
+          syncNotic({ anntId: anntId });
+        });
+      }
+      let detailId = params.detailId;
+      if(detailId){
+        getOne(detailId).then(data=>{
+          console.log('getOne', data)
+          openDetail(true, {
+            record: data,
+            isUpdate: true,
+          });
+          appStore.setMessageHrefParams('')
+        })
+      }
+    }
+  }
+  //update-end-author:taoyan date:2022-8-23 for: 消息跳转，打开详情表单
+
+  
 </script>

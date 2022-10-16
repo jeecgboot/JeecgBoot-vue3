@@ -96,7 +96,11 @@
 
       const getUploadBtnText = computed(() => {
         const someError = fileListRef.value.some((item) => item.status === UploadResultStatus.ERROR);
-        return isUploadingRef.value ? t('component.upload.uploading') : someError ? t('component.upload.reUploadFailed') : t('component.upload.startUpload');
+        return isUploadingRef.value
+          ? t('component.upload.uploading')
+          : someError
+          ? t('component.upload.reUploadFailed')
+          : t('component.upload.startUpload');
       });
 
       // 上传前校验

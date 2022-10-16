@@ -293,6 +293,7 @@ export function importViewsFile(path): Promise<any> {
 }
 //update-end-author:taoyan date:2022-6-8 for:解决老的vue2动态导入文件语法 vite不支持的问题
 
+
 /**
  * 跳转至积木报表的 预览页面
  * @param url
@@ -301,13 +302,13 @@ export function importViewsFile(path): Promise<any> {
  */
 export function goJmReportViewPage(url, id, token) {
   // URL支持{{ window.xxx }}占位符变量
-  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => eval(s2));
+  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => eval(s2))
   if (url.includes('?')) {
-    url += '&';
+    url += '&'
   } else {
-    url += '?';
+    url += '?'
   }
-  url += `id=${id}`;
-  url += `&token=${token}`;
-  window.open(url);
+  url += `id=${id}`
+  url += `&token=${token}`
+  window.open(url)
 }

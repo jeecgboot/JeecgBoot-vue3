@@ -43,6 +43,7 @@
     pidValue: propTypes.string.def(''),
     //update-end---author:wangshuai ---date:20220620  for：JTreeSelect组件pidValue还原成空，否则会影响自定义组件树示例--------------
     hasChildField: propTypes.string.def(''),
+    converIsLeafVal: propTypes.integer.def(1),
     condition: propTypes.string.def(''),
     multiple: propTypes.bool.def(false),
     loadTriggleChange: propTypes.bool.def(false),
@@ -96,7 +97,11 @@
    */
   async function loadItemByCode() {
     if (!props.value || props.value == '0') {
-      treeValue.value = null;
+      if(props.multiple){
+        treeValue.value = [];
+      }else{
+        treeValue.value = null;
+      }
     } else {
       let params = { key: props.value };
       let result = await defHttp.get({ url: `${Api.view}${props.dict}`, params }, { isTransformResponse: false });
@@ -137,6 +142,7 @@
       pid: props.pidValue,
       pidField: props.pidField,
       hasChildField: props.hasChildField,
+      converIsLeafVal: props.converIsLeafVal,
       condition: props.condition,
       tableName: unref(tableName),
       text: unref(text),
@@ -166,6 +172,7 @@
       pid: pid,
       pidField: props.pidField,
       hasChildField: props.hasChildField,
+      converIsLeafVal: props.converIsLeafVal,
       condition: props.condition,
       tableName: unref(tableName),
       text: unref(text),

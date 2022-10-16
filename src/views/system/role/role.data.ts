@@ -156,7 +156,7 @@ export const roleIndexFormSchema: FormSchema[] = [
     field: 'route',
     label: '是否路由菜单',
     component: 'Switch',
-    defaultValue: true,
+    defaultValue: true
   },
   {
     label: '优先级',

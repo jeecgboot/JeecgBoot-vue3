@@ -105,7 +105,12 @@
                     if (res.success) {
                       nodes = [...successInfo, h('br'), `无失败信息！`];
                     } else {
-                      nodes = [`失败信息如下：`, renderTextarea(h, res.result.failInfo.map((v, i) => `${i + 1}. ${v}`).join('\n')), h('br'), ...successInfo];
+                      nodes = [
+                        `失败信息如下：`,
+                        renderTextarea(h, res.result.failInfo.map((v, i) => `${i + 1}. ${v}`).join('\n')),
+                        h('br'),
+                        ...successInfo,
+                      ];
                     }
                     return nodes;
                   },

@@ -128,7 +128,7 @@
   // 树选择事件
   function onSelect(selKeys, event) {
     if (selKeys.length > 0 && selectedKeys.value[0] !== selKeys[0]) {
-      setSelectedKey(selKeys[0], event.selectedNodes[0].props);
+      setSelectedKey(selKeys[0], event.selectedNodes[0]);
     } else {
       // 这样可以防止用户取消选择
       setSelectedKey(selectedKeys.value[0]);
@@ -141,3 +141,9 @@
     autoExpandParent.value = false;
   }
 </script>
+<style lang="less" scoped>
+  /*升级antd3后，查询框与树贴的太近，样式优化*/
+  ::v-deep(.jeecg-tree-header) {
+    margin-bottom: 6px;
+  }
+</style>

@@ -103,8 +103,32 @@
       const tableScroll = ref({ x: true });
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
       const [
-        { visibleChange, loadColumnsInfo, dynamicParamHandler, loadData, handleChangeInTable, combineRowKey, clickThenCheck, filterUnuseSelect, getOkSelectRows },
-        { visible, rowSelection, checkedKeys, selectRows, pagination, dataSource, columns, loading, title, iSorter, queryInfo, queryParam, dictOptions },
+        {
+          visibleChange,
+          loadColumnsInfo,
+          dynamicParamHandler,
+          loadData,
+          handleChangeInTable,
+          combineRowKey,
+          clickThenCheck,
+          filterUnuseSelect,
+          getOkSelectRows,
+        },
+        {
+          visible,
+          rowSelection,
+          checkedKeys,
+          selectRows,
+          pagination,
+          dataSource,
+          columns,
+          loading,
+          title,
+          iSorter,
+          queryInfo,
+          queryParam,
+          dictOptions,
+        },
       ] = usePopBiz(getBindValue);
 
       const showSearchFlag = computed(() => unref(queryInfo) && unref(queryInfo).length > 0);

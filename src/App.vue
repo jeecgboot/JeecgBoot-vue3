@@ -12,6 +12,8 @@
   import { useTitle } from '/@/hooks/web/useTitle';
   import { useLocale } from '/@/locales/useLocale';
 
+  // 解决日期时间国际化问题
+  import 'dayjs/locale/zh-cn';
   // support Multi-language
   const { getAntdLocale } = useLocale();
 

@@ -1,6 +1,6 @@
 import type { UserConfig, ConfigEnv } from 'vite';
 import pkg from './package.json';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { loadEnv } from 'vite';
 import { resolve } from 'path';
 //require('vue-jeecg-plugs/packages/utils')
@@ -17,7 +17,7 @@ function pathResolve(dir: string) {
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+  lastBuildTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
 };
 
 export default ({ command, mode }: ConfigEnv): UserConfig => {
@@ -56,6 +56,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     server: {
       // Listening on all local IPs
       host: true,
+      https: false,
       port: VITE_PORT,
       // Load proxy configuration from .env
       proxy: createProxy(VITE_PROXY),
@@ -100,13 +101,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
       // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
       include: [
+        '@vue/runtime-core',
+        '@vue/shared',
         '@iconify/iconify',
         'ant-design-vue/es/locale/zh_CN',
-        'moment/dist/locale/zh-cn',
         'ant-design-vue/es/locale/en_US',
-        'moment/dist/locale/eu',
       ],
-      exclude: ['vue-demi'],
     },
   };
 };

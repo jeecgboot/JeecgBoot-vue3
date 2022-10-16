@@ -1,6 +1,14 @@
 <template>
   <div :class="prefixCls">
-    <a-select v-if="query" v-model:value="value" :options="selectOptions" :disabled="disabled" style="width: 100%" v-bind="attrs" @change="onSelectChange" />
+    <a-select
+      v-if="query"
+      v-model:value="value"
+      :options="selectOptions"
+      :disabled="disabled"
+      style="width: 100%"
+      v-bind="attrs"
+      @change="onSelectChange"
+    />
     <a-switch v-else v-model:checked="checked" :disabled="disabled" v-bind="attrs" @change="onSwitchChange" />
   </div>
 </template>

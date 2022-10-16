@@ -11,7 +11,7 @@
   export default defineComponent({
     name: 'JCheckbox',
     props: {
-      value: propTypes.oneOfType([propTypes.string, propTypes.number]),
+      value:propTypes.oneOfType([propTypes.string, propTypes.number]),
       dictCode: propTypes.string,
       options: {
         type: Array,
@@ -31,11 +31,11 @@
       watchEffect(() => {
         //update-begin-author:taoyan date:2022-7-4 for:issues/I5E7YX AUTO在线表单进入功能测试之后一直卡在功能测试界面
         let temp = props.value;
-        if (!temp && temp !== 0) {
-          checkboxArray.value = [];
-        } else {
+        if(!temp && temp!==0){
+          checkboxArray.value = []
+        }else{
           temp = temp + '';
-          checkboxArray.value = temp.split(',');
+          checkboxArray.value = temp.split(',')
         }
         //update-end-author:taoyan date:2022-7-4 for:issues/I5E7YX AUTO在线表单进入功能测试之后一直卡在功能测试界面
         //update-begin-author:taoyan date:20220401 for: 调用表单的 resetFields不会清空当前信息，界面显示上一次的数据

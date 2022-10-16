@@ -46,7 +46,9 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     const isContainedByEl = el.contains(mouseUpTarget) || el.contains(mouseDownTarget);
     const isSelf = el === mouseUpTarget;
 
-    const isTargetExcluded = (excludes.length && excludes.some((item) => item?.contains(mouseUpTarget))) || (excludes.length && excludes.includes(mouseDownTarget as HTMLElement));
+    const isTargetExcluded =
+      (excludes.length && excludes.some((item) => item?.contains(mouseUpTarget))) ||
+      (excludes.length && excludes.includes(mouseDownTarget as HTMLElement));
     const isContainedByPopper = popperRef && (popperRef.contains(mouseUpTarget) || popperRef.contains(mouseDownTarget));
     if (isBound || isTargetExists || isContainedByEl || isSelf || isTargetExcluded || isContainedByPopper) {
       return;

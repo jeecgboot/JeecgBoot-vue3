@@ -16,7 +16,16 @@
       <a-button class="mr-2" @click="clearSelect"> 清空选中行 </a-button>
       <a-button class="mr-2" @click="getPagination"> 获取分页信息 </a-button>
     </div>
-    <BasicTable :canResize="false" title="RefTable示例" titleHelpMessage="使用Ref调用表格内方法" ref="tableRef" :api="api" :columns="columns" rowKey="id" :rowSelection="{ type: 'checkbox' }" />
+    <BasicTable
+      :canResize="false"
+      title="RefTable示例"
+      titleHelpMessage="使用Ref调用表格内方法"
+      ref="tableRef"
+      :api="api"
+      :columns="columns"
+      rowKey="id"
+      :rowSelection="{ type: 'checkbox' }"
+    />
   </div>
 </template>
 <script lang="ts">

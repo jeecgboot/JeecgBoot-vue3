@@ -1,6 +1,12 @@
 <template>
   <div :class="getClass" ref="wrapperRef">
-    <PageHeader :ghost="ghost" :title="title" v-bind="omit($attrs, 'class')" ref="headerRef" v-if="content || $slots.headerContent || title || getHeaderSlots.length">
+    <PageHeader
+      :ghost="ghost"
+      :title="title"
+      v-bind="omit($attrs, 'class')"
+      ref="headerRef"
+      v-if="content || $slots.headerContent || title || getHeaderSlots.length"
+    >
       <template #default>
         <template v-if="content">
           {{ content }}
@@ -74,7 +80,13 @@
       });
 
       const getUpwardSpace = computed(() => props.upwardSpace);
-      const { redoHeight, setCompensation, contentHeight } = useContentHeight(getIsContentFullHeight, wrapperRef, [headerRef, footerRef], [contentRef], getUpwardSpace);
+      const { redoHeight, setCompensation, contentHeight } = useContentHeight(
+        getIsContentFullHeight,
+        wrapperRef,
+        [headerRef, footerRef],
+        [contentRef],
+        getUpwardSpace
+      );
       setCompensation({ useLayoutFooter: true, elements: [footerRef] });
 
       const getClass = computed(() => {

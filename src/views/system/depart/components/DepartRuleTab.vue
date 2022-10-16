@@ -25,7 +25,7 @@
 
     <div class="j-box-bottom-button offset-20" style="margin-top: 30px">
       <div class="j-box-bottom-button-float">
-        <a-dropdown :trigger="['click']" placement="topCenter">
+        <a-dropdown :trigger="['click']" placement="top">
           <template #overlay>
             <a-menu>
               <a-menu-item key="3" @click="toggleCheckALL(true)">全部勾选</a-menu-item>
@@ -132,7 +132,7 @@
 
   // tree选中事件
   function onSelect($selectedKeys, { selectedNodes }) {
-    if (selectedNodes[0]?.props?.ruleFlag) {
+    if (selectedNodes[0]?.ruleFlag) {
       let functionId = $selectedKeys[0];
       dataRuleDrawer.openDrawer(true, { departId, functionId });
     }

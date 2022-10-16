@@ -38,7 +38,7 @@
         columns: getBasicColumns(),
         showSummary: true,
         summaryFunc: handleSummary,
-        scroll: { x: 2000 },
+        scroll: { x: 1000 },
         canResize: false,
       });
 

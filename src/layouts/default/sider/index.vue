@@ -1,5 +1,13 @@
 <template>
-  <Drawer v-if="getIsMobile" placement="left" :class="prefixCls" :width="getMenuWidth" :getContainer="null" :visible="!getCollapsed" @close="handleClose">
+  <Drawer
+    v-if="getIsMobile"
+    placement="left"
+    :class="prefixCls"
+    :width="getMenuWidth"
+    :getContainer="null"
+    :visible="!getCollapsed"
+    @close="handleClose"
+  >
     <Sider />
   </Drawer>
   <MixSider v-else-if="getIsMixSidebar" />

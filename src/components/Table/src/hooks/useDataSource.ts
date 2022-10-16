@@ -22,7 +22,11 @@ interface SearchState {
   sortInfo: Recordable;
   filterInfo: Record<string, string[]>;
 }
-export function useDataSource(propsRef: ComputedRef<BasicTableProps>, { getPaginationInfo, setPagination, setLoading, validate, clearSelectedRowKeys, tableData }: ActionType, emit: EmitType) {
+export function useDataSource(
+  propsRef: ComputedRef<BasicTableProps>,
+  { getPaginationInfo, setPagination, setLoading, validate, clearSelectedRowKeys, tableData }: ActionType,
+  emit: EmitType
+) {
   const searchState = reactive<SearchState>({
     sortInfo: {},
     filterInfo: {},

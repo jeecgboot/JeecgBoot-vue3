@@ -332,6 +332,26 @@ export const schemas: FormSchema[] = [
     },
   },
   {
+    field: 'data2',
+    label: '年份范围选择',
+    component: 'RangePicker',
+    componentProps: {
+      picker: 'year',
+      valueFormat: 'YYYY',
+    },
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'data2',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: {
+      span: 12,
+    },
+  },
+  {
     field: 'hk',
     component: 'Input',
     label: '滑块验证码',
@@ -372,6 +392,8 @@ export const schemas: FormSchema[] = [
     componentProps: {
       dict: 'sys_permission,name,id',
       pidField: 'parent_id',
+      hasChildField: 'is_leaf',
+      converIsLeafVal: 0,
     },
     colProps: {
       span: 12,
@@ -391,6 +413,8 @@ export const schemas: FormSchema[] = [
     componentProps: {
       dict: 'sys_permission,name,id',
       pidField: 'parent_id',
+      hasChildField: 'is_leaf',
+      converIsLeafVal: 0,
       multiple: true,
     },
     colProps: {
@@ -617,20 +641,6 @@ export const schemas: FormSchema[] = [
   },
   {
     field: 'JSwitchSelect',
-    component: 'JEllipsis',
-    label: '选中值',
-    colProps: { span: 12 },
-  },
-  {
-    field: 'superQuery',
-    component: 'Input',
-    label: '高级查询',
-    helpMessage: ['插槽模式'],
-    slot: 'superQuery',
-    colProps: { span: 12 },
-  },
-  {
-    field: 'superQuery',
     component: 'JEllipsis',
     label: '选中值',
     colProps: { span: 12 },

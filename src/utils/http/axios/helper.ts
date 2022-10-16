@@ -1,4 +1,5 @@
 import { isObject, isString } from '/@/utils/is';
+import dayjs from "dayjs";
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 
@@ -24,7 +25,8 @@ export function formatRequestDate(params: Recordable) {
   }
 
   for (const key in params) {
-    if (params[key] && params[key]._isAMomentObject) {
+    // 判断是否是dayjs实例
+    if (dayjs.isDayjs(params[key])) {
       params[key] = params[key].format(DATE_TIME_FORMAT);
     }
     if (isString(key)) {

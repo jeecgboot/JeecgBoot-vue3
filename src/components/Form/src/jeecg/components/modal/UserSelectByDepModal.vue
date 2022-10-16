@@ -101,7 +101,7 @@
         bordered: true,
         size: 'small',
         formConfig: {
-          labelWidth: 200,
+          //labelWidth: 200,
           baseColProps: {
             xs: 24,
             sm: 8,

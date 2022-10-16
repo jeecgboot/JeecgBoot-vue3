@@ -1,7 +1,14 @@
 <template>
   <PageWrapper title="Tree函数操作示例">
     <div class="flex">
-      <BasicTree class="w-1/3" title="右侧操作按钮/自定义图标" helpMessage="帮助信息" :treeData="treeData" :actionList="actionList" :renderIcon="createIcon" />
+      <BasicTree
+        class="w-1/3"
+        title="右侧操作按钮/自定义图标"
+        helpMessage="帮助信息"
+        :treeData="treeData"
+        :actionList="actionList"
+        :renderIcon="createIcon"
+      />
       <BasicTree class="w-1/3 mx-4" title="右键菜单" :treeData="treeData" :beforeRightClick="getRightMenuList" />
       <BasicTree class="w-1/3" title="工具栏使用" toolbar checkable search :treeData="treeData" :beforeRightClick="getRightMenuList" />
     </div>

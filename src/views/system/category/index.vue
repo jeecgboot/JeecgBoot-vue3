@@ -1,7 +1,13 @@
 <template>
   <div>
     <!--引用表格-->
-    <BasicTable @register="registerTable" :rowSelection="rowSelection" :expandedRowKeys="expandedRowKeys" @expand="handleExpand" @fetch-success="onFetchSuccess">
+    <BasicTable
+      @register="registerTable"
+      :rowSelection="rowSelection"
+      :expandedRowKeys="expandedRowKeys"
+      @expand="handleExpand"
+      @fetch-success="onFetchSuccess"
+    >
       <!--插槽:table标题-->
       <template #tableTitle>
         <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
@@ -72,7 +78,8 @@
   });
 
   //注册table数据
-  const [registerTable, { reload, collapseAll, updateTableDataRecord, findTableDataRecord, getDataSource }, { rowSelection, selectedRowKeys }] = tableContext;
+  const [registerTable, { reload, collapseAll, updateTableDataRecord, findTableDataRecord, getDataSource }, { rowSelection, selectedRowKeys }] =
+    tableContext;
 
   /**
    * 新增事件

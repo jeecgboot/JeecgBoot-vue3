@@ -10,7 +10,7 @@
         </div>
         <!--签字-->
         <a-col :md="24" :sm="24">
-          <div class="sign" style="text-align: left; height: inherit">
+          <div class="sign" style="text-align: center; height: inherit">
             <a-col :span="24">
               <span>打印人员:</span>
               <a-input style="width: 30%" v-model:value="model.printer" />
@@ -29,7 +29,13 @@
             <a-col style="margin-top: 20px" :span="24">
               <span>打印图片:</span>
               <br />
-              <a-upload action="/jsonplaceholder.typicode.com/posts/" listType="picture-card" :fileList="model.fileList" @preview="handlePreview" @change="handleChange">
+              <a-upload
+                action="/jsonplaceholder.typicode.com/posts/"
+                listType="picture-card"
+                :fileList="model.fileList"
+                @preview="handlePreview"
+                @change="handleChange"
+              >
                 <div v-if="model.fileList.length < 3">
                   <Icon icon="ant-design:plus-outlined" />
                   <div class="ant-upload-text">Upload</div>

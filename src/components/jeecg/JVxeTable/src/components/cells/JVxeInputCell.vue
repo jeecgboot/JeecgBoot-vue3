@@ -67,6 +67,10 @@
       getValue(value, ctx) {
         if (ctx?.props?.type === JVxeTypes.inputNumber && isString(value)) {
           if (NumberRegExp.test(value)) {
+            // 【issues/I5IHN7】修复无法输入小数点的bug
+            if (/\.0*$/.test(value)) {
+              return value;
+            }
             return Number.parseFloat(value);
           }
         }

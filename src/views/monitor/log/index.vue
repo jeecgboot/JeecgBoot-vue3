@@ -45,7 +45,7 @@
       },
       formConfig: {
         schemas: searchFormSchema,
-        fieldMapToTime: [['fieldTime', ['createTime_begin', 'createTime_end'], 'YYYY-MM-DD HH:mm:ss']],
+        fieldMapToTime: [['fieldTime', ['createTime_begin', 'createTime_end'], 'YYYY-MM-DD']],
       },
     },
   });

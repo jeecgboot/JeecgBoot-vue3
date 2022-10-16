@@ -1,13 +1,23 @@
 <template>
-  <a-modal :title="title" :width="width" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="关闭">
+  <BasicModal
+    :title="title"
+    :width="width"
+    :visible="visible"
+    :height="600"
+    @ok="handleOk"
+    :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }"
+    @cancel="handleCancel"
+    cancelText="关闭"
+  >
     <OneNativeForm ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></OneNativeForm>
-  </a-modal>
+  </BasicModal>
 </template>
 
 <script lang="ts" setup>
   import { ref, nextTick, defineExpose } from 'vue';
   import OneNativeForm from './OneNativeForm.vue';
-
+  import { BasicModal } from '/@/components/Modal';
+  
   const title = ref<string>('');
   const width = ref<number>(800);
   const visible = ref<boolean>(false);
@@ -51,9 +61,5 @@
   });
 </script>
 
-<style>
-  /**隐藏样式-modal确定按钮 */
-  .jee-hidden {
-    display: none !important;
-  }
+<style lang="less" scoped>
 </style>

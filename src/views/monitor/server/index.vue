@@ -35,7 +35,7 @@
   import { getServerInfo, getTextInfo, getMoreInfo } from './server.api';
   import { columns } from './server.data';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
 
   const dataSource = ref([]);
   const activeKey = ref('1');
@@ -65,7 +65,7 @@
 
   //加载信息
   function getInfoList(infoType) {
-    lastUpdateTime.value = moment().format('YYYY年MM月DD日 HH时mm分ss秒');
+    lastUpdateTime.value = dayjs().format('YYYY年MM月DD日 HH时mm分ss秒');
     getServerInfo(infoType).then((res) => {
       textInfo.value = getTextInfo(infoType);
       moreInfo.value = getMoreInfo(infoType);
@@ -94,7 +94,7 @@
     if (type === 'Number') {
       return Number(value * 100).toFixed(2);
     } else if (type === 'Date') {
-      return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss');
+      return dayjs(value * 1000).format('YYYY-MM-DD HH:mm:ss');
     } else if (type === 'RAM') {
       return Number(value / 1048576).toFixed(3);
     }

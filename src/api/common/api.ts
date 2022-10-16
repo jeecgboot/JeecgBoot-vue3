@@ -141,3 +141,10 @@ export const getFileblob = (url, parameter) => {
     { isTransformResponse: false }
   );
 };
+
+/**
+ * 【用于评论功能】自定义文件上传-方法
+ */
+export const uploadMyFile = (url, data) => {
+  return defHttp.uploadMyFile(url, data);
+};

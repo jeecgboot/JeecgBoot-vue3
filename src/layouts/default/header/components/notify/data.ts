@@ -148,7 +148,8 @@ export const tabListData: TabItem[] = [
         id: '000000008',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
         title: '标题',
-        description: '请将鼠标移动到此处，以便测试超长的消息在此处将如何处理。本例中设置的描述最大行数为2，超过2行的描述内容将被省略并且可以通过tooltip查看完整内容',
+        description:
+          '请将鼠标移动到此处，以便测试超长的消息在此处将如何处理。本例中设置的描述最大行数为2，超过2行的描述内容将被省略并且可以通过tooltip查看完整内容',
         datetime: '2017-08-07',
         type: '2',
         clickClose: true,

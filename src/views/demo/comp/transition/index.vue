@@ -29,7 +29,21 @@
     ExpandTransition,
   } from '/@/components/Transition';
 
-  const transitionList = ['Fade', 'Scale', 'SlideY', 'ScrollY', 'SlideYReverse', 'ScrollYReverse', 'SlideX', 'ScrollX', 'SlideXReverse', 'ScrollXReverse', 'ScaleRotate', 'ExpandX', 'Expand'];
+  const transitionList = [
+    'Fade',
+    'Scale',
+    'SlideY',
+    'ScrollY',
+    'SlideYReverse',
+    'ScrollYReverse',
+    'SlideX',
+    'ScrollX',
+    'SlideXReverse',
+    'ScrollXReverse',
+    'ScaleRotate',
+    'ExpandX',
+    'Expand',
+  ];
   const options = transitionList.map((item) => ({
     label: item,
     value: item,

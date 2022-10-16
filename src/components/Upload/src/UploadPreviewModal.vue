@@ -1,5 +1,12 @@
 <template>
-  <BasicModal width="800px" :title="t('component.upload.preview')" wrapClassName="upload-preview-modal" v-bind="$attrs" @register="register" :showOkBtn="false">
+  <BasicModal
+    width="800px"
+    :title="t('component.upload.preview')"
+    wrapClassName="upload-preview-modal"
+    v-bind="$attrs"
+    @register="register"
+    :showOkBtn="false"
+  >
     <FileList :dataSource="fileListRef" :columns="columns" :actionColumn="actionColumn" />
   </BasicModal>
 </template>

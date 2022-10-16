@@ -32,6 +32,12 @@ interface OnlineColumn {
   slots?: ScopedSlots;
   //超过宽度将自动省略，暂不支持和排序筛选一起使用。
   ellipsis?: boolean;
+  // 是否固定列
+  fixed?: boolean | 'left' | 'right';
+  //字段类型 int/string 
+  dbType?:string;
+  //他表字段用
+  linkField?:string;
 }
 
 export { OnlineColumn, HrefSlots };

@@ -1,17 +1,10 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { computed, reactive, ref, unref } from 'vue';
-import { useWebSocket as $useWebSocket, WebSocketResult } from '@vueuse/core';
+import { unref } from 'vue';
+import { useWebSocket, WebSocketResult } from '@vueuse/core';
 import { getToken } from '/@/utils/auth';
 
-const state = reactive({
-  server: '',
-  sendValue: '',
-  recordList: [] as { id: number; time: number; res: string }[],
-});
-
-const result = ref<WebSocketResult<any>>();
-
+let result: WebSocketResult<any>;
 const listeners = new Map();
 
 /**
@@ -19,23 +12,28 @@ const listeners = new Map();
  * @param url
  */
 export function connectWebSocket(url: string) {
-  if (!unref(getIsOpen)) {
-    state.server = url;
-    //update-begin-author:taoyan date:2022-4-24 for: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
-    let token = (getToken() || '') as string;
-    result.value = $useWebSocket(state.server, {
-      // 自动重连
-      autoReconnect: true,
-      // 心跳检测
-      heartbeat: false,
-      protocols: [token],
-    });
-    //update-end-author:taoyan date:2022-4-24 for: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
-    result.value.open();
-    const ws = unref(result.value.ws);
-    if (ws) {
-      ws.onopen = onOpen;
-      ws.onclose = onClose;
+  //update-begin-author:taoyan date:2022-4-24 for: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
+  let token = (getToken() || '') as string;
+  result = useWebSocket(url, {
+    // 自动重连 (遇到错误最多重复连接10次)
+    autoReconnect: {
+      retries : 10,
+      delay : 5000
+    },
+    // 心跳检测
+    heartbeat: {
+      message: "ping",
+      interval: 55000
+    },
+    protocols: [token],
+  });
+  //update-end-author:taoyan date:2022-4-24 for: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
+  if (result) {
+    result.open = onOpen;
+    result.close = onClose;
+
+    const ws = unref(result.ws);
+    if(ws!=null){
       ws.onerror = onError;
       ws.onmessage = onMessage;
     }
@@ -55,9 +53,6 @@ function onError(e) {
 }
 
 function onMessage(e) {
-  if (e.data === 'ping') {
-    return;
-  }
   console.debug('[WebSocket] -----接收消息-------', e.data);
   try {
     const data = JSON.parse(e.data);
@@ -73,10 +68,6 @@ function onMessage(e) {
   }
 }
 
-/**
- * 判断 WebSocket 是否是开启状态
- */
-export const getIsOpen = computed(() => result.value?.status.value === 'OPEN');
 
 /**
  * 添加 WebSocket 消息监听
@@ -101,6 +92,6 @@ export function offWebSocket(callback: (data: object) => any) {
   listeners.delete(callback);
 }
 
-export function useWebSocket() {
-  return unref(result);
+export function useMyWebSocket() {
+  return result;
 }

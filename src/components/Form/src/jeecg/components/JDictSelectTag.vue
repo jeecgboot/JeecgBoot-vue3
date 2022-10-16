@@ -22,8 +22,16 @@
         <LoadingOutlined />
       </template>
     </a-input>
-    <a-select v-else :placeholder="placeholder" v-bind="attrs" v-model:value="state" :filterOption="handleFilterOption" :getPopupContainer="getPopupContainer" @change="handleChange">
-      <a-select-option v-if="showChooseOption" :value="undefined">请选择</a-select-option>
+    <a-select
+      v-else
+      :placeholder="placeholder"
+      v-bind="attrs"
+      v-model:value="state"
+      :filterOption="handleFilterOption"
+      :getPopupContainer="getPopupContainer"
+      @change="handleChange"
+    >
+      <a-select-option v-if="showChooseOption" :value="null">请选择…</a-select-option>
       <template v-for="item in dictOptions" :key="`${item.value}`">
         <a-select-option :value="item.value">
           <span style="display: inline-block; width: 100%" :title="item.label">
@@ -35,13 +43,14 @@
   </template>
 </template>
 <script lang="ts">
-  import { defineComponent, PropType, ref, reactive, watchEffect, computed, unref, watch, onMounted } from 'vue';
+  import { defineComponent, PropType, ref, reactive, watchEffect, computed, unref, watch, onMounted, nextTick } from 'vue';
+  import { Form } from 'ant-design-vue';
   import { propTypes } from '/@/utils/propTypes';
   import { useAttrs } from '/@/hooks/core/useAttrs';
-  import { initDictOptions } from '/@/utils/dict/index';
+  import { initDictOptions } from '/@/utils/dict';
   import { get, omit } from 'lodash-es';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { CompTypeEnum } from '/@/enums/CompTypeEnum.ts';
+  import { CompTypeEnum } from '/@/enums/CompTypeEnum';
   import { LoadingOutlined } from '@ant-design/icons-vue';
 
   export default defineComponent({
@@ -69,6 +78,7 @@
     },
     emits: ['options-change', 'change'],
     setup(props, { emit, refs }) {
+      const { onFieldChange } = Form.useInjectFormItemContext();
       const emitData = ref<any[]>([]);
       const dictOptions = ref<any[]>([]);
       const attrs = useAttrs();
@@ -108,6 +118,7 @@
         () => {
           if (props.value === '') {
             emit('change', '');
+            nextTick(() => onFieldChange());
           }
         }
       );
@@ -132,6 +143,7 @@
 
       function handleChange(e) {
         emitData.value = [e?.target?.value || e];
+        nextTick(() => onFieldChange());
       }
 
       /** 用于搜索下拉框中的内容 */

@@ -45,7 +45,9 @@
         let type = props.type === null ? props.value >= props.target : props.type;
         return type ? 'up' : 'down';
       });
-      const rate = computed(() => (props.percentage === null ? (Math.abs(props.value - props.target) * 100) / props.target : props.percentage).toFixed(props.fixed));
+      const rate = computed(() =>
+        (props.percentage === null ? (Math.abs(props.value - props.target) * 100) / props.target : props.percentage).toFixed(props.fixed)
+      );
       return {
         trend,
         rate,

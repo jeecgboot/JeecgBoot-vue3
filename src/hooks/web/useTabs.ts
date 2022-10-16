@@ -89,6 +89,20 @@ export function useTabs(_router?: Router) {
     }
   }
 
+  /**
+   * 关闭相同的路由
+   * @param path
+   */
+  function closeSameRoute(path) {
+    if(path.indexOf('?')>0){
+      path = path.split('?')[0];
+    }
+    let tab = tabStore.getTabList.find((item) => item.path.indexOf(path)>=0)!;
+    if(tab){
+      tabStore.closeTab(tab, router);
+    }
+  }
+
   return {
     refreshPage: () => handleTabAction(TableActionEnum.REFRESH),
     closeAll: () => handleTabAction(TableActionEnum.CLOSE_ALL),
@@ -99,5 +113,6 @@ export function useTabs(_router?: Router) {
     close: (tab?: RouteLocationNormalized) => handleTabAction(TableActionEnum.CLOSE, tab),
     setTitle: (title: string, tab?: RouteLocationNormalized) => updateTabTitle(title, tab),
     updatePath: (fullPath: string, tab?: RouteLocationNormalized) => updateTabPath(fullPath, tab),
+    closeSameRoute
   };
 }

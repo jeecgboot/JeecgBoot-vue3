@@ -8,6 +8,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'name',
     width: 70,
     align: 'left',
+    sorter: true
   },
   {
     title: '关键词',
@@ -23,6 +24,7 @@ export const columns: BasicColumn[] = [
     title: '工资',
     dataIndex: 'salaryMoney',
     width: 40,
+    sorter: true
   },
   {
     title: '奖金',
@@ -32,6 +34,7 @@ export const columns: BasicColumn[] = [
   {
     title: '性别',
     dataIndex: 'sex',
+    sorter: true,
     customRender: ({ record }) => {
       return render.renderDict(record.sex, 'sex');
       // let v = record.sex ? (record.sex == '1' ? '男' : '女') : '';
@@ -67,6 +70,9 @@ export const searchFormSchema: FormSchema[] = [
     field: 'birthday',
     label: '生日',
     component: 'RangePicker',
+    componentProps: {
+      valueType: 'Date'
+    },
     colProps: { span: 8 },
   },
   {
@@ -92,6 +98,18 @@ export const formSchema: FormSchema[] = [
   {
     field: 'id',
     label: 'id',
+    component: 'Input',
+    show: false,
+  },
+  {
+    field: 'createBy',
+    label: 'createBy',
+    component: 'Input',
+    show: false,
+  },
+  {
+    field: 'createTime',
+    label: 'createTime',
     component: 'Input',
     show: false,
   },
@@ -154,8 +172,8 @@ export const formSchema: FormSchema[] = [
     field: 'birthday',
     label: '生日',
     component: 'DatePicker',
+    defaultValue: '',
     componentProps: {
-      showTime: true,
       valueFormat: 'YYYY-MM-DD',
       placeholder: '请选择生日',
     },
@@ -171,8 +189,9 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'content',
-    label: '个人简介',
+    label: '个人简介 - To introduce myself',
     component: 'InputTextArea',
+    labelLength: 4,
     componentProps: {
       placeholder: '请输入个人简介',
     },

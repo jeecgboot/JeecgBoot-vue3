@@ -139,7 +139,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   /** 通用处理 change 事件 */
   function handleChangeCommon($value) {
     let newValue = enhanced.getValue($value, ctx);
-    let oldValue = value.value;
+    let oldValue = value.value
     trigger('change', { value: newValue });
     // 触发valueChange事件
     parentTrigger('valueChange', {

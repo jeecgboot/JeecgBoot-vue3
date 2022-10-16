@@ -118,11 +118,11 @@
           let params = { id: orderMainModel.id };
           const customerList = await orderCustomerList(params);
           //update-begin---author:wangshuai ---date:20220629  for：[VUEN-1484]在一对多示例页面，编辑一行（青岛订单A0001），客户信息无法填入------------
-          orderMainModel.jeecgOrderCustomerList = customerList[0] ? customerList[0] : {};
+          orderMainModel.jeecgOrderCustomerList = customerList[0]?customerList[0]:{};
           //update-end---author:wangshuai ---date:20220629  for：[VUEN-1484]在一对多示例页面，编辑一行（青岛订单A0001），客户信息无法填入--------------
           const ticketList = await orderTicketList(params);
           //update-begin---author:wangshuai ---date:20220629  for：[VUEN-1484]在一对多示例页面，编辑一行（青岛订单A0001），客户信息无法填入------------
-          orderMainModel.jeecgOrderTicketList = ticketList[0] ? ticketList[0] : {};
+          orderMainModel.jeecgOrderTicketList = ticketList[0]?ticketList[0]:{};
           //update-end---author:wangshuai ---date:20220629  for：[VUEN-1484]在一对多示例页面，编辑一行（青岛订单A0001），客户信息无法填入--------------
         }
       });
@@ -145,8 +145,10 @@
             try {
               console.log('formData', JSON.stringify(orderMainModel));
               setModalProps({ confirmLoading: true });
-              orderMainModel.jeecgOrderCustomerList = Object.keys(orderMainModel.jeecgOrderCustomerList).length > 0 ? [orderMainModel.jeecgOrderCustomerList] : [];
-              orderMainModel.jeecgOrderTicketList = Object.keys(orderMainModel.jeecgOrderTicketList).length > 0 ? [orderMainModel.jeecgOrderTicketList] : [];
+              orderMainModel.jeecgOrderCustomerList =
+                Object.keys(orderMainModel.jeecgOrderCustomerList).length > 0 ? [orderMainModel.jeecgOrderCustomerList] : [];
+              orderMainModel.jeecgOrderTicketList =
+                Object.keys(orderMainModel.jeecgOrderTicketList).length > 0 ? [orderMainModel.jeecgOrderTicketList] : [];
               await saveOrUpdate(orderMainModel, unref(isUpdate));
               closeModal();
               emit('success');

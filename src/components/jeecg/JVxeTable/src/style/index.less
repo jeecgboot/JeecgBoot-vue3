@@ -72,4 +72,27 @@
   .vxe-body--row.sortable-chosen {
     background-color: #dfecfb;
   }
+
+  // ----------- 【VUEN-1691】默认隐藏滚动条，鼠标放上去才显示 -------------------------------------------
+  .vxe-table {
+    //.vxe-table--footer-wrapper.body--wrapper,
+    .vxe-table--body-wrapper.body--wrapper {
+      overflow-x: hidden;
+    }
+    
+    &:hover {
+      //.vxe-table--footer-wrapper.body--wrapper,
+      .vxe-table--body-wrapper.body--wrapper {
+        overflow-x: auto;
+      }
+    }
+  }
+  // ----------- 【VUEN-1691】默认隐藏滚动条，鼠标放上去才显示 -------------------------------------------
+
+  // 调整展开/收起图标样式
+  .vxe-table--render-default .vxe-table--expanded .vxe-table--expand-btn {
+    width: 17px;
+    height: 17px;
+  }
+
 }

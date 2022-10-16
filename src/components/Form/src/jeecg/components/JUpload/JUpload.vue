@@ -291,6 +291,8 @@
               fileSize: item.size,
             };
             newFileList.push(fileJson);
+          } else {
+            return;
           }
         }
         emitValue(newFileList);

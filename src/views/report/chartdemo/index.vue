@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <a-card :bordered="false" style="height: 100%">
-      <a-tabs v-model:activeKey="activeKey" @change="tabChange">
+      <a-tabs v-model:activeKey="activeKey" animated @change="tabChange">
         <a-tab-pane key="1" tab="柱状图">
           <a-row>
             <a-col :span="24">

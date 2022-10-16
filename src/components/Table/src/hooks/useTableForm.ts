@@ -4,7 +4,12 @@ import { unref, computed } from 'vue';
 import type { FormProps } from '/@/components/Form';
 import { isFunction } from '/@/utils/is';
 
-export function useTableForm(propsRef: ComputedRef<BasicTableProps>, slots: Slots, fetch: (opt?: FetchParams | undefined) => Promise<void>, getLoading: ComputedRef<boolean | undefined>) {
+export function useTableForm(
+  propsRef: ComputedRef<BasicTableProps>,
+  slots: Slots,
+  fetch: (opt?: FetchParams | undefined) => Promise<void>,
+  getLoading: ComputedRef<boolean | undefined>
+) {
   const getFormProps = computed((): Partial<FormProps> => {
     const { formConfig } = unref(propsRef);
     const { submitButtonOptions } = formConfig || {};
@@ -13,6 +18,7 @@ export function useTableForm(propsRef: ComputedRef<BasicTableProps>, slots: Slot
       ...formConfig,
       submitButtonOptions: { loading: unref(getLoading), ...submitButtonOptions },
       compact: true,
+      autoSubmitOnEnter: true,
     };
   });
 

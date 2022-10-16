@@ -2,7 +2,12 @@
   <div v-for="(param, index) in dynamicInput.params" :key="index" style="display: flex">
     <a-input placeholder="请输入参数key" v-model:value="param.label" style="width: 30%; margin-bottom: 5px" @input="emitChange" />
     <a-input placeholder="请输入参数value" v-model:value="param.value" style="width: 30%; margin: 0 0 5px 5px" @input="emitChange" />
-    <MinusCircleOutlined v-if="dynamicInput.params.length > min" class="dynamic-delete-button" @click="remove(param)" style="width: 50px"></MinusCircleOutlined>
+    <MinusCircleOutlined
+      v-if="dynamicInput.params.length > min"
+      class="dynamic-delete-button"
+      @click="remove(param)"
+      style="width: 50px"
+    ></MinusCircleOutlined>
   </div>
   <div>
     <a-button type="dashed" style="width: 60%" @click="add">

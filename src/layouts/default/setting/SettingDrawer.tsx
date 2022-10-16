@@ -16,7 +16,16 @@ import { useI18n } from '/@/hooks/web/useI18n';
 
 import { baseHandler } from './handler';
 
-import { HandlerEnum, contentModeOptions, topMenuAlignOptions, getMenuTriggerOptions, routerTransitionOptions, menuTypeList, mixSidebarTriggerOptions, tabsThemeOptions } from './enum';
+import {
+  HandlerEnum,
+  contentModeOptions,
+  topMenuAlignOptions,
+  getMenuTriggerOptions,
+  routerTransitionOptions,
+  menuTypeList,
+  mixSidebarTriggerOptions,
+  tabsThemeOptions,
+} from './enum';
 
 import { HEADER_PRESET_BG_COLOR_LIST, SIDE_BAR_BG_COLOR_LIST, APP_PRESET_COLOR_LIST } from '/@/settings/designSetting';
 
@@ -25,8 +34,19 @@ const { t } = useI18n();
 export default defineComponent({
   name: 'SettingDrawer',
   setup(_, { attrs }) {
-    const { getContentMode, getShowFooter, getShowBreadCrumb, getShowBreadCrumbIcon, getShowLogo, getFullContent, getColorWeak, getGrayMode, getLockTime, getShowDarkModeToggle, getThemeColor } =
-      useRootSetting();
+    const {
+      getContentMode,
+      getShowFooter,
+      getShowBreadCrumb,
+      getShowBreadCrumbIcon,
+      getShowLogo,
+      getFullContent,
+      getColorWeak,
+      getGrayMode,
+      getLockTime,
+      getShowDarkModeToggle,
+      getThemeColor,
+    } = useRootSetting();
 
     const { getOpenPageLoading, getBasicTransition, getEnableTransition, getOpenNProgress } = useTransitionSetting();
 
@@ -103,7 +123,12 @@ export default defineComponent({
 
       return (
         <>
-          <SwitchItem title={t('layout.setting.splitMenu')} event={HandlerEnum.MENU_SPLIT} def={unref(getSplit)} disabled={!unref(getShowMenuRef) || unref(getMenuType) !== MenuTypeEnum.MIX} />
+          <SwitchItem
+            title={t('layout.setting.splitMenu')}
+            event={HandlerEnum.MENU_SPLIT}
+            def={unref(getSplit)}
+            disabled={!unref(getShowMenuRef) || unref(getMenuType) !== MenuTypeEnum.MIX}
+          />
           {/*<SwitchItem*/}
           {/*  title={t('layout.setting.mixSidebarFixed')}*/}
           {/*  event={HandlerEnum.MENU_FIXED_MIX_SIDEBAR}*/}
@@ -171,7 +196,12 @@ export default defineComponent({
             options={triggerOptions}
             disabled={!unref(getShowMenuRef) || unref(getIsMixSidebar)}
           />
-          <SelectItem title={t('layout.setting.contentMode')} event={HandlerEnum.CONTENT_MODE} def={unref(getContentMode)} options={contentModeOptions} />
+          <SelectItem
+            title={t('layout.setting.contentMode')}
+            event={HandlerEnum.CONTENT_MODE}
+            def={unref(getContentMode)}
+            options={contentModeOptions}
+          />
           <InputNumberItem
             title={t('layout.setting.autoScreenLock')}
             min={0}
@@ -198,7 +228,12 @@ export default defineComponent({
     function renderContent() {
       return (
         <>
-          <SwitchItem title={t('layout.setting.menuDrag')} event={HandlerEnum.MENU_HAS_DRAG} def={unref(getCanDrag)} disabled={!unref(getShowMenuRef)} />
+          <SwitchItem
+            title={t('layout.setting.menuDrag')}
+            event={HandlerEnum.MENU_HAS_DRAG}
+            def={unref(getCanDrag)}
+            disabled={!unref(getShowMenuRef)}
+          />
           <SwitchItem
             title={t('layout.setting.collapseMenuDisplayName')}
             event={HandlerEnum.MENU_COLLAPSED_SHOW_TITLE}
@@ -206,7 +241,12 @@ export default defineComponent({
             disabled={!unref(getShowMenuRef) || !unref(getCollapsed) || unref(getIsMixSidebar)}
           />
           <SwitchItem title={t('layout.setting.tabs')} event={HandlerEnum.TABS_SHOW} def={unref(getShowMultipleTab)} />
-          <SwitchItem title={t('layout.setting.breadcrumb')} event={HandlerEnum.SHOW_BREADCRUMB} def={unref(getShowBreadCrumb)} disabled={!unref(getShowHeader)} />
+          <SwitchItem
+            title={t('layout.setting.breadcrumb')}
+            event={HandlerEnum.SHOW_BREADCRUMB}
+            def={unref(getShowBreadCrumb)}
+            disabled={!unref(getShowHeader)}
+          />
 
           {/*<SwitchItem*/}
           {/*  title={t('layout.setting.breadcrumbIcon')}*/}
@@ -287,7 +327,7 @@ export default defineComponent({
     }
 
     return () => (
-      <BasicDrawer {...attrs} title={t('layout.setting.drawerTitle')} width={330} wrapClassName="setting-drawer">
+      <BasicDrawer {...attrs} title={t('layout.setting.drawerTitle')} width={330} class="setting-drawer">
         {unref(getShowDarkModeToggle) && <Divider>{() => t('layout.setting.darkMode')}</Divider>}
         {unref(getShowDarkModeToggle) && <AppDarkModeToggle class="mx-auto" />}
         <Divider>{() => t('layout.setting.navMode')}</Divider>

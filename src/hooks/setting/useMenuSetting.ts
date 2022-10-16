@@ -99,7 +99,8 @@ export function useMenuSetting() {
       unref(getIsTopMenu) || !unref(getShowMenu) || (unref(getSplit) && unref(getMenuHidden))
         ? 0
         : unref(getIsMixSidebar)
-        ? (unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH) + (unref(getMixSideFixed) && unref(mixSideHasChildren) ? unref(getRealWidth) : 0)
+        ? (unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH) +
+          (unref(getMixSideFixed) && unref(mixSideHasChildren) ? unref(getRealWidth) : 0)
         : unref(getRealWidth);
 
     return `calc(100% - ${unref(width)}px)`;

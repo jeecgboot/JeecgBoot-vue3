@@ -298,6 +298,12 @@ export const getServerInfo = (infoType) => {
     ]);
   }
   if (infoType == '3') {
-    return Promise.all([getTomcatSessionsActiveCurrent(), getTomcatSessionsActiveMax(), getTomcatSessionsCreated(), getTomcatSessionsExpired(), getTomcatSessionsRejected()]);
+    return Promise.all([
+      getTomcatSessionsActiveCurrent(),
+      getTomcatSessionsActiveMax(),
+      getTomcatSessionsCreated(),
+      getTomcatSessionsExpired(),
+      getTomcatSessionsRejected(),
+    ]);
   }
 };

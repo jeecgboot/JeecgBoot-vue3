@@ -1,5 +1,6 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { rules } from '/@/utils/helper/validator';
+import { filterDictTextByCache } from '/@/utils/dict/JDictSelectUtil';
 
 export const columns: BasicColumn[] = [
   {
@@ -21,15 +22,7 @@ export const columns: BasicColumn[] = [
     title: '模板类型',
     dataIndex: 'templateType',
     width: 100,
-    customRender: function ({ text }) {
-      if (text == '1') {
-        return '文本';
-      }
-      if (text == '2') {
-        return '富文本';
-      }
-      return text;
-    },
+    customRender: ({ text }) => filterDictTextByCache('msgType', text),
   },
   {
     title: '是否应用',
@@ -118,7 +111,7 @@ export const formSchemas: FormSchema[] = [
       },
     },
     ifShow: ({ values }) => {
-      return !['2', '4'].includes(values.templateType);
+      return !['2', '4', '5'].includes(values.templateType);
     },
   },
 
@@ -128,6 +121,14 @@ export const formSchemas: FormSchema[] = [
     component: 'JEditor',
     ifShow: ({ values }) => {
       return ['2', '4'].includes(values.templateType);
+    },
+  },
+  {
+    label: '模板内容',
+    field: 'templateContent',
+    component: 'JMarkdownEditor',
+    ifShow: ({ values }) => {
+      return ['5'].includes(values.templateType);
     },
   },
 ];
@@ -157,6 +158,7 @@ export const sendTestFormSchemas: FormSchema[] = [
     component: 'InputTextArea',
     required: true,
     helpMessage: 'JSON数据',
+    defaultValue: '{}',
     componentProps: {
       placeholder: '请输入JSON格式测试数据',
       rows: 5,
@@ -167,12 +169,17 @@ export const sendTestFormSchemas: FormSchema[] = [
     field: 'msgType',
     component: 'JDictSelectTag',
     required: true,
-    componentProps: { dictCode: 'messageType' },
+    defaultValue:'system',
+    componentProps: { dictCode: 'messageType',type:'radio' },
   },
   {
     label: '消息接收方',
     field: 'receiver',
-    component: 'Input',
     required: true,
+    component: 'JSelectUser',
+    componentProps: {
+      labelKey: 'username',
+      rowKey: 'username',
+    },
   },
 ];

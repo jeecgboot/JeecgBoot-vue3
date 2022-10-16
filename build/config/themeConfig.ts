@@ -30,7 +30,12 @@ export function getThemeColors(color?: string) {
   return [...lightColors, ...modeColors];
 }
 
-export function generateColors({ color = primaryColor, mixLighten, mixDarken, tinycolor }: GenerateColorsParams) {
+export function generateColors({
+  color = primaryColor,
+  mixLighten,
+  mixDarken,
+  tinycolor,
+}: GenerateColorsParams) {
   const arr = new Array(19).fill(0);
   const lightens = arr.map((_t, i) => {
     return mixLighten(color, i / 5);
@@ -63,5 +68,12 @@ export function generateColors({ color = primaryColor, mixLighten, mixDarken, ti
         .toHexString();
     })
     .filter((item) => item !== '#000000');
-  return [...lightens, ...darkens, ...alphaColors, ...shortAlphaColors, ...tinycolorDarkens, ...tinycolorLightens].filter((item) => !item.includes('-'));
+  return [
+    ...lightens,
+    ...darkens,
+    ...alphaColors,
+    ...shortAlphaColors,
+    ...tinycolorDarkens,
+    ...tinycolorLightens,
+  ].filter((item) => !item.includes('-'));
 }

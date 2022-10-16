@@ -1,5 +1,10 @@
 <template>
-  <PageWrapper :title="`用户` + userId + `的资料`" content="这是用户资料详情页面。本页面仅用于演示相同路由在tab中打开多个页面并且显示不同的数据" contentBackground @back="goBack">
+  <PageWrapper
+    :title="`用户` + userId + `的资料`"
+    content="这是用户资料详情页面。本页面仅用于演示相同路由在tab中打开多个页面并且显示不同的数据"
+    contentBackground
+    @back="goBack"
+  >
     <template #extra>
       <a-button type="primary" danger> 禁用账号 </a-button>
       <a-button type="primary"> 修改密码 </a-button>

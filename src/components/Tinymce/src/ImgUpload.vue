@@ -1,6 +1,15 @@
 <template>
   <div :class="[prefixCls, { fullscreen }]">
-    <Upload name="file" multiple @change="handleChange" :action="uploadUrl" :showUploadList="false" :data="getBizData()" :headers="getheader()" accept=".jpg,.jpeg,.gif,.png,.webp">
+    <Upload
+      name="file"
+      multiple
+      @change="handleChange"
+      :action="uploadUrl"
+      :showUploadList="false"
+      :data="getBizData()"
+      :headers="getheader()"
+      accept=".jpg,.jpeg,.gif,.png,.webp"
+    >
       <a-button type="primary" v-bind="{ ...getButtonProps }">
         {{ t('component.upload.imgUpload') }}
       </a-button>

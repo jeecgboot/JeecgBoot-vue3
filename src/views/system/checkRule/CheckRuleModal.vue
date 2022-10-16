@@ -2,7 +2,7 @@
   <BasicModal v-bind="$attrs" @register="registerModal" @ok="handleSubmit" :title="title" :width="1200" destroyOnClose>
     <BasicForm @register="registerForm" />
 
-    <a-tabs v-model:activeKey="activeKey">
+    <a-tabs v-model:activeKey="activeKey" animated>
       <a-tab-pane tab="局部规则" key="1" :forceRender="true">
         <JVxeTable ref="vTable1" toolbar rowNumber dragSort rowSelection :maxHeight="580" :dataSource="dataSource1" :columns="columns1">
           <template #toolbarAfter>
@@ -11,7 +11,17 @@
         </JVxeTable>
       </a-tab-pane>
       <a-tab-pane tab="全局规则" key="2" :forceRender="true">
-        <JVxeTable ref="vTable2" toolbar rowNumber dragSort rowSelection :maxHeight="580" :dataSource="dataSource2" :addSetActive="false" :columns="columns2">
+        <JVxeTable
+          ref="vTable2"
+          toolbar
+          rowNumber
+          dragSort
+          rowSelection
+          :maxHeight="580"
+          :dataSource="dataSource2"
+          :addSetActive="false"
+          :columns="columns2"
+        >
           <template #toolbarAfter>
             <a-alert type="info" showIcon message="全局规则可校验用户输入的所有字符；全局规则的优先级比局部规则的要高。" style="margin-bottom: 8px" />
           </template>

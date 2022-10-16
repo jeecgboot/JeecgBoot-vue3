@@ -61,7 +61,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { random } from 'lodash-es';
   import { buildUUID } from '/@/utils/uuid';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import { pushIfNotExist } from '/@/utils/common/compUtils';
 
   const { createMessage } = useMessage();
@@ -190,7 +190,7 @@
       key: 'datetime',
       type: JVxeTypes.datetime,
       width: 200,
-      defaultValue: '2019-4-30 14:52:22',
+      defaultValue: '2019-04-30 14:52:22',
       placeholder: '请选择',
     },
     {
@@ -229,7 +229,7 @@
 
     let randomDatetime = () => {
       let time = random(1000, 9999999999999);
-      return moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss');
+      return dayjs(new Date(time)).format('YYYY-MM-DD HH:mm:ss');
     };
 
     let limit = (current - 1) * pageSize;

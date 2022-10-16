@@ -1,16 +1,18 @@
 <template>
-  <Modal v-bind="getProps">
-    <Spin :spinning="loading">
-      <div style="padding: 20px">
-        <div v-html="options.content" style="margin-bottom: 8px"></div>
-        <BasicForm @register="registerForm">
-          <template #customInput="{ model, field }">
-            <Input ref="inputRef" v-model:value="model[field]" :placeholder="placeholder" @pressEnter="onSubmit" @input="onChange" />
-          </template>
-        </BasicForm>
-      </div>
-    </Spin>
-  </Modal>
+  <ConfigProvider :locale="getAntdLocale">
+    <Modal v-bind="getProps">
+      <Spin :spinning="loading">
+        <div style="padding: 20px;">
+          <div v-html="options.content" style="margin-bottom: 8px"></div>
+          <BasicForm @register="registerForm">
+            <template #customInput="{ model, field }">
+              <Input ref="inputRef" v-model:value="model[field]" :placeholder="placeholder" @pressEnter="onSubmit" @input="onChange" />
+            </template>
+          </BasicForm>
+        </div>
+      </Spin>
+    </Modal>
+  </ConfigProvider>
 </template>
 
 <script lang="ts">
@@ -18,7 +20,8 @@
   import type { ModalProps } from '/@/components/Modal';
   import { ref, defineComponent, computed, unref, onMounted, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
-  import { Modal, Spin, Input } from 'ant-design-vue';
+  import { Modal, Spin, Input, ConfigProvider } from 'ant-design-vue';
+  import { useLocale } from '/@/locales/useLocale';
 
   export default defineComponent({
     name: 'JPrompt',
@@ -27,10 +30,12 @@
       Spin,
       Input,
       BasicForm,
+      ConfigProvider,
     },
     emits: ['register'],
     setup(props, { emit }) {
       const inputRef = ref();
+      const { getAntdLocale } = useLocale();
       const visible = ref(false);
       // 当前是否正在加载中
       const loading = ref(false);
@@ -109,9 +114,9 @@
       }
 
       function onChange() {
-        validate();
+        validate()
       }
-
+      
       /** 提交表单 */
       async function onSubmit() {
         try {
@@ -144,6 +149,7 @@
         loading,
         options,
         placeholder,
+        getAntdLocale,
         onChange,
         onSubmit,
 

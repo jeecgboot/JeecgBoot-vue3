@@ -226,7 +226,7 @@ export const ticketFormSchema: FormSchema[] = [
     field: 'tickectDate',
     component: 'DatePicker',
     componentProps: {
-      valueFormat: 'YYYY-MM-DD hh:mm:ss',
+      valueFormat: 'YYYY-MM-DD',
     },
   },
   {

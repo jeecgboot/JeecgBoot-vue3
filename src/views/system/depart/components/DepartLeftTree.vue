@@ -266,8 +266,9 @@
 
   // 树选择事件
   function onSelect(selKeys, event) {
+    console.log('select: ', selKeys, event);
     if (selKeys.length > 0 && selectedKeys.value[0] !== selKeys[0]) {
-      setSelectedKey(selKeys[0], event.selectedNodes[0].props);
+      setSelectedKey(selKeys[0], event.selectedNodes[0]);
     } else {
       // 这样可以防止用户取消选择
       setSelectedKey(selectedKeys.value[0]);

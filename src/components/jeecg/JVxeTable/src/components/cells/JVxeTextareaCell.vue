@@ -1,5 +1,14 @@
 <template>
-  <JInputPop :value="innerValue" :width="300" :height="210" :pop-container="getPopupContainer" v-bind="cellProps" style="width: 100%" @blur="handleBlurCommon" @change="handleChangeCommon" />
+  <JInputPop
+    :value="innerValue"
+    :width="300"
+    :height="210"
+    :pop-container="getPopupContainer"
+    v-bind="cellProps"
+    style="width: 100%"
+    @blur="handleBlurCommon"
+    @change="handleChangeCommon"
+  />
 </template>
 
 <script lang="ts">

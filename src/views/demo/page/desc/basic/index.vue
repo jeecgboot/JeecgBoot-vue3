@@ -17,7 +17,16 @@
   import { PageWrapper } from '/@/components/Page';
   import { Divider } from 'ant-design-vue';
 
-  import { refundSchema, refundData, personSchema, personData, refundTableSchema, refundTimeTableSchema, refundTableData, refundTimeTableData } from './data';
+  import {
+    refundSchema,
+    refundData,
+    personSchema,
+    personData,
+    refundTableSchema,
+    refundTimeTableSchema,
+    refundTableData,
+    refundTimeTableData,
+  } from './data';
   export default defineComponent({
     components: { Description, BasicTable, PageWrapper, [Divider.name]: Divider },
     setup() {

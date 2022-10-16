@@ -1,7 +1,14 @@
 JEECG BOOT 低代码开发平台（Vue3前端）
 ===============
-当前最新版本： 3.3.0（发布时间：20220725）
-> 变更大版本号与后台同步 3.3.X，后续单独发布版本会更新小版本号。
+当前最新版本： 3.4.3（发布时间：20221017）
+
+[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/zhangdaiscott/jeecg-boot/blob/master/LICENSE)
+[![](https://img.shields.io/badge/Author-北京国炬软件-orange.svg)](http://www.jeecg.com)
+[![](https://img.shields.io/badge/Blog-官方博客-blue.svg)](https://my.oschina.net/jeecg)
+[![](https://img.shields.io/badge/version-3.4.3-brightgreen.svg)](https://github.com/zhangdaiscott/jeecg-boot)
+[![GitHub stars](https://img.shields.io/github/stars/zhangdaiscott/jeecg-boot.svg?style=social&label=Stars)](https://github.com/zhangdaiscott/jeecg-boot)
+[![GitHub forks](https://img.shields.io/github/forks/zhangdaiscott/jeecg-boot.svg?style=social&label=Fork)](https://github.com/zhangdaiscott/jeecg-boot)
+
 
 
 ## 简介
@@ -12,10 +19,10 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue、TypeScript 等新技术�
 
 ##  项目源码
 
-| 仓库 |前端源码Vue3版 | 前端源码Vue2版 | 后端源码 |
+| 仓库 | 后端源码 |前端 Vue3版 | 前端 Vue2版  |
 |-|-|-|-|
-| Github | [jeecgboot-vue3](https://github.com/jeecgboot/jeecgboot-vue3)  | [ant-design-vue-jeecg](https://github.com/jeecgboot/jeecg-boot/tree/master/ant-design-vue-jeecg) | [jeecg-boot](https://github.com/jeecgboot/jeecg-boot) |
-| 码云 | [jeecgboot-vue3](https://gitee.com/jeecg/jeecgboot-vue3)  | [ant-design-vue-jeecg](https://gitee.com/jeecg/jeecg-boot/tree/master/ant-design-vue-jeecg)  | [jeecg-boot](https://gitee.com/jeecg/jeecg-boot) |
+| Github | [jeecg-boot](https://github.com/jeecgboot/jeecg-boot) | [jeecgboot-vue3](https://github.com/jeecgboot/jeecgboot-vue3)  | [ant-design-vue-jeecg](https://github.com/jeecgboot/ant-design-vue-jeecg)  |
+| 码云 | [jeecg-boot](https://gitee.com/jeecg/jeecg-boot) | [jeecgboot-vue3](https://gitee.com/jeecg/jeecgboot-vue3)  | [ant-design-vue-jeecg](https://gitee.com/jeecg/ant-design-vue-jeecg)   |
 
 
 ##### 项目说明
@@ -24,7 +31,7 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue、TypeScript 等新技术�
 |--------------------|------------------------|
 | `jeecgboot-vue3` | Vue3版前端代码 | 
 | `jeecg-boot`    | JAVA后台（支持微服务）        | 
-| `ant-design-vue-jeecg`  |Vue2版前端代码（默认与主项目一起）       |   
+| `ant-design-vue-jeecg`  |Vue2版前端代码   |   
 
 
 
@@ -41,6 +48,8 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue、TypeScript 等新技术�
 
 ## 安装与使用
 
+
+ > 环境要求: Node.js版本要求12.x以上，且不能为13.x版本，这里推荐14.x及以上。
 
   
 - Get the project code

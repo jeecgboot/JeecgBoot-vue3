@@ -1,5 +1,13 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="register" :title="t('component.cropper.modalTitle')" width="800px" :canFullscreen="false" @ok="handleOk" :okText="t('component.cropper.okText')">
+  <BasicModal
+    v-bind="$attrs"
+    @register="register"
+    :title="t('component.cropper.modalTitle')"
+    width="800px"
+    :canFullscreen="false"
+    @ok="handleOk"
+    :okText="t('component.cropper.okText')"
+  >
     <div :class="prefixCls">
       <div :class="`${prefixCls}-left`">
         <div :class="`${prefixCls}-cropper`">
@@ -17,10 +25,22 @@
               <a-button type="primary" preIcon="ant-design:reload-outlined" size="small" :disabled="!src" @click="handlerToolbar('reset')" />
             </Tooltip>
             <Tooltip :title="t('component.cropper.btn_rotate_left')" placement="bottom">
-              <a-button type="primary" preIcon="ant-design:rotate-left-outlined" size="small" :disabled="!src" @click="handlerToolbar('rotate', -45)" />
+              <a-button
+                type="primary"
+                preIcon="ant-design:rotate-left-outlined"
+                size="small"
+                :disabled="!src"
+                @click="handlerToolbar('rotate', -45)"
+              />
             </Tooltip>
             <Tooltip :title="t('component.cropper.btn_rotate_right')" placement="bottom">
-              <a-button type="primary" preIcon="ant-design:rotate-right-outlined" size="small" :disabled="!src" @click="handlerToolbar('rotate', 45)" />
+              <a-button
+                type="primary"
+                preIcon="ant-design:rotate-right-outlined"
+                size="small"
+                :disabled="!src"
+                @click="handlerToolbar('rotate', 45)"
+              />
             </Tooltip>
             <Tooltip :title="t('component.cropper.btn_scale_x')" placement="bottom">
               <a-button type="primary" preIcon="vaadin:arrows-long-h" size="small" :disabled="!src" @click="handlerToolbar('scaleX')" />

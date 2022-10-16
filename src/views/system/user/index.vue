@@ -4,7 +4,7 @@
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <!--插槽:table标题-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" v-auth="'system:user:add'" @click="handleCreate"> 新增</a-button>
         <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
         <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
         <a-button type="primary" @click="handleSyncUser" preIcon="ant-design:sync-outlined"> 同步流程</a-button>
@@ -70,7 +70,6 @@
 
   const { createMessage, createConfirm } = useMessage();
 
-  const selectRows = ref([]);
   //注册drawer
   const [registerDrawer, { openDrawer }] = useDrawer();
   //回收站model
@@ -89,7 +88,7 @@
       columns: columns,
       size: 'small',
       formConfig: {
-        labelWidth: 200,
+        // labelWidth: 200,
         schemas: searchFormSchema,
       },
       actionColumn: {
@@ -109,7 +108,7 @@
   });
 
   //注册table数据
-  const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRowKeys }] = tableContext;
+  const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
 
   /**
    * 新增事件
@@ -154,7 +153,7 @@
    * 批量删除事件
    */
   async function batchHandleDelete() {
-    let hasAdmin = unref(selectRows).filter((item) => item.username == 'admin');
+    let hasAdmin = unref(selectedRows).filter((item) => item.username == 'admin');
     if (unref(hasAdmin).length > 0) {
       createMessage.warning('管理员账号不允许此操作！');
       return;
@@ -197,7 +196,7 @@
    * 批量冻结解冻
    */
   function batchFrozen(status) {
-    let hasAdmin = unref(selectRows).filter((item) => item.username == 'admin');
+    let hasAdmin = selectedRows.value.filter((item) => item.username == 'admin');
     if (unref(hasAdmin).length > 0) {
       createMessage.warning('管理员账号不允许此操作！');
       return;

@@ -1,5 +1,9 @@
 <template>
-  <PageWrapper contentFullHeight title="基础组件" content=" 基础组件依赖于ant-design-vue,组件库已有的基础组件,项目中不会再次进行demo展示（二次封装组件除外）">
+  <PageWrapper
+    contentFullHeight
+    title="基础组件"
+    content=" 基础组件依赖于ant-design-vue,组件库已有的基础组件,项目中不会再次进行demo展示（二次封装组件除外）"
+  >
     <a-row :gutter="[20, 20]">
       <a-col :xl="10" :lg="24">
         <a-card title="BasicButton Color">

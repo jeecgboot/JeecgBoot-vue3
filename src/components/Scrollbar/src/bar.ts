@@ -28,7 +28,8 @@ export default defineComponent({
       }
       window.getSelection()?.removeAllRanges();
       startDrag(e);
-      barStore.value[bar.value.axis] = e.currentTarget[bar.value.offset] - (e[bar.value.client] - e.currentTarget.getBoundingClientRect()[bar.value.direction]);
+      barStore.value[bar.value.axis] =
+        e.currentTarget[bar.value.offset] - (e[bar.value.client] - e.currentTarget.getBoundingClientRect()[bar.value.direction]);
     };
 
     const clickTrackHandler = (e: any) => {

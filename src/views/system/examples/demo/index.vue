@@ -52,13 +52,13 @@
         <a-upload name="file" :showUploadList="false" :customRequest="(file) => handleImportXls(file, getImportUrl, reload)">
           <a-button preIcon="ant-design:import-outlined" type="primary">导入</a-button>
         </a-upload>
-        <a-button preIcon="ant-design:export-outlined" type="primary" @click="handleExportXls('单表示例', getExportUrl, exportParams)">导出</a-button>
+        <a-button preIcon="ant-design:export-outlined" type="primary" @click="handleExportXls('单表示例', getExportUrl,exportParams)">导出</a-button>
         <a-button preIcon="ant-design:filter" type="primary" @click="">高级查询?</a-button>
         <a-button preIcon="ant-design:plus-outlined" type="primary" @click="openTab">打开Tab页</a-button>
-        <a-button preIcon="ant-design:retweet-outlined" type="primary" @click="customSearch = !customSearch">{{ customSearch ? '表单配置查询' : '自定义查询' }}</a-button>
+        <a-button preIcon="ant-design:retweet-outlined" type="primary" @click="customSearch = !customSearch">{{
+          customSearch ? '表单配置查询' : '自定义查询'
+        }}</a-button>
         <a-button preIcon="ant-design:import-outlined" type="primary" @click="handleImport">弹窗导入</a-button>
-
-        <super-query :config="superQueryConfig" @search="handleSuperQuery" />
 
         <a-dropdown v-if="checkedKeys.length > 0">
           <template #overlay>
@@ -84,7 +84,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, unref, reactive, toRaw, watch, computed } from 'vue';
+  import { ref, unref, reactive, toRaw, watch,computed } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import DemoModal from './DemoModal.vue';
@@ -97,13 +97,11 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { router } from '/@/router';
   import { filterObj } from '/@/utils/common/compUtils';
-  import SuperQuery from '/@/components/jeecg/super/superquery/SuperQuery.vue';
-
+  
   const go = useGo();
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerModal, { openModal }] = useModal();
   const [registerModal1, { openModal: openModal1 }] = useModal();
-  const [registerDetailModal, { openModal: openDetailModal }] = useModal();
   const { handleExportXls, handleImportXls } = useMethods();
   const min = ref();
   const max = ref();
@@ -112,14 +110,19 @@
     api: getDemoList,
     columns,
     formConfig: {
-      labelWidth: 120,
+      //labelWidth: 120,
       schemas: searchFormSchema,
-      fieldMapToTime: [['birthday', ['birthday_begin', 'birthday_end'], 'YYYY-MM-DD HH:mm:ss']],
+      fieldMapToTime: [['birthday', ['birthday_begin', 'birthday_end'], 'YYYY-MM-DD']],
       fieldMapToNumber: [['age', ['age_begin', 'age_end']]],
       autoAdvancedCol: 2,
       actionColOptions: {
         style: { textAlign: 'left' },
       },
+    },
+    //自定义默认排序
+    defSort: {
+      column: 'sex,salaryMoney',
+      order: 'desc',
     },
     striped: true,
     useSearchForm: true,
@@ -152,13 +155,13 @@
     openModal1(true);
   }
 
-  const exportParams = computed(() => {
+  const exportParams = computed(()=>{
     let paramsForm = {};
     if (checkedKeys.value && checkedKeys.value.length > 0) {
       paramsForm['selections'] = checkedKeys.value.join(',');
     }
-    return filterObj(paramsForm);
-  });
+    return filterObj(paramsForm)
+  })
   /**
    * 操作列定义
    * @param record
@@ -176,24 +179,15 @@
           confirm: handleDelete.bind(null, record),
         },
       },
-      {
-        label: '详情',
-        onClick: handleDetail.bind(null, record),
-      },
     ];
   }
 
-  function handleDetail(record) {
-    openDetailModal(true, {
-      record,
-    });
-  }
 
   /**
    * 选择事件
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
-    console.log('checkedKeys------>', checkedKeys);
+    console.log("checkedKeys------>",checkedKeys)
     checkedKeys.value = selectedRowKeys;
   }
 
@@ -274,17 +268,6 @@
   }
   //自定义查询----end---------
 
-  const superQueryConfig = reactive({
-    name: { title: '名称', view: 'text', type: 'string', order: 1 },
-    sex: { title: '性别', view: 'list', type: 'string', dictCode: 'sex', order: 2 },
-  });
-
-  function handleSuperQuery(params) {
-    Object.keys(params).map((k) => {
-      queryParam[k] = params[k];
-    });
-    searchQuery();
-  }
 </script>
 <style lang="less" scoped>
   .jeecg-basic-table-form-container {

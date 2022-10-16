@@ -366,6 +366,8 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     isOnlineJS?: boolean;
     // 是否激活编辑状态
     setActive?: boolean;
+    //是否需要触发change事件
+    emitChange?:boolean
   }
 
   /**
@@ -376,7 +378,13 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
    * @return
    */
   async function addRows(rows: Recordable | Recordable[] = {}, options?: IAddRowsOptions) {
-    return addOrInsert(rows, -1, 'added', options);
+    //update-begin-author:taoyan date:2022-8-12 for: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
+    let result = await addOrInsert(rows, -1, 'added', options);
+    if(options && options!.emitChange==true){
+      trigger('valueChange', {column: 'all', row: result.row})
+    }
+    return result;
+    //update-end-author:taoyan date:2022-8-12 for: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
   }
 
   /**
@@ -563,6 +571,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
               col: column.params,
               column: column,
               isSetValues: true,
+              row: {...row}
             });
             count++;
           }
@@ -753,6 +762,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     emit(name, event);
   }
 
+
   /**
    * 获取选中的行-和 getSelectionData 区别在于对于新增的行也会返回ID
    * 用于onlinePopForm
@@ -760,15 +770,15 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
    */
   function getSelectedData(isFull?: boolean) {
     const xTable = getXTable();
-    let rows: any[] = [];
+    let rows:any[] = []
     if (props.rowSelectionType === JVxeTypes.rowRadio) {
       let row = xTable.getRadioRecord(isFull);
       if (isNull(row)) {
         return [];
       }
-      rows = [row];
+      rows = [row]
     } else {
-      rows = xTable.getCheckboxRecords(isFull);
+      rows = xTable.getCheckboxRecords(isFull)
     }
     let records: Recordable[] = [];
     for (let row of rows) {

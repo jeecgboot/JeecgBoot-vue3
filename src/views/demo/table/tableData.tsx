@@ -21,6 +21,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '地址',
       dataIndex: 'address',
+      width: 300,
     },
     {
       title: '编号',

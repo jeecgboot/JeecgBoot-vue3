@@ -92,7 +92,9 @@ export class VAxios {
     }, undefined);
 
     // 请求拦截器错误捕获
-    requestInterceptorsCatch && isFunction(requestInterceptorsCatch) && this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
+    requestInterceptorsCatch &&
+      isFunction(requestInterceptorsCatch) &&
+      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
 
     // 响应结果拦截器处理
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
@@ -104,7 +106,9 @@ export class VAxios {
     }, undefined);
 
     // 响应结果拦截器错误捕获
-    responseInterceptorsCatch && isFunction(responseInterceptorsCatch) && this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
+    responseInterceptorsCatch &&
+      isFunction(responseInterceptorsCatch) &&
+      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 
   /**
@@ -242,5 +246,26 @@ export class VAxios {
           reject(e);
         });
     });
+  }
+
+
+  /**
+   * 【用于评论功能】自定义文件上传-请求
+   * @param url
+   * @param formData
+   */
+  uploadMyFile<T = any>(url, formData) {
+    const glob = useGlobSetting();
+    return this.axiosInstance
+      .request<T>({
+        url: url,
+        baseURL: glob.uploadUrl,
+        method: 'POST',
+        data: formData,
+        headers: {
+          'Content-type': ContentTypeEnum.FORM_DATA,
+          ignoreCancelToken: true,
+        },
+      });
   }
 }

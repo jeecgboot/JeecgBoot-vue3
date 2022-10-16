@@ -73,7 +73,7 @@ export function useTreeBiz(treeRef, getList, props) {
       const { selectedNodes } = info;
       let rows = <any[]>[];
       selectedNodes.forEach((item) => {
-        rows.push(item.props.node);
+        rows.push(item);
       });
       selectRows.value = rows;
     }
@@ -90,7 +90,7 @@ export function useTreeBiz(treeRef, getList, props) {
           //update-begin-author:taoyan date:20220408 for: 单选模式下，设定rowKey，无法选中数据-
           checkedKeys.value = [info.node.eventKey];
           let temp = info.checkedNodes.find((n) => n.key === info.node.eventKey);
-          selectRows.value = [temp.props.node];
+          selectRows.value = [temp];
           //update-end-author:taoyan date:20220408 for: 单选模式下，设定rowKey，无法选中数据-
         } else {
           checkedKeys.value = [];
@@ -102,7 +102,7 @@ export function useTreeBiz(treeRef, getList, props) {
       const { checkedNodes } = info;
       let rows = <any[]>[];
       checkedNodes.forEach((item) => {
-        rows.push(item.props.node);
+        rows.push(item);
       });
       selectRows.value = rows;
     }

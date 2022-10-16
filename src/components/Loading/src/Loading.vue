@@ -1,5 +1,10 @@
 <template>
-  <section class="full-loading" :class="{ absolute, [theme]: !!theme }" :style="[background ? `background-color: ${background}` : '']" v-show="loading">
+  <section
+    class="full-loading"
+    :class="{ absolute, [theme]: !!theme }"
+    :style="[background ? `background-color: ${background}` : '']"
+    v-show="loading"
+  >
     <Spin v-bind="$attrs" :tip="tip" :size="size" :spinning="loading" />
   </section>
 </template>

@@ -188,16 +188,13 @@
         }
       );
       //update-end-author:taoyan date:2022-5-9 for: codeEditor禁用功能
-
+      
       // 支持动态设置语言
-      watch(
-        () => props.language,
-        (val) => {
-          if (val && coder) {
-            coder.setOption('mode', val);
-          }
+      watch(()=>props.language, (val)=>{
+        if(val && coder){
+          coder.setOption('mode', val);
         }
-      );
+      });
 
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
       return {

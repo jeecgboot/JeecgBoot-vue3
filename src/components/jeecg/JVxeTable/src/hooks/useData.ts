@@ -29,8 +29,8 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
         activeMethod: () => !props.disabled,
       },
       expandConfig: {
-        iconClose: 'ant-table-row-expand-icon ant-table-row-collapsed',
-        iconOpen: 'ant-table-row-expand-icon ant-table-row-expanded',
+        iconClose: 'ant-table-row-expand-icon ant-table-row-expand-icon-collapsed',
+        iconOpen: 'ant-table-row-expand-icon ant-table-row-expand-icon-expanded',
       },
       // 虚拟滚动配置，y轴大于xx条数据时启用虚拟滚动
       scrollY: {
@@ -38,6 +38,8 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
       },
       scrollX: {
         gt: 20,
+        // 暂时关闭左右虚拟滚动
+        enabled: false,
       },
       radioConfig: { highlight: true },
       checkboxConfig: { highlight: true },

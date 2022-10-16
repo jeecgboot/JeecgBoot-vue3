@@ -10,7 +10,7 @@ export function useItemLabelWidth(schemaItemRef: Ref<FormSchema>, propsRef: Ref<
     const { labelCol = {}, wrapperCol = {} } = schemaItem.itemProps || {};
     const { labelWidth, disabledLabelWidth } = schemaItem;
 
-    const { labelWidth: globalLabelWidth, labelCol: globalLabelCol, wrapperCol: globWrapperCol } = unref(propsRef);
+    const { labelWidth: globalLabelWidth, labelCol: globalLabelCol, wrapperCol: globWrapperCol,layout } = unref(propsRef);
 
     // update-begin--author:sunjianlei---date:20211104---for: 禁用全局 labelWidth，不自动设置 textAlign --------
     if (disabledLabelWidth) {
@@ -34,8 +34,11 @@ export function useItemLabelWidth(schemaItemRef: Ref<FormSchema>, propsRef: Ref<
     }
 
     return {
-      labelCol: { style: { width }, ...col },
-      wrapperCol: { style: { width: `calc(100% - ${width})` }, ...wrapCol },
+      labelCol: { style: { width: width ? width : '100%' }, ...col },
+      wrapperCol: {
+        style: { width: layout === 'vertical' ? '100%' : `calc(100% - ${width})` },
+        ...wrapCol,
+      },
     };
   });
 }

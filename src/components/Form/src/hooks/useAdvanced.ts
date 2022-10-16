@@ -57,7 +57,8 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
   function getAdvanced(itemCol: Partial<ColEx>, itemColSum = 0, isLastAction = false, index = 0) {
     const width = unref(realWidthRef);
 
-    const mdWidth = parseInt(itemCol.md as string) || parseInt(itemCol.xs as string) || parseInt(itemCol.sm as string) || (itemCol.span as number) || BASIC_COL_LEN;
+    const mdWidth =
+      parseInt(itemCol.md as string) || parseInt(itemCol.xs as string) || parseInt(itemCol.sm as string) || (itemCol.span as number) || BASIC_COL_LEN;
 
     const lgWidth = parseInt(itemCol.lg as string) || mdWidth;
     const xlWidth = parseInt(itemCol.xl as string) || lgWidth;

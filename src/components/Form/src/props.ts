@@ -4,8 +4,10 @@ import type { ColEx } from './types';
 import type { TableActionType } from '/@/components/Table';
 import type { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
 import type { RowProps } from 'ant-design-vue/lib/grid/Row';
+import dayjs from "dayjs";
 import { propTypes } from '/@/utils/propTypes';
 import componentSetting from '/@/settings/componentSetting';
+
 const { form } = componentSetting;
 export const basicProps = {
   model: {
@@ -58,7 +60,8 @@ export const basicProps = {
   transformDateFunc: {
     type: Function as PropType<Fn>,
     default: (date: any) => {
-      return date._isAMomentObject ? date?.format('YYYY-MM-DD HH:mm:ss') : date;
+      // 判断是否是dayjs实例
+      return dayjs.isDayjs(date) ? date?.format('YYYY-MM-DD HH:mm:ss') : date;
     },
   },
   rulesMessageJoinLabel: propTypes.bool.def(true),

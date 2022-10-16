@@ -19,7 +19,7 @@
   import { onMounted, ref, reactive, Ref } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getInfo, getRedisInfo } from './redis.api';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import { columns } from './redis.data';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useECharts } from '/@/hooks/web/useECharts';
@@ -144,7 +144,7 @@
   function loadData() {
     getRedisInfo()
       .then((res) => {
-        let time = moment().format('hh:mm:ss');
+        let time = dayjs().format('hh:mm:ss');
         let [{ dbSize: currentSize }, memoryInfo] = res;
         let currentMemory = memoryInfo.used_memory / 1000;
         // push 数据

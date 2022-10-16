@@ -16,7 +16,12 @@
           <span style="color: #ed6f6f">请选择登录租户</span>
         </template>
         <!--租户下拉内容-->
-        <a-select v-model:value="formState.tenantId" @change="handleTenantChange" placeholder="请选择登录租户" :class="{ 'valid-error': validate_status == 'error' }">
+        <a-select
+          v-model:value="formState.tenantId"
+          @change="handleTenantChange"
+          placeholder="请选择登录租户"
+          :class="{ 'valid-error': validate_status == 'error' }"
+        >
           <template v-for="tenant in tenantList" :key="tenant.id">
             <a-select-option :value="tenant.id">{{ tenant.name }}</a-select-option>
           </template>
@@ -37,7 +42,12 @@
           <span style="color: #ed6f6f">请选择登录部门</span>
         </template>
         <!--部门下拉内容-->
-        <a-select v-model:value="formState.orgCode" @change="handleDepartChange" placeholder="请选择登录部门" :class="{ 'valid-error': validate_status1 == 'error' }">
+        <a-select
+          v-model:value="formState.orgCode"
+          @change="handleDepartChange"
+          placeholder="请选择登录部门"
+          :class="{ 'valid-error': validate_status1 == 'error' }"
+        >
           <template v-for="depart in departList" :key="depart.orgCode">
             <a-select-option :value="depart.orgCode">{{ depart.departName }}</a-select-option>
           </template>

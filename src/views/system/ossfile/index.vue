@@ -7,7 +7,14 @@
         <a-upload name="file" :showUploadList="false" :action="ossAction" :headers="tokenHeader" :beforeUpload="beforeUpload" @change="handleChange">
           <a-button type="primary" preIcon="ant-design:upload-outlined">OSS文件上传</a-button>
         </a-upload>
-        <a-upload name="file" :showUploadList="false" :action="minioAction" :headers="tokenHeader" :beforeUpload="beforeUpload" @change="handleChange">
+        <a-upload
+          name="file"
+          :showUploadList="false"
+          :action="minioAction"
+          :headers="tokenHeader"
+          :beforeUpload="beforeUpload"
+          @change="handleChange"
+        >
           <a-button type="primary" preIcon="ant-design:upload-outlined">MINIO文件上传</a-button>
         </a-upload>
       </template>
@@ -71,9 +78,13 @@
    */
   function handleView(record) {
     if (record && record.url) {
-      //TODO 这种地址需不需要拿出去？
       console.log('glob.onlineUrl', glob.viewUrl);
-      let url = `${glob.viewUrl}?url=` + encodeURIComponent(record.url);
+      let filePath = encodeURIComponent(record.url);
+      //文档采用pdf预览高级模式
+      if(filePath.endsWith(".pdf") || filePath.endsWith(".doc") || filePath.endsWith(".docx")){
+        filePath = filePath + '&officePreviewType=pdf'
+      }
+      let url = `${glob.viewUrl}?url=` + filePath;
       window.open(url, '_blank');
     }
   }

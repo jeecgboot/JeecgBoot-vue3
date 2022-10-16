@@ -32,7 +32,8 @@ export const DictSearchInputCell = defineComponent({
   props: useJVxeCompProps(),
   setup(props: JVxeComponent.Props) {
     const { createMessage } = useMessage();
-    const { dict, loading, isAsync, options, innerOptions, originColumn, cellProps, innerSelectValue, handleChangeCommon } = useSelectDictSearch(props);
+    const { dict, loading, isAsync, options, innerOptions, originColumn, cellProps, innerSelectValue, handleChangeCommon } =
+      useSelectDictSearch(props);
     const hasRequest = ref(false);
     // 提示信息
     const tipsContent = computed(() => {
@@ -41,7 +42,8 @@ export const DictSearchInputCell = defineComponent({
     // 筛选函数
     const filterOption = computed(() => {
       if (isAsync.value) {
-        return null;
+        //【jeecgboot-vue3/issues/I5QRT8】JVxeTypes.selectDictSearch sync问题
+        return ()=>true;
       }
       return (input, option) => option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     });

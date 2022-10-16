@@ -2,7 +2,15 @@
   <PageWrapper title="详情组件示例">
     <Description title="基础示例" :collapseOptions="{ canExpand: true, helpMessage: 'help me' }" :column="3" :data="mockData" :schema="schema" />
 
-    <Description class="mt-4" title="垂直示例" layout="vertical" :collapseOptions="{ canExpand: true, helpMessage: 'help me' }" :column="2" :data="mockData" :schema="schema" />
+    <Description
+      class="mt-4"
+      title="垂直示例"
+      layout="vertical"
+      :collapseOptions="{ canExpand: true, helpMessage: 'help me' }"
+      :column="2"
+      :data="mockData"
+      :schema="schema"
+    />
 
     <Description @register="register" class="mt-4" />
     <Description @register="register1" class="mt-4" />

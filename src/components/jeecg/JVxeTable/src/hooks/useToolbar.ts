@@ -24,7 +24,7 @@ export function useToolbar(props: JVxeTableProps, data: JVxeDataProps, methods: 
             let deleteRows = methods.filterNewRows(data.selectedRows.value);
             // 触发删除事件
             if (deleteRows.length > 0) {
-              let removeEvent: any = { deleteRows, $table };
+              let removeEvent: any = { deleteRows, $table};
               if (props.asyncRemove) {
                 // 确认删除，只有调用这个方法才会真删除
                 removeEvent.confirmRemove = () => methods.removeSelection();

@@ -70,6 +70,7 @@
       columns: departRoleColumns,
       canResize: false,
       formConfig: {
+        labelWidth: 100,
         schemas: departRoleSearchFormSchema,
         baseColProps: adaptiveColProps,
         labelAlign: 'left',

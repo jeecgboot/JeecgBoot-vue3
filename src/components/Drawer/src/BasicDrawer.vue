@@ -70,13 +70,14 @@
           visible: unref(visibleRef),
         };
         opt.title = undefined;
-        const { isDetail, width, wrapClassName, getContainer } = opt;
+        let { isDetail, width, wrapClassName, getContainer } = opt;
         if (isDetail) {
           if (!width) {
             opt.width = '100%';
           }
           const detailCls = `${prefixCls}__detail`;
-          opt.wrapClassName = wrapClassName ? `${wrapClassName} ${detailCls}` : detailCls;
+          wrapClassName = opt['class'] ? opt['class'] : wrapClassName;
+          opt.class = wrapClassName ? `${wrapClassName} ${detailCls}` : detailCls;
 
           if (!getContainer) {
             // TODO type error?

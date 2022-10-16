@@ -50,7 +50,6 @@
       //update-end---author:wangshuai ---date:20220629  for：[VUEN-1485]进入系统管理--通讯录页面后，网页命令行报错--------------
       showIndexColumn: true,
       formConfig: {
-        labelWidth: 200,
         schemas: searchFormSchema,
       },
       canResize: false,

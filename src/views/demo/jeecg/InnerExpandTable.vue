@@ -5,7 +5,8 @@
         <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
       </template>
       <template #expandedRowRender>
-        <BasicTable bordered size="middle" rowKey="id" :canResize="false" :columns="innerColumns" :dataSource="innerData" :pagination="false"> </BasicTable>
+        <BasicTable bordered size="middle" rowKey="id" :canResize="false" :columns="innerColumns" :dataSource="innerData" :pagination="false">
+        </BasicTable>
       </template>
       <!--操作栏-->
       <template #action="{ record }">
@@ -91,9 +92,11 @@
       align: 'center',
       dataIndex: 'sex',
       customRender: function (text) {
-        if (text == 1) {
+        //console.log(typeof  text )
+        //console.log(text)
+        if (text.value == '1') {
           return '男';
-        } else if (text == 2) {
+        } else if (text.value == '2') {
           return '女';
         } else {
           return text;

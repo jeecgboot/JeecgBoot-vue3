@@ -17,7 +17,9 @@ enum Api {
  * 列表接口
  * @param params
  */
-export const list = () => defHttp.get({ url: Api.list });
+export const list = (params) => {
+  return defHttp.get({ url: Api.list, params });
+}
 
 /**
  * 删除菜单

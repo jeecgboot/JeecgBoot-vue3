@@ -33,6 +33,8 @@
         baseColProps: {
           span: 6,
         },
+        labelWidth: 200,
+        layout: 'vertical',
         schemas: schemas,
         showActionButtonGroup: false,
       });
@@ -41,6 +43,8 @@
         baseColProps: {
           span: 6,
         },
+        labelWidth: 200,
+        layout: 'vertical',
         schemas: taskSchemas,
         showActionButtonGroup: false,
       });

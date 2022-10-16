@@ -57,7 +57,7 @@
       setModalProps({ confirmLoading: true });
       //提交表单
       let params = Object.assign({ username: unref(username) }, values);
-      defHttp.put({ url: 'sys/user/updatePassword', params }, { isTransformResponse: false }).then((res) => {
+      defHttp.put({ url: '/sys/user/updatePassword', params }, { isTransformResponse: false }).then((res) => {
         if (res.success) {
           $message.createMessage.success(res.message);
           //关闭弹窗

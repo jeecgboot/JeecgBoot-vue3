@@ -37,17 +37,17 @@
       title: '信息查询',
       icon: 'ion:settings-outline',
       color: '#3fb27f',
-    },
-    {
-      title: '通知公告',
-      icon: 'ion:notifications',
-      color: '#13b0ff',
-    },
-    {
-      title: '我的任务',
-      icon: 'ion:person-stalker',
-      color: '#b27315',
-    },
+    }, 
+		{
+				title: '通知公告',
+				icon: 'ion:notifications',
+				color: '#13b0ff',
+		}, 
+		{
+				title: '我的任务',
+				icon: 'ion:person-stalker',
+				color: '#b27315',
+		}
   ];
 
   function goPage() {

@@ -291,7 +291,10 @@ export const formSchema: FormSchema[] = [
     field: 'phone',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
-      return [{ ...rules.duplicateCheckRule('sys_user', 'phone', model, schema, true)[0] }, { pattern: /^1[3|4|5|7|8|9][0-9]\d{8}$/, message: '手机号码格式有误' }];
+      return [
+        { ...rules.duplicateCheckRule('sys_user', 'phone', model, schema, true)[0] },
+        { pattern: /^1[3|4|5|7|8|9][0-9]\d{8}$/, message: '手机号码格式有误' },
+      ];
     },
   },
   {

@@ -4,6 +4,7 @@ import { error } from '/@/utils/log';
 import JPrompt from '../JPrompt.vue';
 
 export function useJPrompt() {
+
   function createJPrompt(options: JPromptProps) {
     let instance = null;
     const box = document.createElement('div');

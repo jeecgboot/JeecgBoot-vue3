@@ -1,5 +1,14 @@
 <template>
-  <BasicForm :labelWidth="200" :schemas="schemas" :showResetButton="false" :showSubmitButton="false" :actionColOptions="{ span: 24 }" @submit="handleSubmit" @reset="handleReset" style="height: 800px">
+  <BasicForm
+    :labelWidth="200"
+    :schemas="schemas"
+    :showResetButton="false"
+    :showSubmitButton="false"
+    :actionColOptions="{ span: 24 }"
+    @submit="handleSubmit"
+    @reset="handleReset"
+    style="height: 800px"
+  >
     <template #jCodeEdit="{ model, field }">
       <JCodeEditor v-model:value="model[field]" mode="js" height="300px" :fullScreen="true" />
     </template>

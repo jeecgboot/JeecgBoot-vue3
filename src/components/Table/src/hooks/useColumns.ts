@@ -1,7 +1,7 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import type { ComputedRef } from 'vue';
-import { computed, Ref, ref, toRaw, unref, watch } from 'vue';
+import { computed, Ref, ref, toRaw, unref, watch, reactive } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -141,11 +141,11 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>, getPagination
         return hasPermission(column.auth) && isIfShow(column);
       })
       .map((column) => {
-        const { slots, dataIndex, customRender, format, edit, editRow, flag, title: metaTitle } = column;
+        const { slots, customRender, format, edit, editRow, flag, title: metaTitle } = column;
 
         if (!slots || !slots?.title) {
-          column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
-          column.customTitle = column.title;
+          // column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
+          column.customTitle = column.title as string;
           Reflect.deleteProperty(column, 'title');
         }
         //update-begin-author:taoyan date:20211203 for:【online报表】分组标题显示错误，都显示成了联系信息 LOWCOD-2343
@@ -165,7 +165,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>, getPagination
         if ((edit || editRow) && !isDefaultAction) {
           column.customRender = renderEditCell(column);
         }
-        return column;
+        return reactive(column);
       });
   });
 

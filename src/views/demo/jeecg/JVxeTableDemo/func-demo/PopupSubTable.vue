@@ -87,7 +87,14 @@
       <!-- 子表单 -->
       <template #subForm="{ row }">
         <template v-if="loadSubData(row)">
-          <JVxeTable ref="subFormTable" height="auto" :max-height="350" :loading="subTable.loading" :columns="subTable.columns" :dataSource="subTable.dataSource" />
+          <JVxeTable
+            ref="subFormTable"
+            height="auto"
+            :max-height="350"
+            :loading="subTable.loading"
+            :columns="subTable.columns"
+            :dataSource="subTable.dataSource"
+          />
         </template>
       </template>
     </JVxeTable>

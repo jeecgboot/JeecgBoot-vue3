@@ -13,7 +13,10 @@ export interface ComponentProps {
   getPopupContainer?: Fn;
 }
 
-export const CellComponent: FunctionalComponent = ({ component = 'Input', rule = true, ruleMessage, popoverVisible, getPopupContainer }: ComponentProps, { attrs }) => {
+export const CellComponent: FunctionalComponent = (
+  { component = 'Input', rule = true, ruleMessage, popoverVisible, getPopupContainer }: ComponentProps,
+  { attrs }
+) => {
   const Comp = componentMap.get(component) as typeof defineComponent;
 
   const DefaultComp = h(Comp, attrs);

@@ -4,7 +4,11 @@
     <div :class="`${prefixCls}-left`">
       <!-- logo -->
       <AppLogo v-if="getShowHeaderLogo || getIsMobile" :class="`${prefixCls}-logo`" :theme="getHeaderTheme" :style="getLogoWidth" />
-      <LayoutTrigger v-if="(getShowContent && getShowHeaderTrigger && !getSplit && !getIsMixSidebar) || getIsMobile" :theme="getHeaderTheme" :sider="false" />
+      <LayoutTrigger
+        v-if="(getShowContent && getShowHeaderTrigger && !getSplit && !getIsMixSidebar) || getIsMobile"
+        :theme="getHeaderTheme"
+        :sider="false"
+      />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
     </div>
     <!-- left end -->
@@ -95,7 +99,17 @@
       const { getShowTopMenu, getShowHeaderTrigger, getSplit, getIsMixMode, getMenuWidth, getIsMixSidebar } = useMenuSetting();
       const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } = useRootSetting();
 
-      const { getHeaderTheme, getShowFullScreen, getShowNotice, getShowContent, getShowBread, getShowHeaderLogo, getShowHeader, getShowSearch, getUseLockPage } = useHeaderSetting();
+      const {
+        getHeaderTheme,
+        getShowFullScreen,
+        getShowNotice,
+        getShowContent,
+        getShowBread,
+        getShowHeaderLogo,
+        getShowHeader,
+        getShowSearch,
+        getUseLockPage,
+      } = useHeaderSetting();
 
       const { getShowLocalePicker } = useLocale();
 

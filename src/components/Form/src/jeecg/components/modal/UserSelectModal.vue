@@ -1,7 +1,16 @@
 <!--用户选择框-->
 <template>
   <div>
-    <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="900px" wrapClassName="j-user-select-modal" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
+    <BasicModal
+      v-bind="$attrs"
+      @register="register"
+      :title="modalTitle"
+      width="900px"
+      wrapClassName="j-user-select-modal"
+      @ok="handleOk"
+      destroyOnClose
+      @visible-change="visibleChange"
+    >
       <a-row>
         <a-col :span="showSelected ? 18 : 24">
           <BasicTable
@@ -22,7 +31,12 @@
           </BasicTable>
         </a-col>
         <a-col :span="showSelected ? 6 : 0">
-          <BasicTable v-bind="selectedTable" :dataSource="selectRows" :useSearchForm="true" :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }">
+          <BasicTable
+            v-bind="selectedTable"
+            :dataSource="selectRows"
+            :useSearchForm="true"
+            :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
+          >
             <!--操作栏-->
             <template #action="{ record }">
               <a href="javascript:void(0)" @click="handleDeleteSelected(record)"><Icon icon="ant-design:delete-outlined"></Icon></a>
@@ -88,11 +102,13 @@
         size: 'small',
       };
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
-      const [{ rowSelection, visibleChange, selectValues, indexColumnProps, getSelectResult, handleDeleteSelected, selectRows }] = useSelectBiz(getUserList, getBindValue);
+      const [{ rowSelection, visibleChange, selectValues, indexColumnProps, getSelectResult, handleDeleteSelected, selectRows }] = useSelectBiz(
+        getUserList,
+        getBindValue
+      );
       const searchInfo = ref(props.params);
       //查询form
       const formConfig = {
-        labelWidth: 200,
         baseColProps: {
           xs: 24,
           sm: 8,

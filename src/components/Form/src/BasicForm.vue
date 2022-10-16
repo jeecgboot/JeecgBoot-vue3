@@ -52,6 +52,7 @@
 
   import { basicProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import dayjs from 'dayjs';
 
   export default defineComponent({
     name: 'BasicForm',
@@ -80,7 +81,13 @@
 
       // Get the basic configuration of the form
       const getProps = computed((): FormProps => {
-        return { ...props, ...unref(propsRef) } as FormProps;
+        let mergeProps = { ...props, ...unref(propsRef) } as FormProps;
+        //update-begin-author:sunjianlei date:20220923 for: 如果用户设置了labelWidth，则使labelCol失效，解决labelWidth设置无效的问题
+        if (mergeProps.labelWidth) {
+          mergeProps.labelCol = undefined;
+        }
+        //update-end-author:sunjianlei date:20220923 for: 如果用户设置了labelWidth，则使labelCol失效，解决labelWidth设置无效的问题
+        return mergeProps;
       });
 
       const getFormClass = computed(() => {
@@ -112,7 +119,7 @@
             if (!Array.isArray(defaultValue)) {
               schema.defaultValue = dateUtil(defaultValue);
             } else {
-              const def: moment.Moment[] = [];
+              const def: dayjs.Dayjs[] = [];
               defaultValue.forEach((item) => {
                 def.push(dateUtil(item));
               });
@@ -150,17 +157,29 @@
         formElRef: formElRef as Ref<FormActionType>,
       });
 
-      const { handleSubmit, setFieldsValue, clearValidate, validate, validateFields, getFieldsValue, updateSchema, resetSchema, appendSchemaByField, removeSchemaByFiled, resetFields, scrollToField } =
-        useFormEvents({
-          emit,
-          getProps,
-          formModel,
-          getSchema,
-          defaultValueRef,
-          formElRef: formElRef as Ref<FormActionType>,
-          schemaRef: schemaRef as Ref<FormSchema[]>,
-          handleFormValues,
-        });
+      const {
+        handleSubmit,
+        setFieldsValue,
+        clearValidate,
+        validate,
+        validateFields,
+        getFieldsValue,
+        updateSchema,
+        resetSchema,
+        appendSchemaByField,
+        removeSchemaByFiled,
+        resetFields,
+        scrollToField,
+      } = useFormEvents({
+        emit,
+        getProps,
+        formModel,
+        getSchema,
+        defaultValueRef,
+        formElRef: formElRef as Ref<FormActionType>,
+        schemaRef: schemaRef as Ref<FormSchema[]>,
+        handleFormValues,
+      });
 
       createFormContext({
         resetAction: resetFields,

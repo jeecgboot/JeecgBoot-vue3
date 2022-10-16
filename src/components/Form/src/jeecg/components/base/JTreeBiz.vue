@@ -2,7 +2,15 @@
   <div>
     <a-row class="j-select-row" type="flex" :gutter="8">
       <a-col class="left" :class="{ full: !showButton }">
-        <a-select ref="select" v-model:value="selectValues.value" :mode="multiple" :open="false" :options="options" @change="handleChange" style="width: 100%" />
+        <a-select
+          ref="select"
+          v-model:value="selectValues.value"
+          :mode="multiple"
+          :open="false"
+          :options="options"
+          @change="handleChange"
+          style="width: 100%"
+        />
       </a-col>
       <a-col v-if="showButton" class="right">
         <a-button type="primary" @click="openModal">选择</a-button>

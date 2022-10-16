@@ -18,7 +18,16 @@
         </a-tree>
       </a-col>
       <a-col :span="18">
-        <JVxeTable rowNumber rowSelection :height="750" :loading="loading" :columns="columns" :dataSource="dataSource" :pagination="pagination" @pageChange="handleTablePageChange" />
+        <JVxeTable
+          rowNumber
+          rowSelection
+          :height="750"
+          :loading="loading"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="pagination"
+          @pageChange="handleTablePageChange"
+        />
       </a-col>
     </a-row>
   </a-card>

@@ -2,7 +2,7 @@
   <a-card :loading="loading" :bordered="false" :body-style="{ padding: '0' }">
     <div class="salesCard">
       <a-tabs default-active-key="1" size="large" :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }">
-        <template #tabBarExtraContent>
+        <template #rightExtra>
           <div class="extra-wrapper">
             <div class="extra-item">
               <a>今日</a>
@@ -26,7 +26,11 @@
         <a-tab-pane tab="交互监管" key="2">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-              <BarMulti :chartData="barMultiData" :option="{ title: { text: '平台与部门交互量统计', textStyle: { fontWeight: 'lighter' } } }" height="40vh" />
+              <BarMulti
+                :chartData="barMultiData"
+                :option="{ title: { text: '平台与部门交互量统计', textStyle: { fontWeight: 'lighter' } } }"
+                height="40vh"
+              />
             </a-col>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <QuickNav :loading="loading" class="enter-y" :bordered="false" :body-style="{ padding: 0 }" />

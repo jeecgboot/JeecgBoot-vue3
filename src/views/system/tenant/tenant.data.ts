@@ -25,12 +25,6 @@ export const columns: BasicColumn[] = [
     width: 180,
   },
   {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    sorter: true,
-    width: 180,
-  },
-  {
     title: '状态',
     dataIndex: 'status_dictText',
     width: 100,
@@ -56,14 +50,17 @@ export const searchFormSchema: FormSchema[] = [
     },
     colProps: { span: 8 },
   },
-  {
-    field: 'fieldTime',
-    component: 'RangePicker',
-    label: '时间字段',
-    colProps: {
-      span: 8,
-    },
-  },
+  // {
+  //   field: 'fieldTime',
+  //   component: 'RangePicker',
+  //   label: '时间字段',
+  //   componentProps: {
+  //     valueType: 'Date',
+  //   },
+  //   colProps: {
+  //     span: 8,
+  //   },
+  // },
 ];
 
 export const formSchema: FormSchema[] = [

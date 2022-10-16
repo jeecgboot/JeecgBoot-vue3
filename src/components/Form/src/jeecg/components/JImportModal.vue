@@ -15,7 +15,9 @@
       <!--页脚-->
       <template #footer>
         <a-button @click="handleClose">关闭</a-button>
-        <a-button type="primary" @click="handleImport" :disabled="uploadDisabled" :loading="uploading">{{ uploading ? '上传中...' : '开始上传' }}</a-button>
+        <a-button type="primary" @click="handleImport" :disabled="uploadDisabled" :loading="uploading">{{
+          uploading ? '上传中...' : '开始上传'
+        }}</a-button>
       </template>
     </BasicModal>
   </div>

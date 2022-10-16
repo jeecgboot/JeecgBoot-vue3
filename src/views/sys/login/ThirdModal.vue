@@ -47,12 +47,14 @@
   import { Form, Input } from 'ant-design-vue';
   import { CountdownInput } from '/@/components/CountDown';
   import { useThirdLogin } from '/@/hooks/system/useThirdLogin';
+  import { QuestionCircleFilled } from '@ant-design/icons-vue';
+
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
 
   export default defineComponent({
     name: 'ThirdModal',
-    components: { FormItem, Form, InputPassword, CountdownInput },
+    components: { FormItem, Form, InputPassword, CountdownInput, QuestionCircleFilled },
     setup() {
       return {
         ...useThirdLogin(),

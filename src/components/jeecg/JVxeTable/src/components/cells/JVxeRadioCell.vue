@@ -1,6 +1,8 @@
 <template>
   <a-radio-group :class="clazz" :value="innerValue" v-bind="cellProps" @change="(e) => handleChangeCommon(e.target.value)">
-    <a-radio v-for="item of originColumn.options" :key="item.value" :value="item.value" @click="(e) => handleRadioClick(item, e)">{{ item.text || item.label || item.title || item.value }} </a-radio>
+    <a-radio v-for="item of originColumn.options" :key="item.value" :value="item.value" @click="(e) => handleRadioClick(item, e)"
+      >{{ item.text || item.label || item.title || item.value }}
+    </a-radio>
   </a-radio-group>
 </template>
 

@@ -8,7 +8,9 @@
       </a-menu>
     </template>
   </a-dropdown>
-  <a-button v-else-if="syncToApp" type="primary" preIcon="ant-design:sync-outlined" @click="handleMenuClick({ key: 'to-app' })">同步{{ name }}</a-button>
+  <a-button v-else-if="syncToApp" type="primary" preIcon="ant-design:sync-outlined" @click="handleMenuClick({ key: 'to-app' })"
+    >同步{{ name }}</a-button
+  >
   <a-button v-else type="primary" preIcon="ant-design:sync-outlined" @click="handleMenuClick({ key: 'to-local' })">同步{{ name }}到本地</a-button>
 </template>
 

@@ -35,7 +35,14 @@
                   @blur="handleInputEditConfirm(item, tag, tagIndx)"
                   @keyup.enter="handleInputEditConfirm(item, tag, tagIndx)"
                 />
-                <a-tag v-else :key="tag" style="margin-bottom: 2px" :closable="true" @close="() => removeTag(item, tag)" @click="editTag(item, tag, tagIndx, index)">
+                <a-tag
+                  v-else
+                  :key="tag"
+                  style="margin-bottom: 2px"
+                  :closable="true"
+                  @close="() => removeTag(item, tag)"
+                  @click="editTag(item, tag, tagIndx, index)"
+                >
                   {{ tag }}
                 </a-tag>
               </template>
@@ -72,7 +79,12 @@
                     <span v-if="key == 'name'">参数名</span>
                   </a-col>
                   <a-col :span="18">
-                    <a-input :defaultValue="value" placeholder="参数值" style="width: 70%; margin-right: 8px; margin-top: 3px" @change="(e) => valueChange(e, item.args, key)" />
+                    <a-input
+                      :defaultValue="value"
+                      placeholder="参数值"
+                      style="width: 70%; margin-right: 8px; margin-top: 3px"
+                      @change="(e) => valueChange(e, item.args, key)"
+                    />
                   </a-col>
                 </a-row>
               </template>

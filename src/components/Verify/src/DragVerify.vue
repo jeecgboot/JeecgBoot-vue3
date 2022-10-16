@@ -249,7 +249,8 @@
           }
           return (
             <div class={cls} onMousedown={handleDragStart} onTouchstart={handleDragStart} style={unref(getActionStyleRef)} ref={actionElRef}>
-              {getSlot(slots, 'actionIcon', isPassing) || (isPassing ? <CheckOutlined class={`darg-verify-action__icon`} /> : <DoubleRightOutlined class={`darg-verify-action__icon`} />)}
+              {getSlot(slots, 'actionIcon', isPassing) ||
+                (isPassing ? <CheckOutlined class={`darg-verify-action__icon`} /> : <DoubleRightOutlined class={`darg-verify-action__icon`} />)}
             </div>
           );
         };
@@ -303,7 +304,16 @@
       top: 0;
       font-size: 12px;
       -webkit-text-size-adjust: none;
-      background-color: -webkit-gradient(linear, left top, right top, color-stop(0, #333), color-stop(0.4, #333), color-stop(0.5, #fff), color-stop(0.6, #333), color-stop(1, #333));
+      background-color: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0, #333),
+        color-stop(0.4, #333),
+        color-stop(0.5, #fff),
+        color-stop(0.6, #333),
+        color-stop(1, #333)
+      );
       animation: slidetounlock 3s infinite;
       background-clip: text;
       user-select: none;

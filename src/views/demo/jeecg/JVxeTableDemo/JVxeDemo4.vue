@@ -1,5 +1,14 @@
 <template>
-  <JVxeTable ref="vTable" toolbar rowNumber rowSelection :maxHeight="580" :dataSource="dataSource" :columns="columns" :linkageConfig="linkageConfig" />
+  <JVxeTable
+    ref="vTable"
+    toolbar
+    rowNumber
+    rowSelection
+    :maxHeight="580"
+    :dataSource="dataSource"
+    :columns="columns"
+    :linkageConfig="linkageConfig"
+  />
 </template>
 
 <script lang="ts" setup>

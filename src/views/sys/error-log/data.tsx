@@ -12,7 +12,16 @@ export function getColumns(): BasicColumn[] {
       title: t('sys.errorLog.tableColumnType'),
       width: 80,
       customRender: ({ text }) => {
-        const color = text === ErrorTypeEnum.VUE ? 'green' : text === ErrorTypeEnum.RESOURCE ? 'cyan' : text === ErrorTypeEnum.PROMISE ? 'blue' : ErrorTypeEnum.AJAX ? 'red' : 'purple';
+        const color =
+          text === ErrorTypeEnum.VUE
+            ? 'green'
+            : text === ErrorTypeEnum.RESOURCE
+            ? 'cyan'
+            : text === ErrorTypeEnum.PROMISE
+            ? 'blue'
+            : ErrorTypeEnum.AJAX
+            ? 'red'
+            : 'purple';
         return <Tag color={color}>{() => text}</Tag>;
       },
     },

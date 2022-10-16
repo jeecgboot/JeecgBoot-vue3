@@ -23,8 +23,10 @@
         </a-dropdown>
       </template>
       <!--操作栏-->
-      <template #action="{ record }">
-        <TableAction :actions="getTableAction(record)" />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction :actions="getTableAction(record)" />
+        </template>
       </template>
     </BasicTable>
   </BasicModal>
@@ -62,7 +64,7 @@
       width: 150,
       title: '操作',
       dataIndex: 'action',
-      slots: { customRender: 'action' },
+      // slots: { customRender: 'action' },
       fixed: undefined,
     },
   });

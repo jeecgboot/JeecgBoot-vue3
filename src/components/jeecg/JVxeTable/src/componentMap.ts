@@ -24,7 +24,13 @@ const componentMap = new Map<JVxeTypes | string, JVxeVueComponent>();
 export const spanEnds: string = ':span';
 
 /** 定义不能用于注册的关键字 */
-export const excludeKeywords: Array<JVxeTypes> = [JVxeTypes.hidden, JVxeTypes.rowNumber, JVxeTypes.rowCheckbox, JVxeTypes.rowRadio, JVxeTypes.rowExpand];
+export const excludeKeywords: Array<JVxeTypes> = [
+  JVxeTypes.hidden,
+  JVxeTypes.rowNumber,
+  JVxeTypes.rowCheckbox,
+  JVxeTypes.rowRadio,
+  JVxeTypes.rowExpand,
+];
 
 /**
  * 注册组件

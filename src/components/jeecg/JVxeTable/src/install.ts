@@ -46,6 +46,10 @@ export function registerJVxeTable(app: App) {
       if (className.includes('j-popup-modal') || className.includes('j-depart-select-modal') || className.includes('j-user-select-modal')) {
         return false;
       }
+      // 点击的是日期选择器
+      if (className.includes('j-vxe-date-picker')) {
+        return false;
+      }
       // 执行增强
       let flag = interceptor['event.clearActived.className']?.call(this, className, ...arguments);
       if (flag === false) {

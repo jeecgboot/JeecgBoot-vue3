@@ -119,7 +119,13 @@
         jeecgOrderCustomerList: [],
         jeecgOrderTicketList: [],
       });
-      const [handleChangeTabs, handleSubmit, requestSubTableData, formRef] = useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs, activeKey, refKeys);
+      const [handleChangeTabs, handleSubmit, requestSubTableData, formRef] = useJvxeMethod(
+        requestAddOrEdit,
+        classifyIntoFormData,
+        tableRefs,
+        activeKey,
+        refKeys
+      );
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: false });
         reset();

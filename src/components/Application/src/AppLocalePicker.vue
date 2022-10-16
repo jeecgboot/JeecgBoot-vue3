@@ -3,7 +3,14 @@
  * @Description: Multi-language switching component
 -->
 <template>
-  <Dropdown placement="bottomCenter" :trigger="['click']" :dropMenuList="localeList" :selectedKeys="selectedKeys" @menuEvent="handleMenuEvent" overlayClassName="app-locale-picker-overlay">
+  <Dropdown
+    placement="bottom"
+    :trigger="['click']"
+    :dropMenuList="localeList"
+    :selectedKeys="selectedKeys"
+    @menuEvent="handleMenuEvent"
+    overlayClassName="app-locale-picker-overlay"
+  >
     <span class="cursor-pointer flex items-center">
       <Icon icon="ion:language" />
       <span v-if="showText" class="ml-1">{{ getLocaleText }}</span>

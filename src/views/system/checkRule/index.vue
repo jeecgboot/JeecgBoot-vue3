@@ -38,7 +38,14 @@
   import { useListPage } from '/@/hooks/system/useListPage';
 
   import { useModal } from '/@/components/Modal';
-  import { getCheckRuleList, exportUrl, importUrl, deleteCheckRule, batchDeleteCheckRule, validateCheckRule } from '/@/views/system/checkRule/check.rule.api';
+  import {
+    getCheckRuleList,
+    exportUrl,
+    importUrl,
+    deleteCheckRule,
+    batchDeleteCheckRule,
+    validateCheckRule,
+  } from '/@/views/system/checkRule/check.rule.api';
   import { columns, searchFormSchema } from '/@/views/system/checkRule/check.rule.data';
   import { ActionItem } from '/@/components/Table';
 

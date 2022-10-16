@@ -1,5 +1,13 @@
 <template>
-  <BasicDrawer v-bind="$attrs" @register="registerDrawer" :title="getTitle" :width="adaptiveWidth" @ok="handleSubmit" :showFooter="showFooter" destroyOnClose>
+  <BasicDrawer
+    v-bind="$attrs"
+    @register="registerDrawer"
+    :title="getTitle"
+    :width="adaptiveWidth"
+    @ok="handleSubmit"
+    :showFooter="showFooter"
+    destroyOnClose
+  >
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>

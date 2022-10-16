@@ -29,45 +29,58 @@ html[data-theme='light'] {
   }
 
   .ant-tabs.ant-tabs-card {
-    .ant-tabs-card-bar {
-      height: calc(@multiple-height + 4px);
+    padding-left: 10px;
+
+    .ant-tabs-nav {
+      height: calc(@multiple-height);
       margin: 0;
       background-color: @component-background;
       border: 0;
       box-shadow: none;
 
-      .ant-tabs-nav-container {
+      .ant-tabs-nav-wrap {
         height: @multiple-height;
-        margin-top: 4px;
+        margin-top: 2px;
       }
 
       .ant-tabs-tab {
         height: calc(@multiple-height - 4px);
         padding-right: 12px;
-        line-height: calc(@multiple-height - 6px);
+        line-height: calc(@multiple-height - 4px);
         color: @text-color-base;
         background-color: @component-background;
         transition: none;
 
+        .ant-tabs-tab-btn {
+          color: @text-color-base;
+          transition: none;
+        }
+
         &:hover {
-          .ant-tabs-close-x {
+          .ant-tabs-tab-remove .anticon-close {
             opacity: 1;
           }
         }
 
-        .ant-tabs-close-x {
-          width: 8px;
-          height: 12px;
-          font-size: 12px;
-          color: inherit;
-          opacity: 0;
-          transition: none;
+        .ant-tabs-tab-remove {
+          margin: 0;
+          padding: 0;
           position: relative;
-          top: -1px;
+          top: 0;
+          left: 4px;
 
-          &:hover {
-            svg {
-              width: 0.8em;
+          .anticon-close {
+            width: 8px;
+            height: 12px;
+            font-size: 12px;
+            color: inherit;
+            opacity: 0;
+            transition: none;
+
+            &:hover {
+              svg {
+                width: 0.8em;
+              }
             }
           }
         }
@@ -99,7 +112,11 @@ html[data-theme='light'] {
         border: 1px solid transparent;
         transition: none;
 
-        .ant-tabs-close-x {
+        .ant-tabs-tab-btn {
+          color: @white;
+        }
+
+        .ant-tabs-tab-remove .anticon-close {
           opacity: 1;
         }
 
@@ -108,10 +125,6 @@ html[data-theme='light'] {
           fill: @white;
         }
       }
-    }
-
-    .ant-tabs-nav-scroll {
-      padding-left: 10px;
     }
 
     .ant-tabs-nav > div:nth-child(1) {
@@ -124,7 +137,7 @@ html[data-theme='light'] {
   }
 
   .ant-tabs-tab:not(.ant-tabs-tab-active) {
-    .anticon-close {
+    .ant-tabs-tab-remove .anticon-close {
       font-size: 12px;
 
       svg {
@@ -143,7 +156,7 @@ html[data-theme='light'] {
   }
 
   &--hide-close {
-    .ant-tabs-close-x {
+    .ant-tabs-tab-remove .anticon-close {
       opacity: 0 !important;
     }
   }

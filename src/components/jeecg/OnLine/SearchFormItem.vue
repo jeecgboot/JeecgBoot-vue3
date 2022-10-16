@@ -4,12 +4,29 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <template v-if="single_mode === item.mode">
-      <a-date-picker :showTime="false" valueFormat="YYYY-MM-DD" :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]"></a-date-picker>
+      <a-date-picker
+        :showTime="false"
+        valueFormat="YYYY-MM-DD"
+        :placeholder="'请选择' + item.label"
+        v-model:value="queryParam[item.field]"
+      ></a-date-picker>
     </template>
     <template v-else>
-      <a-date-picker :showTime="false" valueFormat="YYYY-MM-DD" placeholder="开始日期" v-model:value="queryParam[item.field + '_begin']" style="width: calc(50% - 15px)"></a-date-picker>
+      <a-date-picker
+        :showTime="false"
+        valueFormat="YYYY-MM-DD"
+        placeholder="开始日期"
+        v-model:value="queryParam[item.field + '_begin']"
+        style="width: calc(50% - 15px)"
+      ></a-date-picker>
       <span class="group-query-strig">~</span>
-      <a-date-picker :showTime="false" valueFormat="YYYY-MM-DD" placeholder="结束日期" v-model:value="queryParam[item.field + '_end']" style="width: calc(50% - 15px)"></a-date-picker>
+      <a-date-picker
+        :showTime="false"
+        valueFormat="YYYY-MM-DD"
+        placeholder="结束日期"
+        v-model:value="queryParam[item.field + '_end']"
+        style="width: calc(50% - 15px)"
+      ></a-date-picker>
     </template>
   </a-form-item>
 
@@ -18,7 +35,12 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <template v-if="single_mode === item.mode">
-      <a-date-picker :placeholder="'请选择' + item.label" :show-time="true" valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="queryParam[item.field]"></a-date-picker>
+      <a-date-picker
+        :placeholder="'请选择' + item.label"
+        :show-time="true"
+        valueFormat="YYYY-MM-DD HH:mm:ss"
+        v-model:value="queryParam[item.field]"
+      ></a-date-picker>
     </template>
     <template v-else>
       <a-date-picker
@@ -47,17 +69,34 @@
       <a-date-picker :placeholder="'请选择' + item.label" mode="time" valueFormat="HH:mm:ss" v-model:value="queryParam[item.field]"></a-date-picker>
     </template>
     <template v-else>
-      <a-date-picker placeholder="请选择开始时间" mode="time" valueFormat="HH:mm:ss" v-model:value="queryParam[item.field + '_begin']" style="width: calc(50% - 15px)"></a-date-picker>
+      <a-date-picker
+        placeholder="请选择开始时间"
+        mode="time"
+        valueFormat="HH:mm:ss"
+        v-model:value="queryParam[item.field + '_begin']"
+        style="width: calc(50% - 15px)"
+      ></a-date-picker>
       <span class="group-query-strig">~</span>
-      <a-date-picker placeholder="请选择结束时间" mode="time" valueFormat="HH:mm:ss" v-model:value="queryParam[item.field + '_end']" style="width: calc(50% - 15px)"></a-date-picker>
+      <a-date-picker
+        placeholder="请选择结束时间"
+        mode="time"
+        valueFormat="HH:mm:ss"
+        v-model:value="queryParam[item.field + '_end']"
+        style="width: calc(50% - 15px)"
+      ></a-date-picker>
     </template>
   </a-form-item>
 
-  <a-form-item v-else-if="item.view === CompTypeEnum.List || item.view === CompTypeEnum.Radio || item.view === CompTypeEnum.Switch" :labelCol="labelCol" :class="'jeecg-online-search'">
+  <a-form-item
+    v-else-if="item.view === CompTypeEnum.List || item.view === CompTypeEnum.Radio || item.view === CompTypeEnum.Switch"
+    :labelCol="labelCol"
+    :class="'jeecg-online-search'"
+  >
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JDictSelectTag v-if="item.config === '1'" :placeholder="'请选择' + item.label" v-model="queryParam[item.field]" :dictCode="getDictCode(item)"> </JDictSelectTag>
+    <JDictSelectTag v-if="item.config === '1'" :placeholder="'请选择' + item.label" v-model="queryParam[item.field]" :dictCode="getDictCode(item)">
+    </JDictSelectTag>
     <a-select v-else :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]">
       <template v-for="(obj, index) in dictOptions[getDictOptionKey(item)]" :key="index">
         <a-select-option :value="obj.value"> {{ obj.text }}</a-select-option>
@@ -92,7 +131,8 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JDictSelectTag v-if="item.config === '1'" v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label" :dict="getDictCode(item)"> </JDictSelectTag>
+    <JDictSelectTag v-if="item.config === '1'" v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label" :dict="getDictCode(item)">
+    </JDictSelectTag>
     <!--TODO 新需要的组件-->
     <!-- <j-online-search-select
                 v-else
@@ -121,7 +161,14 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JPopup :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]" :formElRef="formElRef" :code="item.dictTable" :field-config="item.dictCode" :multi="true" />
+    <JPopup
+      :placeholder="'请选择' + item.label"
+      v-model:value="queryParam[item.field]"
+      :formElRef="formElRef"
+      :code="item.dictTable"
+      :field-config="item.dictCode"
+      :multi="true"
+    />
   </a-form-item>
 
   <a-form-item v-else-if="item.view === CompTypeEnum.Pca" :labelCol="labelCol" :class="'jeecg-online-search'">
@@ -131,7 +178,12 @@
     <JAreaLinkage :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]" />
   </a-form-item>
   <!--TODO 缺少的组件-->
-  <a-form-item v-else-if="item.view === CompTypeEnum.Checkbox || item.view === CompTypeEnum.ListMulti" :labelCol="labelCol" :label="item.label" :class="'jeecg-online-search'">
+  <a-form-item
+    v-else-if="item.view === CompTypeEnum.Checkbox || item.view === CompTypeEnum.ListMulti"
+    :labelCol="labelCol"
+    :label="item.label"
+    :class="'jeecg-online-search'"
+  >
     <!-- <j-select-multiple
                 v-if="item.config==='1'"
                 :placeholder=" '请选择'+item.label "

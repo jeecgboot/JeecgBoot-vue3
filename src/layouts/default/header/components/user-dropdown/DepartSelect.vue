@@ -106,9 +106,11 @@
     if (unref(isMultiTenant) && unref(isMultiDepart)) {
       currTitle.value = '切换租户和部门';
     } else if (unref(isMultiTenant)) {
-      currTitle.value = unref(currentTenantName) && unref(currentTenantName).length > 0 ? `租户切换（当前租户 :${unref(currentTenantName)}）` : props.title;
+      currTitle.value =
+        unref(currentTenantName) && unref(currentTenantName).length > 0 ? `租户切换（当前租户 :${unref(currentTenantName)}）` : props.title;
     } else if (unref(isMultiDepart)) {
-      currTitle.value = unref(currentDepartName) && unref(currentDepartName).length > 0 ? `部门切换（当前部门 :${unref(currentDepartName)}）` : props.title;
+      currTitle.value =
+        unref(currentDepartName) && unref(currentDepartName).length > 0 ? `部门切换（当前部门 :${unref(currentDepartName)}）` : props.title;
     }
     //model显隐
     if (unref(isMultiTenant) || unref(isMultiDepart)) {

@@ -7,8 +7,8 @@
           {{ record.no }}
         </Tag>
       </template>
-      <template #avatar="{ record }">
-        <Avatar :size="60" :src="record.avatar" />
+      <template #bodyCell="{ column, record }">
+        <Avatar v-if="column.key === 'avatar'" :size="60" :src="record.avatar" />
       </template>
       <template #img="{ text }">
         <TableImg :size="60" :simpleShow="true" :imgList="text" />

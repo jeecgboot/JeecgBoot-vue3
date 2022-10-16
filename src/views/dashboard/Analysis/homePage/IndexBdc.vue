@@ -6,7 +6,7 @@
       <a-col :span="24">
         <a-card :loading="loading" :class="{ 'anty-list-cust': true }" :bordered="false">
           <a-tabs v-model:activeKey="indexBottomTab" size="large" :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }">
-            <template #tabBarExtraContent>
+            <template #rightExtra>
               <div class="extra-wrapper">
                 <a-radio-group v-model:value="indexRegisterType" @change="changeRegisterType">
                   <a-radio-button value="转移登记">转移登记</a-radio-button>
@@ -17,15 +17,34 @@
             </template>
 
             <a-tab-pane tab="业务流程限时监管" key="1">
-              <a-table :dataSource="dataSource" size="default" rowKey="reBizCode" :columns="table.columns" :pagination="ipagination" @change="tableChange">
+              <a-table
+                :dataSource="dataSource"
+                size="default"
+                rowKey="reBizCode"
+                :columns="table.columns"
+                :pagination="ipagination"
+                @change="tableChange"
+              >
                 <template #flowRate="{ text, record, index }">
-                  <Progress :strokeColor="getPercentColor(record.flowRate)" :format="getPercentFormat" :percent="getFlowRateNumber(record.flowRate)" style="width: 80px" />
+                  <Progress
+                    :strokeColor="getPercentColor(record.flowRate)"
+                    :format="getPercentFormat"
+                    :percent="getFlowRateNumber(record.flowRate)"
+                    style="width: 80px"
+                  />
                 </template>
               </a-table>
             </a-tab-pane>
 
             <a-tab-pane loading="true" tab="业务节点限时监管" key="2">
-              <a-table :dataSource="dataSource1" size="default" rowKey="reBizCode" :columns="table1.columns" :pagination="ipagination1" @change="tableChange1">
+              <a-table
+                :dataSource="dataSource1"
+                size="default"
+                rowKey="reBizCode"
+                :columns="table1.columns"
+                :pagination="ipagination1"
+                @change="tableChange1"
+              >
                 <template #flowRate="{ text, record, index }">
                   <span style="color: red">{{ record.flowRate }}小时</span>
                 </template>
