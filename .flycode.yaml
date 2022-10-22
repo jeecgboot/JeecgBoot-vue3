@@ -1,0 +1,11 @@
+version: "0.1"
+environments:
+  - name: v3.4.0-last
+    branch: v3.4.0-last
+    mode: pull-request
+apps:
+  - name: AppCash
+    path: tests/server/
+    text-resources:
+      - path: "*.vue"
+        format: vue-hardcoded
