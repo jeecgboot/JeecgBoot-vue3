@@ -114,6 +114,7 @@ export interface TableActionType {
   setShowPagination: (show: boolean) => Promise<void>;
   getShowPagination: () => boolean;
   setCacheColumnsByField?: (dataIndex: string | undefined, value: BasicColumn) => void;
+  getBeforeFetch: () => Promise<{}>;
 }
 
 export interface FetchSetting {

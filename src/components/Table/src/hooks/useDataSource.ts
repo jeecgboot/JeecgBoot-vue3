@@ -313,6 +313,21 @@ export function useDataSource(
     return await fetch(opt);
   }
 
+  async function getBeforeFetch() {
+    const { beforeFetch } = unref(propsRef);
+    const { sortInfo = {}, filterInfo } = searchState;
+
+    let params: Recordable = {
+      ...sortInfo,
+      ...filterInfo,
+    };
+    if (beforeFetch && isFunction(beforeFetch)) {
+      params = (await beforeFetch(params)) || params;
+    }
+    console.log(params);
+    return params;
+  }
+
   onMounted(() => {
     useTimeoutFn(() => {
       unref(propsRef).immediate && fetch();
@@ -334,5 +349,6 @@ export function useDataSource(
     insertTableDataRecord,
     findTableDataRecord,
     handleTableChange,
+    getBeforeFetch,
   };
 }
