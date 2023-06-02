@@ -130,6 +130,7 @@
         reload,
         getAutoCreateKey,
         updateTableData,
+        getBeforeFetch,
       } = useDataSource(
         getProps,
         {
@@ -274,6 +275,7 @@
         getSize: () => {
           return unref(getBindValues).size as SizeType;
         },
+        getBeforeFetch,
       };
       createTableContext({ ...tableAction, wrapRef, getBindValues });
 

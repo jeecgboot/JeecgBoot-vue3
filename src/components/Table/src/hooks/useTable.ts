@@ -161,7 +161,10 @@ export function useTable(tableProps?: Props): [
     },
     getTableRef: () => {
       return getTableRef();
-    }
+    },
+    getBeforeFetch: async () => {
+      return await getTableInstance().getBeforeFetch();
+    },
   };
 
   return [register, methods];

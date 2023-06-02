@@ -59,7 +59,7 @@ export function useListPage(options: ListPageOptions) {
 
   const tableContext = useListTable(options.tableProps);
 
-  const [, { getForm, reload, setLoading }, { selectedRowKeys }] = tableContext;
+  const [, { getForm, reload, setLoading, getBeforeFetch }, { selectedRowKeys }] = tableContext;
 
   // 导出 excel
   async function onExportXls() {
@@ -78,9 +78,8 @@ export function useListPage(options: ListPageOptions) {
       //update-end-author:taoyan date:20220507 for: erp代码生成 子表 导出报错，原因未知-
       
       //update-begin-author:liusq date:20230410 for:[/issues/409]导出功能没有按排序结果导出,设置导出默认排序，创建时间倒序
-      if(!paramsForm?.column){
-         Object.assign(paramsForm,{column:'createTime',order:'desc'});
-      }
+      const bfParams = await getBeforeFetch();
+      Object.assign(paramsForm, bfParams);
       //update-begin-author:liusq date:20230410 for: [/issues/409]导出功能没有按排序结果导出,设置导出默认排序，创建时间倒序
       
       //如果参数不为空，则整合到一起
