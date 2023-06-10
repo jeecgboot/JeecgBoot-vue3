@@ -127,7 +127,7 @@ export function configureDynamicParamsMenu(menu: Menu, params: RouteParams) {
   if (!paramPath && matchArr && matchArr.length > 0) {
     menu.paramPath = path;
   }
-  menu.path = realPath;
+  // menu.path = realPath;
   // children
   menu.children?.forEach((item) => configureDynamicParamsMenu(item, params));
 }
