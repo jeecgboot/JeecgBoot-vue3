@@ -5,9 +5,10 @@
   import { unref } from 'vue';
   import { useRouter } from 'vue-router';
 
-  const { currentRoute, replace } = useRouter();
+  const { currentRoute, replace, options } = useRouter();
 
-  const { params, query } = unref(currentRoute);
+  const { query } = unref(currentRoute);
+  const { params } = options.history.state as Recordable;
   const { path, _redirect_type = 'path' } = params;
 
   Reflect.deleteProperty(params, '_redirect_type');

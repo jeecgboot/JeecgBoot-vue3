@@ -60,7 +60,7 @@ export const useRedo = (_router?: Router) => {
         params['_redirect_type'] = 'path';
         params['path'] = fullPath;
       }
-      push({ name: REDIRECT_NAME, params, query }).then(() => resolve(true));
+      push({ name: REDIRECT_NAME, state: { params }, query }).then(() => resolve(true));
     });
   }
   return redo;
