@@ -2,6 +2,7 @@ import type { Ref } from 'vue';
 import { inject, reactive, ref, computed, unref, watch, nextTick } from 'vue';
 import { TreeActionType } from '/@/components/Tree';
 import { listToTree } from '/@/utils/common/compUtils';
+import { eachTree } from '/@/utils/helper/treeHelper';
 
 export function useTreeBiz(treeRef, getList, props) {
   //接收下拉框选项
@@ -138,7 +139,11 @@ export function useTreeBiz(treeRef, getList, props) {
       ids = checkedKeys.value.join(",");
     }
     getList({ids:ids}).then((res) =>{
-      selectRows.value = res;
+      selectRows.value = []
+      eachTree(res, (item) => {
+        selectRows.value.push(item)
+        return item
+      })
     })
   }
 
