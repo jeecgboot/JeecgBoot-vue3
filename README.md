@@ -48,7 +48,7 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue3、TypeScript 等新技术�
 -   官方网站： [http://www.jeecg.com](http://www.jeecg.com)
 -   快速入门：[快速入门](http://jeecg.com/doc/quickstart) | [常见问题](http://help.jeecg.com/qa.html) | [视频教程](https://www.bilibili.com/video/BV1V34y187Y9 "入门视频") |  [ 代码生成](http://help.jeecg.com/vue3/codegen/online.html)
 -   QQ交流群：⑦791696430、683903138
--   在线演示 ：  [Vue3演示](http://boot3.jeecg.com)  |  [Vue2演示](http://boot3.jeecg.com) | [APP演示](http://jeecg.com/appIndex)
+-   在线演示 ：  [Vue3演示](http://boot3.jeecg.com)   | [APP演示](http://jeecg.com/appIndex)|  [敲敲云零代码](https://www.qiaoqiaoyun.com)
 > 演示系统的登录账号密码，请点击 [获取账号密码](http://jeecg.com/doc/demo) 获取
 
 
