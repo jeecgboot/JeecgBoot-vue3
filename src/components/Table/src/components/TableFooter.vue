@@ -88,7 +88,9 @@
         }
 
         if (hasSelection) {
-          const isFixed = columns.some((col) => col.fixed === 'left');
+          // update-begin--author:liaozhiyang---date:20231009---for：【issues/776】显示100条/页，复选框只能显示3个的问题(fixed也有可能设置true)
+          const isFixed = columns.some((col) => col.fixed === 'left' || col.fixed === true);
+          // update-begin--author:liaozhiyang---date:20231009---for：【issues/776】显示100条/页，复选框只能显示3个的问题(fixed也有可能设置true)
           columns.unshift({
             width: 50,
             title: 'selection',
@@ -116,3 +118,12 @@
     },
   });
 </script>
+<style lang="less" scoped>
+  // update-begin--author:liaozhiyang---date:20231009---for：【issues/776】显示100条/页，复选框只能显示3个的问题(隐藏合计的滚动条)
+  .ant-table-wrapper {
+    :deep(.ant-table-body) {
+      overflow-x: hidden !important;
+    }
+  }
+  // update-end--author:liaozhiyang---date:20231009---for：【issues/776】显示100条/页，复选框只能显示3个的问题(隐藏合计的滚动条)
+</style>

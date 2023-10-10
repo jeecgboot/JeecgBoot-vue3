@@ -316,7 +316,8 @@ export function useCustomSelection(
   // 自定义渲染Body
   function bodyCustomRender(params) {
     const { index } = params;
-    if (!recordIsShow(index)) {
+    // update-begin--author:liaozhiyang---date:20231009--for：【issues/776】显示100条/页，复选框只能显示3个的问题
+    if (propsRef.value.canResize && !recordIsShow(index)) {
       return '';
     }
     if (isRadio.value) {
@@ -324,6 +325,7 @@ export function useCustomSelection(
     } else {
       return renderCheckboxComponent(params);
     }
+    // update-end--author:liaozhiyang---date:20231009---for：【issues/776】显示100条/页，复选框只能显示3个的问题
   }
 
   /**
