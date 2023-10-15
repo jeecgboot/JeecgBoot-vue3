@@ -1,9 +1,5 @@
 lockfileVersion: 5.4
 
-overrides:
-  bin-wrapper: npm:bin-wrapper-china
-  rollup: ^3.26.3
-
 specifiers:
   '@ant-design/colors': ^7.0.0
   '@ant-design/icons-vue': ^6.1.0
@@ -98,7 +94,7 @@ specifiers:
   qs: ^6.11.2
   resize-observer-polyfill: ^1.5.1
   rimraf: ^5.0.1
-  rollup: ^3.26.3
+  rollup: ^3.28.1
   rollup-plugin-visualizer: ^5.9.2
   showdown: ^2.1.0
   sortablejs: ^1.15.0
@@ -135,9 +131,9 @@ specifiers:
   vue-tsc: ^1.8.8
   vue-types: ^5.1.1
   vuedraggable: ^4.1.0
-  vxe-table: 4.1.0
-  vxe-table-plugin-antd: 3.0.5
-  xe-utils: 3.3.1
+  vxe-table: 4.5.12
+  vxe-table-plugin-antd: 3.1.0
+  xe-utils: 3.5.13
   xss: ^1.0.14
 
 dependencies:
@@ -193,9 +189,9 @@ dependencies:
   vue-router: registry.npmmirror.com/vue-router/4.2.4_vue@3.3.4
   vue-types: registry.npmmirror.com/vue-types/5.1.1_vue@3.3.4
   vuedraggable: 4.1.0_vue@3.3.4
-  vxe-table: 4.1.0_vue@3.3.4+xe-utils@3.3.1
-  vxe-table-plugin-antd: 3.0.5_vxe-table@4.1.0
-  xe-utils: registry.npmmirror.com/xe-utils/3.3.1
+  vxe-table: registry.npmmirror.com/vxe-table/4.5.12_vue@3.3.4+xe-utils@3.5.13
+  vxe-table-plugin-antd: registry.npmmirror.com/vxe-table-plugin-antd/3.1.0_vxe-table@4.5.12
+  xe-utils: registry.npmmirror.com/xe-utils/3.5.13
   xss: registry.npmmirror.com/xss/1.0.14
 
 devDependencies:
@@ -3460,24 +3456,6 @@ packages:
     dependencies:
       sortablejs: 1.14.0
       vue: registry.npmmirror.com/vue/3.3.4
-    dev: false
-
-  /vxe-table-plugin-antd/3.0.5_vxe-table@4.1.0:
-    resolution: {integrity: sha512-qZXIxNKSqdvfVncvVopId7byy9FYUW+ygX4vwUhPceHwsUq0eyX5SVX/LLafqfsnkq4l8+EZ4zQ5/xQ6AfZ31Q==}
-    peerDependencies:
-      vxe-table: ^4.0.30
-    dependencies:
-      vxe-table: 4.1.0_vue@3.3.4+xe-utils@3.3.1
-    dev: false
-
-  /vxe-table/4.1.0_vue@3.3.4+xe-utils@3.3.1:
-    resolution: {integrity: sha512-FX4nc4ckkQGWG/W94z97KBIGrfZsbcni3pm+4uMzNQUcEgxgchnY78/4PrRC4ZRsHJIMv4mtNrzdfJDCTfA65g==}
-    peerDependencies:
-      vue: ^3.2.2
-      xe-utils: ^3.2.0
-    dependencies:
-      vue: registry.npmmirror.com/vue/3.3.4
-      xe-utils: registry.npmmirror.com/xe-utils/3.3.1
     dev: false
 
   /warning/4.0.3:
@@ -8681,6 +8659,12 @@ packages:
       domhandler: registry.npmmirror.com/domhandler/5.0.3
       entities: registry.npmmirror.com/entities/4.5.0
     dev: true
+
+  registry.npmmirror.com/dom-zindex/1.0.1:
+    resolution: {integrity: sha512-M/MERVDZ8hguvjl6MAlLWSLYLS7PzEyXaTb5gEeJ+SF+e9iUC0sdvlzqe91MMDHBoy+nqw7wKcUOrDSyvMCrRg==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/dom-zindex/-/dom-zindex-1.0.1.tgz}
+    name: dom-zindex
+    version: 1.0.1
+    dev: false
 
   registry.npmmirror.com/domelementtype/1.3.1:
     resolution: {integrity: sha512-BSKB+TSpMpFI/HOxCNr1O8aMOTZ8hT3pM3GQ0w/mWRmkhEDSFJkkyzz4XQsBV44BChwGkrDfMyjVD0eA2aFV3w==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/domelementtype/-/domelementtype-1.3.1.tgz}
@@ -15370,6 +15354,31 @@ packages:
       '@vue/server-renderer': registry.npmmirror.com/@vue/server-renderer/3.3.4_vue@3.3.4
       '@vue/shared': registry.npmmirror.com/@vue/shared/3.3.4
 
+  registry.npmmirror.com/vxe-table-plugin-antd/3.1.0_vxe-table@4.5.12:
+    resolution: {integrity: sha512-+/utdMIjnh+bRKJQVnDdF2R4ULQmjF1p/rcAlZGT+aVjwpUztRgqis/W7QfKBQE0czzHkRriZxnWpwAEY0Fvrw==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/vxe-table-plugin-antd/-/vxe-table-plugin-antd-3.1.0.tgz}
+    id: registry.npmmirror.com/vxe-table-plugin-antd/3.1.0
+    name: vxe-table-plugin-antd
+    version: 3.1.0
+    peerDependencies:
+      vxe-table: ^4.5.0
+    dependencies:
+      vxe-table: registry.npmmirror.com/vxe-table/4.5.12_vue@3.3.4+xe-utils@3.5.13
+    dev: false
+
+  registry.npmmirror.com/vxe-table/4.5.12_vue@3.3.4+xe-utils@3.5.13:
+    resolution: {integrity: sha512-eFLzujF+PcpKmd8LpuKOvmyZfVIKKB8q5w/9P1/D392D7NMuCFDDY+HRIYIo889sZMQzUjEb8oNkYvFjHqEFDw==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/vxe-table/-/vxe-table-4.5.12.tgz}
+    id: registry.npmmirror.com/vxe-table/4.5.12
+    name: vxe-table
+    version: 4.5.12
+    peerDependencies:
+      vue: ^3.2.28
+      xe-utils: ^3.5.0
+    dependencies:
+      dom-zindex: registry.npmmirror.com/dom-zindex/1.0.1
+      vue: registry.npmmirror.com/vue/3.3.4
+      xe-utils: registry.npmmirror.com/xe-utils/3.5.13
+    dev: false
+
   registry.npmmirror.com/w3c-hr-time/1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/w3c-hr-time/-/w3c-hr-time-1.0.2.tgz}
     name: w3c-hr-time
@@ -15584,10 +15593,10 @@ packages:
         optional: true
     dev: false
 
-  registry.npmmirror.com/xe-utils/3.3.1:
-    resolution: {integrity: sha512-OdQgl9WPV9dK3/djneFPrGX8z1M4neX+VOkzra5oONjoNsCKQhwdiut99WlxceNMQ5vXDv4EQ/wKA2fux3Gdug==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/xe-utils/-/xe-utils-3.3.1.tgz}
+  registry.npmmirror.com/xe-utils/3.5.13:
+    resolution: {integrity: sha512-ORT6ghCRk0mUVavMBxetcPzUPskS6NGfntzpWazJ86e+XU0uK4HwHfDhN/jKATiyInrOH5RwQo9SO/+DB8XeBw==, registry: https://packages.aliyun.com/60e053ce4690c27532d3dfd3/npm/npm-registry/, tarball: https://registry.npmmirror.com/xe-utils/-/xe-utils-3.5.13.tgz}
     name: xe-utils
-    version: 3.3.1
+    version: 3.5.13
     dev: false
 
   registry.npmmirror.com/xml-name-validator/3.0.0:
