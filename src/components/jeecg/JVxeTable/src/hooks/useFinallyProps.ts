@@ -55,6 +55,10 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
         editRules: unref(vxeEditRules),
         height: props.height === 'auto' ? null : props.height,
         maxHeight: props.maxHeight,
+        // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
+        scrollY: props.scrollY,
+        scrollX: props.scrollX,
+        // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
         border: props.bordered,
         footerMethod: methods.handleFooterMethod,
         // 展开行配置
@@ -63,7 +67,10 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
         },
         // 可编辑配置
         editConfig: {
-          activeMethod: methods.handleActiveMethod,
+          // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
+          //activeMethod: methods.handleActiveMethod,
+          beforeEditMethod: methods.handleActiveMethod,
+          // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
         },
         radioConfig: {
           checkMethod: methods.handleCheckMethod,

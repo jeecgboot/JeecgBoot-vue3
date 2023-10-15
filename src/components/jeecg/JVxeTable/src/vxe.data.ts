@@ -88,6 +88,12 @@ export const vxeProps = () => ({
   addSetActive: propTypes.bool.def(true),
   // 是否开启键盘编辑
   keyboardEdit: propTypes.bool.def(false),
+  // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
+  // 横向虚拟滚动配置（不支持展开行）
+  scrollX: propTypes.object.def(() => ({ enabled: true })),
+  // 纵向虚拟滚动配置（不支持展开行）
+  scrollY: propTypes.object.def(() => ({ enabled: true })),
+  // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
 });
 
-export const vxeEmits = ['save', 'added', 'removed', 'inserted', 'dragged', 'selectRowChange', 'pageChange', 'valueChange'];
+export const vxeEmits = ['save', 'added', 'removed', 'inserted', 'dragged', 'selectRowChange', 'pageChange', 'valueChange', 'blur'];

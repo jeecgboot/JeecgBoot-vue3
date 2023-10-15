@@ -9,6 +9,7 @@ import { isArray, isEmpty, isNull, isString } from '/@/utils/is';
 import { useLinkage } from './useLinkage';
 import { useWebSocket } from './useWebSocket';
 import { getPrefix, getJVxeAuths } from '../utils/authUtils';
+import { excludeKeywords } from '../componentMap';
 
 export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps, refs: JVxeRefs, instanceRef: Ref) {
   let xTableTemp: VxeTableInstance & VxeTablePrivateMethods;
@@ -201,9 +202,14 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   /**
    * 判断是否是禁用行
    * @param row 行数据
+   * @param rowIndex 行号
    * @param force 是否强制判断
    */
-  function isDisabledRow(row, force = true) {
+  function isDisabledRow(row, rowIndex: number | boolean = -1, force = true) {
+    if(typeof rowIndex === 'boolean'){
+      force = rowIndex;
+      rowIndex = -1;
+    }
     if (!force) {
       return !data.disabledRowIds.includes(row.id);
     }
@@ -215,12 +221,17 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     for (const key of keys) {
       // 判断是否有该属性
       if (row.hasOwnProperty(key)) {
+        let value = row[key];
         let temp: any = props.disabledRows![key];
-        // 禁用规则可以是一个数组
-        if (isArray(temp)) {
-          disabled = temp.includes(row[key]);
+        // 禁用规则可以是一个函数
+        if (typeof temp === 'function') {
+          disabled = temp(value, row, rowIndex);
+        } else if (isArray(temp)) {
+          // 禁用规则可以是一个数组
+          disabled = temp.includes(value);
         } else {
-          disabled = temp === row[key];
+          // 禁用规则可以是一个具体值
+          disabled = temp === value;
         }
         if (disabled) {
           break;
@@ -235,9 +246,9 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     let xTable = getXTable();
     data.disabledRowIds = [];
     const { tableFullData } = xTable.internalData;
-    tableFullData.forEach((row) => {
+    tableFullData.forEach((row, rowIndex) => {
       // 判断是否是禁用行
-      if (isDisabledRow(row)) {
+      if (isDisabledRow(row, rowIndex)) {
         data.disabledRowIds.push(row.id);
       }
     });
@@ -308,7 +319,8 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     // 添加默认值
     xTable.internalData.tableFullColumn.forEach((column) => {
       let col = column.params;
-      if (col) {
+      // 不能被注册的列不获取增强
+      if (col && !excludeKeywords.includes(col.type)) {
         if (col.key && (record[col.key] == null || record[col.key] === '')) {
           // 设置默认值
           let createValue = getEnhanced(col.type).createValue;
@@ -682,10 +694,12 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       let sortKey = props.sortKey ?? 'orderNum';
       let sortBegin = props.sortBegin ?? 0;
       xTable.internalData.tableFullData.forEach((data) => (data[sortKey] = sortBegin++));
+      // update-begin--author:liaozhiyang---date:20231011---for：【QQYUN-5133】JVxeTable 行编辑升级
       // 4.1.0
-      await xTable.updateCache();
+      //await xTable.updateCache();
       // 4.1.1
-      // await xTable.cacheRowMap()
+      await xTable.cacheRowMap()
+      // update-end--author:liaozhiyang---date:20231011---for：【QQYUN-5133】JVxeTable 行编辑升级
       return await xTable.updateData();
     }
   }

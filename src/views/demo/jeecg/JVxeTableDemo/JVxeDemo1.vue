@@ -3,7 +3,7 @@
     <a-button @click="onToggleLoading">切换加载</a-button>
     <a-button @click="onToggleDisabled">切换禁用</a-button>
   </a-space>
-
+  <!--这种使用场景得用height，用maxHeight底层有问题-->
   <JVxeTable
     ref="tableRef"
     stripe
@@ -14,7 +14,7 @@
     resizable
     asyncRemove
     clickSelectRow
-    :maxHeight="480"
+    :height="480"
     :checkboxConfig="{ range: true }"
     :disabledRows="{ input: ['text--16', 'text--18'] }"
     :loading="loading"
@@ -23,6 +23,7 @@
     :dataSource="dataSource"
     @removed="onJVxeRemove"
     @valueChange="handleValueChange"
+    @blur="handleBlur"
   >
     <template #toolbarSuffix>
       <a-button @click="handleTableCheck">表单验证</a-button>
@@ -302,6 +303,11 @@
     console.log('handleValueChange.event: ', event);
   }
 
+  // update-begin--author:liaozhiyang---date:20230817---for：【issues/636】JVxeTable加上blur事件
+  function handleBlur(event){
+    console.log("blur",event);
+  }
+  // update-end--author:liaozhiyang---date:20230817---for：【issues/636】JVxeTable加上blur事件
   /** 表单验证 */
   function handleTableCheck() {
     tableRef.value!.validateTable().then((errMap) => {
@@ -356,7 +362,12 @@
 
   function doDelete(deleteRows) {
     return new Promise((resolve) => {
-      let rowId = deleteRows.map((row) => row.id);
+      let rowId;
+      if (Object.prototype.toString.call(deleteRows) === '[object Array]') {
+        rowId = deleteRows.map((row) => row.id);
+      } else {
+        rowId = deleteRows.id;
+      }
       console.log('删除 rowId: ', rowId);
       setTimeout(() => resolve(true), 1500);
     });

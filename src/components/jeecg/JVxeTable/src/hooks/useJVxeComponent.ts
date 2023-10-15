@@ -54,7 +54,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     // 判断是否是禁用的列
     cellProps['disabled'] = isBoolean(col['disabled']) ? col['disabled'] : cellProps['disabled'];
     // 判断是否禁用行
-    if (renderOptions.isDisabledRow(row.value)) {
+    if (renderOptions.isDisabledRow(row.value, rowIndex.value)) {
       cellProps['disabled'] = true;
     }
     // 判断是否禁用所有组件
@@ -159,8 +159,21 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   }
 
   /** 通用处理 blur 事件 */
-  function handleBlurCommon(value) {
-    trigger('blur', { value });
+  function handleBlurCommon($value) {
+    // update-begin--author:liaozhiyang---date:20230817---for：【issues/636】JVxeTable加上blur事件
+    const newValue = enhanced.getValue($value, ctx);
+    const oldValue = value.value;
+    //trigger('blur', { value });
+    // 触发blur事件
+    parentTrigger('blur', {
+      type: props.type,
+      value: newValue,
+      oldValue: oldValue,
+      col: originColumn.value,
+      rowIndex: rowIndex.value,
+      columnIndex: columnIndex.value,
+    });
+    // update-end--author:liaozhiyang---date:20230817---for：【issues/636】JVxeTable加上blur事件
   }
 
   /**

@@ -30,7 +30,10 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
       editConfig: {
         trigger: 'click',
         mode: 'cell',
-        activeMethod: () => !props.disabled,
+        // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
+        //activeMethod: () => !props.disabled,
+        beforeEditMethod: () => !props.disabled,
+        // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
       },
       expandConfig: {
         iconClose: 'ant-table-row-expand-icon ant-table-row-expand-icon-collapsed',

@@ -8,9 +8,9 @@ export function useDataSource(props, data: JVxeDataProps, methods: JVxeTableMeth
     async () => {
       data.disabledRowIds = [];
       data.vxeDataSource.value = cloneDeep(props.dataSource);
-      data.vxeDataSource.value.forEach((row) => {
+      data.vxeDataSource.value.forEach((row, rowIndex) => {
         // 判断是否是禁用行
-        if (methods.isDisabledRow(row)) {
+        if (methods.isDisabledRow(row, rowIndex)) {
           data.disabledRowIds.push(row.id);
         }
         // 处理联动回显数据

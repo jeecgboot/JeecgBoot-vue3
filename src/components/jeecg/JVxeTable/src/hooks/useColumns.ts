@@ -110,7 +110,9 @@ function handleInnerColumn(args: HandleArgs, col: JVxeColumn, handler: (args: Ha
  * 处理隐藏列
  */
 function handleHiddenColumn({ col, columns }: HandleArgs) {
+  col!.params = cloneDeep(col);
   delete col!.type;
+  col!.field = col!.key
   col!.visible = false;
   columns.push(col!);
 }
@@ -142,7 +144,7 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
 function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
   // 判断是否开启了可选择行
   if (props.rowSelection) {
-    let width = 40;
+    let width = 45;
     if (data.statistics.has && !props.rowExpand && !props.dragSort) {
       width = 60;
     }

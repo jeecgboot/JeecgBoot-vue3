@@ -11,7 +11,7 @@ type dispatchEventOptions = {
   row?;
   column?;
   // JVxeTable的vue3实例
-  instance?: ComponentInternalInstance;
+  instance?: ComponentInternalInstance | any;
   // 要寻找的className
   className: string;
   // 重写找到dom后的处理方法
@@ -36,6 +36,11 @@ export function dispatchEvent(options: dispatchEventOptions) {
     if (row && column) {
       let selector = `table.vxe-table--body tbody tr[rowid='${row.id}'] td[colid='${column.id}']`;
       let cellDom = instance!.vnode?.el?.querySelector(selector);
+      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390】解决online新增字段警告（兼容下）
+      if (!cellDom) {
+        cellDom = instance!.$el?.querySelector(selector);
+      }
+      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390】解决online新增字段警告（兼容下）
       if (cellDom) {
         paths.unshift(cellDom);
       }
