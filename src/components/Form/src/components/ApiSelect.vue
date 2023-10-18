@@ -1,5 +1,5 @@
 <template>
-  <Select @dropdownVisibleChange="handleFetch" v-bind="attrs_" @change="handleChange" :options="getOptions" v-model:value="state" :filterOption="filterOption">
+  <Select @dropdownVisibleChange="handleFetch" v-bind="attrs_" @change="handleChange" :options="getOptions" v-model:value="state">
     <template #[item]="data" v-for="item in Object.keys($slots)">
       <slot :name="item" v-bind="data || {}"></slot>
     </template>
@@ -66,11 +66,24 @@
       // update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6308】解决警告
       let vModalValue: any;
       const attrs_ = computed(() => {
-        let obj: any = unref(attrs);
+        let obj: any = unref(attrs) || {};
         if (obj && obj['onUpdate:value']) {
           vModalValue = obj['onUpdate:value'];
           delete obj['onUpdate:value'];
         }
+        // update-begin--author:liaozhiyang---date:20231017---for：【issues/5467】ApiSelect修复覆盖了用户传递的方法
+        if (obj['filterOption'] === undefined) {
+          // update-begin--author:liaozhiyang---date:20230904---for：【issues/5305】无法按照预期进行搜索
+          obj['filterOption'] = (inputValue, option) => {
+            if (typeof option['label'] === 'string') {
+              return option['label'].toLowerCase().indexOf(inputValue.toLowerCase()) != -1;
+            } else {
+              return true;
+            }
+          };
+          // update-end--author:liaozhiyang---date:20230904---for：【issues/5305】无法按照预期进行搜索
+        }
+        // update-end--author:liaozhiyang---date:20231017---for：【issues/5467】ApiSelect修复覆盖了用户传递的方法
         return obj;
       });
       // update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6308】解决警告
@@ -154,17 +167,7 @@
         emitData.value = args;
       }
 
-      // update-begin--author:liaozhiyang---date:20230904---for：【issues/5305】无法按照预期进行搜索
-      const filterOption = (inputValue, option) => {
-        if (typeof option['label'] === 'string') {
-          return option['label'].toLowerCase().indexOf(inputValue.toLowerCase()) != -1;
-        } else {
-          return true;
-        }
-      };
-      // update-begin--author:liaozhiyang---date:20230904---for：【issues/5305】无法按照预期进行搜索
-
-      return { state, attrs_, attrs, getOptions, loading, t, handleFetch, handleChange, filterOption };
+      return { state, attrs_, attrs, getOptions, loading, t, handleFetch, handleChange };
     },
   });
 </script>
