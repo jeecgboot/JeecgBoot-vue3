@@ -31,10 +31,10 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue3、TypeScript 等新技术�
 
 ##### 项目说明
 
-| 项目名                | 说明                     | 
-|--------------------|------------------------|
-| `jeecgboot-vue3` | Vue3版前端代码 | 
-| `jeecg-boot`    | SpringBoot后台项目（支持微服务）        | 
+| 项目名                | 说明                                      | 
+|--------------------|-----------------------------------------|
+| `jeecgboot-vue3` | 前端源码Vue3版下载                             | 
+| `jeecg-boot`    | 后端JAVA源码下载（SpringBoot+SpringCloud） | 
 
 ## 开发环境搭建
 
