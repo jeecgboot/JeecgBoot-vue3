@@ -16,6 +16,7 @@ import {
   DB_DICT_DATA_KEY,
   TENANT_ID,
   LOGIN_INFO_KEY,
+  OAUTH2_THIRD_LOGIN_TENANT_ID,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
@@ -31,6 +32,7 @@ interface BasicStore {
   [DB_DICT_DATA_KEY]: string;
   [TENANT_ID]: string;
   [LOGIN_INFO_KEY]: LoginInfo;
+  [OAUTH2_THIRD_LOGIN_TENANT_ID]: string
 }
 
 type LocalStore = BasicStore;

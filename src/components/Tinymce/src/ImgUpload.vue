@@ -24,7 +24,7 @@
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { getToken } from '/@/utils/auth';
-  import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
+  import { getFileAccessHttpUrl, getHeaders } from '/@/utils/common/compUtils';
 
   export default defineComponent({
     name: 'TinymceImageUpload',
@@ -44,7 +44,7 @@
 
       //update-begin-author:taoyan date:2022-5-13 for: 富文本上传图片不支持
       function getheader() {
-        return { 'X-Access-Token': getToken() };
+        return getHeaders();
       }
 
       function getBizData() {

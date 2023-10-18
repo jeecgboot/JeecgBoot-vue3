@@ -1,3 +1,4 @@
+<!--邀请用户加入租户弹窗-->
 <template>
   <BasicModal @register="registerModal" :width="500" :title="title" @ok="handleSubmit">
     <BasicForm @register="registerForm" />

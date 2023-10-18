@@ -40,9 +40,10 @@
               <div
                 class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
                 :style="{
-                  transform: activeKey == 'all' ? 'translate3d(0px, 0px, 0px)' : 'translate3d(120px, 0px, 0px)',
+                  transform: activeKey == 'all' ? 'translate3d(130px, 0px, 0px)' : 'translate3d(215px, 0px, 0px)',
                   display: 'block',
                   width: '88px',
+                  height: '1px'
                 }"
               ></div>
             </div>
@@ -115,13 +116,13 @@
 
   <user-select-modal isRadioSelection :showButton="false" labelKey="realname" rowKey="username" @register="regModal" @getSelectResult="getSelectedUser"></user-select-modal>
 
-  <DetailModal @register="registerDetail" />
+  <DetailModal @register="registerDetail" :zIndex="1001"/>
 </template>
 
 <script>
   import { BasicModal, useModalInner, useModal } from '/@/components/Modal';
   import { FilterOutlined, CloseOutlined, BellFilled, ExclamationOutlined, PlusOutlined } from '@ant-design/icons-vue';
-  import { JSelectUser } from '/@/components/Form';
+  import JSelectUser from '/@/components/Form/src/jeecg/components/JSelectUser.vue';
   import { ref, unref, reactive, computed } from 'vue';
   import SysMessageList from './SysMessageList.vue'
   import UserSelectModal from '/@/components/Form/src/jeecg/components/modal/UserSelectModal.vue'
@@ -158,7 +159,7 @@
       const searchParams = reactive({
         fromUser: '',
         realname: '',
-        rangeDateKey: '',
+        rangeDateKey: '7day',
         rangeDate: [],
       });
 
@@ -176,7 +177,7 @@
       }
       
       //useModalInner
-      const [registerModal, { closeModal }] = useModalInner(async () => {
+      const [registerModal, { closeModal }] = useModalInner(async (data) => {
         //每次弹窗打开 加载最新的数据
         loadData();
       });
@@ -196,6 +197,7 @@
         { key: 'sz', text: '上周', active: false },
         { key: 'by', text: '本月', active: false },
         { key: 'sy', text: '上月', active: false },
+        { key: '7day', text: '七日', active: true },
         { key: 'zdy', text: '自定义', active: false },
       ]);
       function handleClickDateTag(item) {
@@ -286,11 +288,11 @@
         for (let a of dateTags) {
           a.active = false;
         }
+        loadData();
       }
 
       const [registerDetail, { openModal: openDetailModal }] = useModal();
       function showDetailModal(record){
-        console.error(123, record)
         openDetailModal(true, {record: unref(record), isUpdate: true})
       }
       return {
@@ -383,14 +385,15 @@
         }
 
         > span.filtera{
-          background-color: #d3eafd;
+          //background-color: #d3eafd;
+          background-color: #eff1f2;
           border-radius: 4px;
           cursor: pointer;
           height: 27px;
           padding-top: 7px;
           margin-top: 3px;
           line-height: 25px;
-          color: #2196f3;
+          //color: #2196f3;
           display: flex;
           
           >span.anticon{

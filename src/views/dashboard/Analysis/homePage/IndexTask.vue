@@ -158,7 +158,7 @@
   import { ref } from 'vue';
   import noDataPng from '/@/assets/images/nodata.png';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { JEllipsis } from '/@/components/Form';
+  import JEllipsis from '/@/components/Form/src/jeecg/components/JEllipsis.vue';
   import { BulbTwoTone, BellTwoTone } from '@ant-design/icons-vue';
 
   const tempSs1 = [

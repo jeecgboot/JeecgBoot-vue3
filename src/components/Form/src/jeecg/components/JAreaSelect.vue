@@ -152,11 +152,14 @@
 <style lang="less" scoped>
   .area-select {
     width: 100%;
-    display: flex;
+
+    /* update-begin-author:taoyan date:2023-2-18 for: QQYUN-4292【online表单】高级查询 2.省市县样式问题 */
+   /* display: flex;*/
 
     .ant-select {
-      width: 33.3%;
+      width: calc(33.3% - 7px)
     }
+    /* update-end-author:taoyan date:2023-2-18 for:  QQYUN-4292【online表单】高级查询 2.省市县样式问题 */
 
     .ant-select:not(:first-child) {
       margin-left: 10px;

@@ -206,10 +206,15 @@
       }
 
       function renderComponent() {
-        const { renderComponentContent, component, field, changeEvent = 'change', valueField } = props.schema;
+        const { renderComponentContent, component, field, changeEvent = 'change', valueField, componentProps } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
-
+        // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
+        let isTrim = false;
+        if (component === 'Input' && componentProps && componentProps.trim) {
+          isTrim = true;
+        }
+        // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
         const eventKey = `on${upperFirst(changeEvent)}`;
         // update-begin--author:liaozhiyang---date:20230922---for：【issues/752】表单校验dynamicRules 无法 使用失去焦点后校验 trigger: 'blur'
         const on = {
@@ -219,7 +224,18 @@
               propsData[eventKey](...args);
             }
             const target = e ? e.target : null;
-            const value = target ? (isCheck ? target.checked : target.value) : e;
+            // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
+            let value;
+            if (target) {
+              if (isCheck) {
+                value = target.checked;
+              } else {
+                value = isTrim ? target.value.trim() : target.value;
+              }
+            } else {
+              value = e;
+            }
+            // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
             props.setFormModel(field, value);
             //props.validateFields([field], { triggerName: 'change' }).catch((_) => {});
           },

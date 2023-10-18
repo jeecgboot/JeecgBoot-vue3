@@ -120,6 +120,22 @@ function createWarningModal(options: ModalOptionsPartial) {
   return Modal.warning(createModalOptions(options, 'warning'));
 }
 
+interface MOE extends Omit<ModalOptionsEx, 'iconType'> {
+  iconType?: ModalOptionsEx['iconType'];
+}
+
+// 提示框，无需传入iconType，默认为warning
+function createConfirmSync(options: MOE) {
+  return new Promise((resolve) => {
+    createConfirm({
+      iconType: 'warning',
+      ...options,
+      onOk: () => resolve(true),
+      onCancel: () => resolve(false),
+    });
+  });
+}
+
 notification.config({
   placement: 'topRight',
   duration: 3,
@@ -133,6 +149,7 @@ export function useMessage() {
     createMessage: Message,
     notification: notification as NotifyApi,
     createConfirm: createConfirm,
+    createConfirmSync,
     createSuccessModal,
     createErrorModal,
     createInfoModal,

@@ -7,8 +7,8 @@
   import { ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { formSchema } from './tenant.data';
-  import { saveOrUpdateTenant, getTenantById } from './tenant.api';
+  import { formSchema } from '../tenant.data';
+  import { saveOrUpdateTenant, getTenantById } from '../tenant.api';
   // Emits声明
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);

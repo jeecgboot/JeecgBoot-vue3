@@ -56,7 +56,9 @@
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
             <a-dropdown>
-              <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+              <!-- update-begin--author:liaozhiyang---date:20230803---for：【QQYUN-5838】图标改小保持一致 -->
+              <a class="ant-dropdown-link">更多 <Icon icon="mdi-light:chevron-down"></Icon></a>
+              <!-- update-end--author:liaozhiyang---date:20230803---for：【QQYUN-5838】图标改小保持一致 -->
               <template #overlay>
                 <a-menu class="antd-more">
                   <a-menu-item>
@@ -94,6 +96,7 @@
   import OneNativeModal from './components/OneNativeModal.vue';
   import { Modal, Popconfirm } from 'ant-design-vue';
   import { JSelectUserByDept, JDictSelectTag, JSelectDept, JSearchSelect } from '/@/components/Form';
+  import Icon from '/@/components/Icon/index';
   import { filterObj, getFileAccessHttpUrl } from '/@/utils/common/compUtils';
   import { loadCategoryData } from '/@/api/common/api';
   import { getToken } from '/@/utils/auth';

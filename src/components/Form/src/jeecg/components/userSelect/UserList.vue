@@ -8,6 +8,11 @@
           </div>
           <div>
             <a-avatar v-if="item.avatar" :src="getFileAccessHttpUrl(item.avatar)"></a-avatar>
+            <a-avatar v-else-if="item.avatarIcon" class="ant-btn-primary">
+              <template #icon>
+                <Icon :icon=" 'ant-design:'+item.avatarIcon " style="margin-top: 4px;font-size: 24px;"/>
+              </template>
+            </a-avatar>
             <a-avatar v-else>
               <template #icon><UserOutlined /></template>
             </a-avatar>
@@ -15,9 +20,10 @@
           <div :style="nameStyle">
             {{ item.realname }}
           </div>
-          <div :style="departStyle">
+          <div :style="departStyle" class="ellipsis" :title="item.orgCodeTxt">
             {{ item.orgCodeTxt }}
           </div>
+          <div style="width: 1px"></div>
         </div>
       </a-list-item>
     </template>
@@ -166,10 +172,16 @@
 <style lang="less">
   .user-select-user-info {
     display: flex;
+    width: 100%;
     > div {
       height: 36px;
       line-height: 36px;
       margin-right: 10px;
+    }
+    .ellipsis {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 </style>

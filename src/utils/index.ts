@@ -104,6 +104,8 @@ export function cloneObject(obj) {
 }
 
 export const withInstall = <T>(component: T, alias?: string) => {
+  console.log("---初始化---", component)
+  
   const comp = component as any;
   comp.install = (app: App) => {
     app.component(comp.name || comp.displayName, component);

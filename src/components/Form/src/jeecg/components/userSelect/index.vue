@@ -19,7 +19,7 @@
       <a-button v-if="showAddButton" shape="circle" @click="onShowModal"><PlusOutlined /></a-button>
     </div>
 
-    <user-select-modal :multi="multi" :getContainer="getContainer" @register="registerModal" @selected="onSelected" :izExcludeMy="izExcludeMy"></user-select-modal>
+    <user-select-modal :inSuperQuery="inSuperQuery" :multi="multi" :getContainer="getContainer" @register="registerModal" @selected="onSelected" :izExcludeMy="izExcludeMy"></user-select-modal>
   </div>
 </template>
 
@@ -31,6 +31,7 @@
   import UserSelectModal from './UserSelectModal.vue';
   import { defHttp } from '/@/utils/http/axios';
   import SelectedUserItem from './SelectedUserItem.vue';
+  import { mySelfExpress, mySelfData } from './useUserSelect'
 
   export default defineComponent({
     name: 'UserSelect',
@@ -72,6 +73,11 @@
       },
       //是否排除我自己
       izExcludeMy:{
+        type: Boolean,
+        default: false,
+      },
+      //是否在高级查询中作为条件 可以选择当前用户
+      inSuperQuery:{
         type: Boolean,
         default: false,
       }
@@ -150,19 +156,41 @@
       );
 
       async function getUserList(ids) {
-        const url = '/sys/user/list';
-        let params = {
-          [props.store]: ids,
-        };
+        let hasUserExpress = false;
+        let paramIds = ids;
+        let idList = [];
         selectedUserList.value = [];
-        const data = await defHttp.get({ url, params }, { isTransformResponse: false });
-        if (data.success) {
-          const { records } = data.result;
-          selectedUserList.value = records;
-        } else {
-          console.error(data.message);
+        if(ids){
+          // update-begin-author:sunjianlei date:20230330 for: 修复用户选择器逗号分割回显不生效的问题
+          let tempArray = ids.split(',').map(s => s.trim()).filter(s => s != '');
+          if (tempArray.includes(mySelfExpress)) {
+            hasUserExpress = true;
+            idList = tempArray.filter(item => item != mySelfExpress);
+          } else {
+            idList = tempArray;
+          }
+          // update-end-author:sunjianlei date:20230330 for: 修复用户选择器逗号分割回显不生效的问题
         }
-        console.log('getUserList', data);
+
+        if(idList.length>0){
+          paramIds = idList.join(',')
+          const url = '/sys/user/list';
+          let params = {
+            [props.store]: paramIds,
+          };
+          const data = await defHttp.get({ url, params }, { isTransformResponse: false });
+          console.log('getUserList', data);
+          if (data.success) {
+            const { records } = data.result;
+            selectedUserList.value = records;
+          } else {
+            console.error(data.message);
+          }
+        }
+        if(hasUserExpress){
+          let temp = selectedUserList.value;
+          temp.push({...mySelfData})
+        }
       }
 
       const showAddButton = computed(() => {

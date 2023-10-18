@@ -43,7 +43,7 @@
     <TenantInviteUserModal @register="registerSelUserModal" @inviteOk="handleInviteUserOk"/>
     <TenantUserModal @register="registerTenUserModal" />
     <!--  产品包  -->
-    <TenantPackModal @register="registerPackModal" />
+    <TenantPackList @register="registerPackModal" />
     <!--  租户回收站  -->
     <TenantRecycleBinModal @register="registerRecycleBinModal" @success="reload" />
   </div>
@@ -54,13 +54,13 @@
   import { useModal } from '/@/components/Modal';
   import { getTenantList, deleteTenant, batchDeleteTenant, invitationUserJoin } from './tenant.api';
   import { columns, searchFormSchema } from './tenant.data';
-  import TenantModal from './TenantModal.vue';
+  import TenantModal from './components/TenantModal.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useListPage } from '/@/hooks/system/useListPage';
-  import TenantInviteUserModal from './TenantInviteUserModal.vue';
-  import TenantUserModal from './TenantUserModal.vue';
-  import TenantPackModal from './TenantPackModal.vue';
-  import TenantRecycleBinModal from './TenantRecycleBinModal.vue';
+  import TenantInviteUserModal from './components/TenantInviteUserModal.vue';
+  import TenantUserModal from './components/TenantUserList.vue';
+  import TenantPackList from './pack/TenantPackList.vue';
+  import TenantRecycleBinModal from './components/TenantRecycleBinModal.vue';
 
   const { createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
@@ -186,8 +186,8 @@
     }
     packModal(true, {
       tenantId: unref(selectedRowKeys.value.join(',')),
-      //将租户创建人(拥有者)传递过去，产品包下的用户不允许非拥有者删除
-      createBy: selectedRows.value[0].createBy
+      //我的租户显示新增和编辑产品包
+      showPackAddAndEdit: true
     });
   }
 

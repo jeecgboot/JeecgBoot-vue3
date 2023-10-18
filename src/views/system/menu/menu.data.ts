@@ -122,11 +122,13 @@ export const formSchema: FormSchema[] = [
     component: 'TreeSelect',
     required: true,
     componentProps: {
-      replaceFields: {
-        title: 'name',
+      //update-begin---author:wangshuai ---date:20230829  for：replaceFields已过期，使用fieldNames代替------------
+      fieldNames: {
+        label: 'name',
         key: 'id',
         value: 'id',
       },
+      //update-end---author:wangshuai ---date:20230829  for：replaceFields已过期，使用fieldNames代替------------
       dropdownStyle: {
         maxHeight: '50vh',
       },
@@ -139,12 +141,14 @@ export const formSchema: FormSchema[] = [
     label: '访问路径',
     component: 'Input',
     required: true,
-    ifShow: ({ values }) => !(values.component === ComponentTypes.IFrame && values.internalOrExternal) && values.menuType !== 2,
+    //update-begin-author:liusq date:2023-06-06 for: [issues/5008]子表数据权限设置不生效
+    ifShow: ({ values }) => !(values.component === ComponentTypes.IFrame && values.internalOrExternal),
     //update-begin-author:zyf date:2022-11-02 for: 聚合路由允许路径重复
-     dynamicRules: ({ model, schema }) => {
-       return checkPermDuplication(model, schema, true);
+     dynamicRules: ({ model, schema,values }) => {
+       return checkPermDuplication(model, schema,  values.menuType !== 2?true:false);
     },
     //update-end-author:zyf date:2022-11-02 for: 聚合路由允许路径重复
+    //update-end-author:liusq date:2022-06-06 for:  [issues/5008]子表数据权限设置不生效
   },
   {
     field: 'component',
@@ -350,13 +354,13 @@ export const dataRuleSearchFormSchema: FormSchema[] = [
     field: 'ruleName',
     label: '规则名称',
     component: 'Input',
-    colProps: { span: 6 },
+    // colProps: { span: 6 },
   },
   {
     field: 'ruleValue',
     label: '规则值',
     component: 'Input',
-    colProps: { span: 6 },
+    // colProps: { span: 6 },
   },
 ];
 

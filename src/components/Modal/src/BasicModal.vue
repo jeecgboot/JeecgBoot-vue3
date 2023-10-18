@@ -69,7 +69,7 @@
     components: { Modal, ModalWrapper, ModalClose, ModalFooter, ModalHeader },
     inheritAttrs: false,
     props: basicProps,
-    emits: ['visible-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible'],
+    emits: ['visible-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'fullScreen'],
     setup(props, { emit, attrs , slots}) {
       const visibleRef = ref(false);
       const propsRef = ref<Partial<ModalProps> | null>(null);
@@ -233,6 +233,12 @@
         }
       }
       //update-end-author:taoyan date:2022-7-18 for: modal支持评论 slot
+
+      // update-begin--author:liaozhiyang---date:20230804---for：【QQYUN-5866】放大行数自适应
+      watch(fullScreenRef,(val)=>{
+        emit('fullScreen',val);
+      });
+      // update-begin--author:liaozhiyang---date:20230804---for：【QQYUN-5866】放大行数自适应
 
       return {
         handleCancel,

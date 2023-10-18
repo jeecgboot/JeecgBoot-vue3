@@ -16,6 +16,8 @@ import { useMessage } from "/@/hooks/web/useMessage";
 const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
   designScope: 'online-user',
   tableProps: {
+    //在线用户rowKey默认id会造成key重复，导致页面出现重复数据
+    rowKey:'token',
     title: '在线用户',
     api: list,
     columns: columns,

@@ -35,6 +35,9 @@ export const LOGIN_INFO_KEY = 'LOGIN__INFO__';
 // 聊天UID key
 export const JEECG_CHAT_UID = 'JEECG_CHAT_UID';
 
+// 免登录租户id，与系统分开，避免重复
+export const OAUTH2_THIRD_LOGIN_TENANT_ID = 'THIRD_LOGIN_TENANT_ID';
+
 export enum CacheTypeEnum {
   SESSION,
   LOCAL,

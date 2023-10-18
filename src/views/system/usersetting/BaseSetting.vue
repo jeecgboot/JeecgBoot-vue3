@@ -1,5 +1,5 @@
 <template>
-  <div class="account-padding">
+  <div class="account-padding" :class="[`${prefixCls}`]">
     <div class="user-setting-top">
       <div class="account-avatar">
         <CropperAvatar
@@ -65,26 +65,27 @@
   <UserAccountModal @register="registerModal" @success="getUserDetail"></UserAccountModal>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
-import { CollapseContainer } from "/@/components/Container";
-import { CropperAvatar } from "/@/components/Cropper";
-import { useMessage } from "/@/hooks/web/useMessage";
-import headerImg from "/@/assets/images/header.jpg";
-import { defHttp } from "/@/utils/http/axios";
-import { useUserStore } from "/@/store/modules/user";
-import { uploadImg } from "/@/api/sys/upload";
-import { getFileAccessHttpUrl } from "/@/utils/common/compUtils";
-import dayjs from "dayjs";
-import { ajaxGetDictItems, getDictItemsByCode, initDictOptions } from "/@/utils/dict";
-import { userEdit, getUserData, queryNameByCodes } from "./UserSetting.api";
-import UserAccountModal from "./commponents/UserAccountModal.vue";
-import { useModal } from "/@/components/Modal";
-import { cloneDeep } from "lodash-es";
-
+import { computed, onMounted, ref } from 'vue';
+import { CollapseContainer } from '/@/components/Container';
+import { CropperAvatar } from '/@/components/Cropper';
+import { useMessage } from '/@/hooks/web/useMessage';
+import headerImg from '/@/assets/images/header.jpg';
+import { defHttp } from '/@/utils/http/axios';
+import { useUserStore } from '/@/store/modules/user';
+import { uploadImg } from '/@/api/sys/upload';
+import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
+import dayjs from 'dayjs';
+import { ajaxGetDictItems, getDictItemsByCode, initDictOptions } from '/@/utils/dict';
+import { userEdit, getUserData, queryNameByCodes } from './UserSetting.api';
+import UserAccountModal from './commponents/UserAccountModal.vue';
+import { useModal } from '/@/components/Modal';
+import { cloneDeep } from 'lodash-es';
+import { useDesign } from '/@/hooks/web/useDesign';
 //TODO 当字典租户隔离时，数据会查不到，默认一个
 const sexOption = getDictItemsByCode("sex") || [{text:'男',value:'1'},{text:'女',value:'2'}];
 const { createMessage } = useMessage();
 const userStore = useUserStore();
+  const { prefixCls } = useDesign('j-base-setting-container');
 //是否编辑
 const isEdit = ref<boolean>(false);
 //用户信息
@@ -215,146 +216,137 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="less" scoped>
-.user-setting-top {
-  padding-top: 40px;
-  width: 100%;
-  border-bottom: 1px solid @border-color-base;
-  display: flex;
-  padding-bottom: 40px;
-}
+<style lang="less">
+    // update-begin-author:liusq date:20230625 for: [issues/563]暗色主题部分失效
+  @prefix-cls: ~'@{namespace}-j-base-setting-container';
 
-.account-avatar {
-  align-items: center;
-  display: flex;
-  margin-right: 30px;
-  flex: 1;
-}
+  .@{prefix-cls}{
+    .user-setting-top {
+      padding-top: 40px;
+      width: 100%;
+      border-bottom: 1px solid @border-color-base;
+      display: flex;
+      padding-bottom: 40px;
+    }
 
-.change-avatar {
-  img {
-    display: block;
-    margin-bottom: 15px;
-    border-radius: 50%;
+    .account-avatar {
+      align-items: center;
+      display: flex;
+      margin-right: 30px;
+      flex: 1;
+    }
+
+    .change-avatar {
+      img {
+        display: block;
+        margin-bottom: 15px;
+        border-radius: 50%;
+      }
+    }
+
+    .account-right {
+      margin-left: 25px !important;
+    }
+
+    .font-size-15 {
+      font-size: 15px;
+    }
+
+    .font-size-17 {
+      font-size: 17px;
+    }
+
+    .pointer {
+      cursor: pointer;
+    }
+
+    .account-name {
+      white-space: nowrap;
+      overflow: hidden;
+      width: 200px;
+      text-overflow: ellipsis;
+      line-height: 32px !important;
+      /*begin 兼容暗夜模式*/
+      color: @text-color;
+      /*end 兼容暗夜模式*/
+      font-weight: 500;
+    }
+
+    .gray-bd {
+      color: #bdbdbd;
+    }
+
+    .account-icon {
+      margin-left: 4px;
+    }
+
+    .account-data {
+      width: 100% !important;
+      display: flex;
+      min-width: 0;
+    }
+
+    .account-detail {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 0;
+
+      .item-label {
+        display: inline-block;
+        text-align: left;
+        width: 80px;
+      }
+    }
+
+    .font-bold {
+      font-weight: 700 !important;
+    }
+
+    .margin-bottom-10 {
+      margin-bottom: 10px;
+    }
+
+    .account-info {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 0;
+      box-sizing: border-box;
+      margin-left: 10px;
+
+      .item-label {
+        display: inline-block;
+        text-align: left;
+        width: 80px;
+      }
+    }
+
+    .nowarp {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .account-padding {
+      padding-left: 20px !important;
+      padding-right: 40px !important;
+    }
+
+    .use-day {
+      /*begin 兼容暗夜模式*/
+      color: @text-color;
+      /*end 兼容暗夜模式*/
+      margin-top: 10px;
+      font-size: 13px;
+      span {
+        color: #1e88e5;
+        margin-left: 5px;
+      }
+    }
+    .font-size-13 {
+      font-size: 13px;
+    }
   }
-}
-
-.account-right {
-  margin-left: 25px !important;
-}
-
-.font-size-15 {
-  font-size: 15px;
-}
-
-.font-size-17 {
-  font-size: 17px;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.account-name {
-  white-space: nowrap;
-  overflow: hidden;
-  width: 200px;
-  text-overflow: ellipsis;
-  line-height: 32px!important;
-  /*begin 兼容暗夜模式*/
-  color: @text-color;
-  /*end 兼容暗夜模式*/
-  font-weight: 500;
-}
-
-.gray-bd {
-  color: #bdbdbd
-}
-
-.account-icon {
-  margin-left: 4px;
-}
-
-.account-data {
-  width: 100% !important;
-  display: flex;
-  min-width: 0;
-}
-
-.account-detail {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 0;
-
-  .item-label {
-    display: inline-block;
-    text-align: left;
-    width: 80px;
-  }
-}
-
-.font-bold {
-  font-weight: 700 !important;
-}
-
-.margin-bottom-10 {
-  margin-bottom: 10px;
-}
-
-/*begin 兼容暗夜模式*/
-.gray-75 {
-  color: @text-color !important;
-}
-
-.gray-3 {
-  color: @text-color;
-}
-/*end 兼容暗夜模式*/
-
-.account-info {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 0;
-  box-sizing: border-box;
-  margin-left: 10px;
-
-  .item-label {
-    display: inline-block;
-    text-align: left;
-    width: 80px;
-  }
-}
-
-.nowarp {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.account-padding{
-  padding-left: 20px !important;
-  padding-right: 40px !important;
-}
-
-.use-day{
-  /*begin 兼容暗夜模式*/
-  color: @text-color;
-  /*end 兼容暗夜模式*/
-  margin-top: 10px;
-  font-size: 13px;
-  span{
-    color:#1e88e5;
-    margin-left: 5px;
-  }
-}
-.font-size-13{
-  font-size: 13px;
-}
-/*begin 兼容暗夜模式*/
-.font-color-gray{
-  color: @text-color;
-}
-/*end 兼容暗夜模式*/
+  // update-end-author:liusq date:20230625 for: [issues/563]暗色主题部分失效
 </style>

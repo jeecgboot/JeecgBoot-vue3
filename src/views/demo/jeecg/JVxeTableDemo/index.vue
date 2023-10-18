@@ -1,6 +1,13 @@
 <template>
   <PageWrapper>
     <a-card :bordered="false">
+      <template #title>
+        <span> 
+          JVXETable是专门为大数据和各种ERP风格的复杂操作研发的的高性能表格组件，底层采用vxe-table组件，可以完美弥补antd默认table性能不足问题。 
+          <a href="https://help.jeecg.com/component/JVxeTable.html">API文档</a>
+        </span>
+      </template>
+    
       <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="基础示例" key="1">
           <JVxeDemo1 />

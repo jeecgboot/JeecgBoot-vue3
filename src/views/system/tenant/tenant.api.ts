@@ -1,5 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 import { Modal } from 'ant-design-vue';
+import { getTenantId } from "/@/utils/auth";
 
 enum Api {
   list = '/sys/tenant/list',
@@ -23,6 +24,12 @@ enum Api {
   queryTenantPackUserList = '/sys/tenant/queryTenantPackUserList',
   deleteTenantPackUser = '/sys/tenant/deleteTenantPackUser',
   addTenantPackUser = '/sys/tenant/addTenantPackUser',
+  //获取用户租户列表
+  getTenantPageListByUserId = '/sys/tenant/getTenantPageListByUserId',
+  
+  //新增、编辑用户租户
+  saveUser = '/sys/user/add',
+  editUser = '/sys/user/editTenantUser',
 }
 
 /**
@@ -202,3 +209,35 @@ export const deleteTenantPackUser = (params)=>{
 export const addTenantPackUser = (params)=>{
   return defHttp.post({ url: Api.addTenantPackUser, params });
 }
+
+/**
+ * 查询用户租户列表
+ * @param params
+ */
+export const getTenantPageListByUserId = (params) => {
+  return defHttp.get({ url: Api.getTenantPageListByUserId, params });
+};
+
+
+/**
+ * 获取当前登录租户名称
+ */
+export async function getLoginTenantName() {
+  let tenantId = getTenantId();
+  if(tenantId){
+    let result = await getTenantById({ id:tenantId });
+    if(result){
+      return result.name;
+    }
+  }
+  return "空";
+}
+
+/**
+ * 保存或者更新用户
+ * @param params
+ */
+export const saveOrUpdateTenantUser = (params, isUpdate) => {
+  let url = isUpdate ? Api.editUser : Api.saveUser;
+  return defHttp.post({ url: url, params },{ joinParamsToUrl: true });
+};

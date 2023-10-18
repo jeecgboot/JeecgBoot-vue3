@@ -14,6 +14,12 @@
       <span style="width: 24px; height: 24px; line-height: 20px; margin-right: 3px; display: inline-block">
         <a-avatar v-if="info.avatar" :src="getFileAccessHttpUrl(info.avatar)" :size="24"></a-avatar>
         
+        <a-avatar v-else-if="info.avatarIcon" class="ant-btn-primary" :size="24" >
+          <template #icon>
+            <Icon :icon=" 'ant-design:'+info.avatarIcon " style="font-size: 16px;margin-top: 4px"/>
+          </template>
+        </a-avatar>
+        
         <a-avatar v-else-if="info.selectType == 'sys_role'" :size="24" style="background-color: rgb(255, 173, 0);">
           <template #icon>
             <team-outlined style="font-size: 16px"/>

@@ -147,6 +147,7 @@ export type ComponentType =
   | 'LinkTableForQuery'
   | 'CascaderPcaForQuery'
   | 'UserSelect'
+  | 'RoleSelect'
   | 'RangeDate'
   | 'RangeNumber'
   | 'linkRecordSelect'

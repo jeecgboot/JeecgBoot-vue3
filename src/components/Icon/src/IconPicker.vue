@@ -4,14 +4,14 @@
       <a-popover placement="bottomLeft" trigger="click" v-model="visible" :overlayClassName="`${prefixCls}-popover`">
         <template #title>
           <div class="flex justify-between">
-            <a-input :placeholder="t('component.icon.search')"  @change="debounceHandleSearchChange" allowClear />
+            <a-input :placeholder="t('component.icon.search')" v-model:value="searchIconValue"  @change="debounceHandleSearchChange" allowClear />
           </div>
         </template>
 
         <template #content>
           <div v-if="getPaginationList.length">
             <ScrollContainer class="border border-solid border-t-0">
-              <ul class="flex flex-wrap px-2">
+              <ul class="flex flex-wrap px-2" style="padding-right: 0">
                 <li
                   v-for="icon in getPaginationList"
                   :key="icon"
@@ -27,7 +27,7 @@
               </ul>
             </ScrollContainer>
             <div class="flex py-2 items-center justify-center" v-if="getTotal >= pageSize">
-              <a-pagination showLessItems size="small" :pageSize="pageSize" :total="getTotal" @change="handlePageChange" />
+              <a-pagination showLessItems v-model:current="current" :page-size-options="pageSizeOptions" size="small" v-model:pageSize="pageSize" v-model:total="getTotal" @change="handlePageChange" />
             </div>
           </div>
           <template v-else
@@ -36,9 +36,9 @@
         </template>
 
         <span class="cursor-pointer px-2 py-1 flex items-center" v-if="isSvgMode && currentSelect">
-          <SvgIcon :name="currentSelect" />
+          <SvgIcon :name="currentSelect" @click="currentSelectClick"/>
         </span>
-        <Icon :icon="currentSelect || 'ion:apps-outline'" class="cursor-pointer px-2 py-1" v-else />
+        <Icon :icon="currentSelect || 'ion:apps-outline'" class="cursor-pointer px-2 py-1" v-else @click="currentSelectClick"/>
       </a-popover>
     </template>
   </a-input>
@@ -85,7 +85,6 @@
   const props = defineProps({
     value: propTypes.string,
     width: propTypes.string.def('100%'),
-    pageSize: propTypes.number.def(140),
     copy: propTypes.bool.def(false),
     mode: propTypes.oneOf<('svg' | 'iconify')[]>(['svg', 'iconify']).def('iconify'),
     disabled: propTypes.bool.def(true),
@@ -107,8 +106,16 @@
   const debounceHandleSearchChange = useDebounceFn(handleSearchChange, 100);
   const { clipboardRef, isSuccessRef } = useCopyToClipboard(props.value);
   const { createMessage } = useMessage();
+  //页数
+  const current = ref<number>(1);
+  //每页条数
+  const pageSize = ref<number>(140);
+  //下拉分页显示
+  const pageSizeOptions = ref<any>(['10', '20', '50', '100', '140'])
+  //下拉搜索值
+  const searchIconValue = ref<string>('');
 
-  const { getPaginationList, getTotal, setCurrentPage } = usePagination(currentList, props.pageSize);
+  const { getPaginationList, getTotal, setCurrentPage, setPageSize } = usePagination(currentList, pageSize.value);
 
   watchEffect(() => {
     currentSelect.value = props.value;
@@ -122,7 +129,12 @@
     }
   );
 
-  function handlePageChange(page: number) {
+  function handlePageChange(page: number,size: number) {
+    //update-begin---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效------------
+    current.value = page;
+    pageSize.value = size;
+    setPageSize(size);
+    //update-end---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效------------
     setCurrentPage(page);
   }
 
@@ -147,13 +159,30 @@
 
   function handleSearchChange(e: ChangeEvent) {
     const value = e.target.value;
+    //update-begin---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效------------
+    setCurrentPage(1);
+    current.value = 1;
+    //update-end---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无述------------
     if (!value) {
-      setCurrentPage(1);
       currentList.value = icons;
       return;
     }
     currentList.value = icons.filter((item) => item.includes(value));
   }
+  
+  //update-begin---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效，输入框后面的图标点击之后清空数据------------
+  /**
+   * 图标点击重置页数
+   */
+  function currentSelectClick() {
+    setCurrentPage(1);
+    setPageSize(140);
+    current.value = 1;
+    pageSize.value = 140;
+    currentList.value = icons;
+    searchIconValue.value = '';
+  }
+  //update-begin---author:wangshuai ---date:20230522  for：【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效，输入框后面的图标点击之后清空数据------------
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-icon-picker';
@@ -164,7 +193,7 @@
     }
 
     &-popover {
-      width: 300px;
+      width: 400px;
 
       .ant-popover-inner-content {
         padding: 0;

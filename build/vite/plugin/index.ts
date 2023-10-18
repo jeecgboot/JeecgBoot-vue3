@@ -20,7 +20,7 @@ import { configSvgIconsPlugin } from './svgSprite';
 // import PkgConfig from 'vite-plugin-package-config';
 
 export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
-  const {VITE_USE_MOCK, VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE } = viteEnv;
+  const { VITE_USE_MOCK, VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE } = viteEnv;
 
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // have to

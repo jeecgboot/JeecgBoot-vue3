@@ -62,6 +62,10 @@
       setFieldsValue(values);
       onUrlChange(values.url);
     }
+    //按钮类型情况下，编辑时候清除一下地址的校验
+    if (menuType.value == 2) {
+      clearValidate();
+    }
     //禁用表单
     setProps({ disabled: !attrs.showFooter });
   });

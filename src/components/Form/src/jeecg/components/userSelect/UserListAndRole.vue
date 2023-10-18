@@ -2,7 +2,11 @@
   <a-row>
     <a-col :span="12">
       <div :style="containerStyle">
-        <a-tree v-if="treeData.length > 0" showIcon :treeData="treeData" :selectedKeys="selectedKeys" @select="onSelect"> </a-tree>
+        <a-tree v-if="treeData.length > 0" showIcon :treeData="treeData" :selectedKeys="selectedKeys" @select="onSelect">
+          <template #title="{ title, key }">
+            <UserOutlined style="color: #9e9e9e"/><span style="margin-left: 5px">{{ title }}</span>
+          </template>
+        </a-tree>
       </div>
     </a-col>
     <a-col :span="12" style="padding-left: 10px">
@@ -17,11 +21,13 @@
   import { computed, ref, watch } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import UserList from './UserList.vue';
+  import { UserOutlined } from '@ant-design/icons-vue';
 
   export default {
     name: 'RoleUserList',
     components: {
       UserList,
+      UserOutlined
     },
     props: {
       searchText: {

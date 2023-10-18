@@ -116,7 +116,7 @@
       watch(
         () => props.dictOptions,
         (val) => {
-          if (val && val.length > 0) {
+          if (val && val.length >= 0) {
             options.value = [...val];
           }
         },

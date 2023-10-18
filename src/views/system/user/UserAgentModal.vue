@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :width="800" title="用户代理" @ok="handleSubmit">
+  <BasicModal v-bind="$attrs" @register="registerModal" :width="800" title="用户代理" @ok="handleSubmit" destroyOnClose>
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>

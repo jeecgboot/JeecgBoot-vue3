@@ -30,7 +30,7 @@
       },
       rowKey: {
         type: String,
-        default: 'code',
+        default: 'id',
       },
       params: {
         type: Object,

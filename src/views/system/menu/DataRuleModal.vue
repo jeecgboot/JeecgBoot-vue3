@@ -4,7 +4,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { defineProps, ref, computed, unref } from 'vue';
+  import { ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { dataRuleFormSchema } from './menu.data';

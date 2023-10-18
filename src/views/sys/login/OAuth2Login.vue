@@ -11,6 +11,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import {getTenantId} from "/@/utils/auth";
 
   const isOAuth = ref<boolean>(isOAuth2AppEnv());
   const env = ref<any>({ thirdApp: false, wxWork: false, dingtalk: false });
@@ -50,7 +51,7 @@
       if (route.query.oauth2LoginToken) {
         let token = route.query.oauth2LoginToken;
         //执行登录操作
-        thirdLogin({ token, thirdType: route.query.thirdType });
+        thirdLogin({ token, thirdType: route.query.thirdType,tenantId: getTenantId });
       } else if (env.value.wxWork) {
         sysOAuth2Login('wechat_enterprise');
       } else if (env.value.dingtalk) {

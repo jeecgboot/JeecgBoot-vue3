@@ -227,7 +227,7 @@ export const schemas: FormSchema[] = [
     componentProps: {
       labelKey: 'realname',
       rowKey: 'id',
-      showSelectTable: false,
+      showSelected: true,
     },
     colProps: {
       span: 12,

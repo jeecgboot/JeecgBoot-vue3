@@ -15,7 +15,7 @@
   import { computed } from 'vue';
   import CodeMirrorEditor from './codemirror/CodeMirror.vue';
   import { isString } from '/@/utils/is';
-
+  
   const props = defineProps({
     value: { type: [Object, String] as PropType<Record<string, any> | string> },
     mode: { type: String, default: MODE.JSON },

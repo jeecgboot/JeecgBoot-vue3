@@ -71,7 +71,9 @@
       //负责部门/赋值
       data.record.departIds && !Array.isArray(data.record.departIds) && (data.record.departIds = data.record.departIds.split(','));
       //update-begin---author:zyf   Date:20211210  for：避免空值显示异常------------
-      data.record.departIds = data.record.departIds == '' ? [] : data.record.departIds;
+      //update-begin---author:liusq   Date:20231008  for：[issues/772]避免空值显示异常------------
+      data.record.departIds =  (!data.record.departIds || data.record.departIds == '') ? [] : data.record.departIds;
+      //update-end-----author:liusq   Date:20231008  for：[issues/772]避免空值显示异常------------
       //update-begin---author:zyf   Date:20211210  for：避免空值显示异常------------
     }
     //处理角色用户列表情况(和角色列表有关系)

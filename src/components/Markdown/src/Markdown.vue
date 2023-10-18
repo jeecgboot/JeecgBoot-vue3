@@ -10,7 +10,7 @@
   import { useModalContext } from '../../Modal';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
-  import { getToken } from '/@/utils/auth';
+  import { getTenantId, getToken } from '/@/utils/auth';
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
 
   type Lang = 'zh_CN' | 'en_US' | 'ja_JP' | 'ko_KR' | undefined;
@@ -23,6 +23,7 @@
     },
     emits: ['change', 'get', 'update:value'],
     setup(props, { attrs, emit }) {
+      console.log("---Markdown---初始化---")
       const wrapRef = ref<ElRef>(null);
       const vditorRef = ref(null) as Ref<Nullable<Vditor>>;
       const initedRef = ref(false);
@@ -78,6 +79,7 @@
       //update-begin-author:taoyan date:2022-5-24 for: VUEN-1090 markdown 无法上传
       const uploadUrl = `${window._CONFIG['domianURL']}/sys/common/upload`;
       const token = getToken();
+      const tenantId = getTenantId() ? getTenantId() : '0';
       function formatResult(files, responseText): string {
         let data: any = JSON.parse(responseText);
         // {"success":true,"message":"markdown/aa_1653391146501.png","code":0,"result":null,"timestamp":1653391146501}'
@@ -126,6 +128,7 @@
             setHeaders() {
               return {
                 'X-Access-Token': token as string,
+                'X-Tenant-Id': tenantId,
               };
             },
             format(files, response) {

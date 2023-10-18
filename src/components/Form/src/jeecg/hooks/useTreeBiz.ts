@@ -3,7 +3,7 @@ import { inject, reactive, ref, computed, unref, watch, nextTick } from 'vue';
 import { TreeActionType } from '/@/components/Tree';
 import { listToTree } from '/@/utils/common/compUtils';
 
-export function useTreeBiz(treeRef, getList, props) {
+export function useTreeBiz(treeRef, getList, props, realProps) {
   //接收下拉框选项
   const selectOptions = inject('selectOptions', ref<Array<object>>([]));
   //接收已选择的值
@@ -19,7 +19,7 @@ export function useTreeBiz(treeRef, getList, props) {
   //是否是打开弹框模式
   const openModal = ref(false);
   // 是否开启父子关联，如果不可以多选，就始终取消父子关联
-  const getCheckStrictly = computed(() => (props.multiple ? props.checkStrictly : true));
+  const getCheckStrictly = computed(() => (realProps.multiple ? props.checkStrictly : true));
   // 是否是首次加载回显，只有首次加载，才会显示 loading
   let isFirstLoadEcho = true;
 
@@ -88,7 +88,7 @@ export function useTreeBiz(treeRef, getList, props) {
   function onCheck(keys, info) {
     if (props.checkable == true) {
       // 如果不能多选，就只保留最后一个选中的
-      if (!props.multiple) {
+      if (!realProps.multiple) {
         if (info.checked) {
           //update-begin-author:taoyan date:20220408 for: 单选模式下，设定rowKey，无法选中数据-
           checkedKeys.value = [info.node.eventKey];

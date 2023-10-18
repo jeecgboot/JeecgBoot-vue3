@@ -21,6 +21,15 @@ export const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
+// TODO 【QQYUN-4517】【表单设计器】记录分享路由守卫测试
+router.beforeEach(async (to, from, next) => {
+  //console.group('【QQYUN-4517】beforeEach');
+  //console.warn('from', from);
+  //console.warn('to', to);
+  //console.groupEnd();
+  next();
+});
+
 // reset router
 export function resetRouter() {
   router.getRoutes().forEach((route) => {

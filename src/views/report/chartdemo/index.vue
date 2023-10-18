@@ -20,10 +20,10 @@
           <Bar :chartData="barDataSource" width="30%" height="50vh"></Bar>
         </a-tab-pane>
         <a-tab-pane key="4" tab="面积图">
-          <Line :chartData="barDataSource" height="50vh" :option="{ title: { text: '销售额排行', left: 'center' } }"></Line>
+          <SingleLine :chartData="barDataSource" height="50vh" :option="{ title: { text: '销售额排行', left: 'center' } }"></SingleLine>
         </a-tab-pane>
         <a-tab-pane key="5" tab="迷你面积图" style="display: flex; justify-content: center">
-          <Line :chartData="barDataSource" width="30%" height="50vh"></Line>
+          <SingleLine :chartData="barDataSource" width="30%" height="50vh"></SingleLine>
         </a-tab-pane>
         <a-tab-pane key="6" tab="多行折线图">
           <LineMulti :chartData="barMultiData" height="50vh" :option="multiBarOption" type="line"></LineMulti>
@@ -61,7 +61,7 @@
   import { getData } from './chartdemo.data.ts';
   import Bar from '/@/components/chart/Bar.vue';
   import BarMulti from '/@/components/chart/BarMulti.vue';
-  import Line from '/@/components/chart/Line.vue';
+  import SingleLine from '/@/components/chart/SingleLine.vue';
   import LineMulti from '/@/components/chart/LineMulti.vue';
   import Pie from '/@/components/chart/Pie.vue';
   import Radar from '/@/components/chart/Radar.vue';

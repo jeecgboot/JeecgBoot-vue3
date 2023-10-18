@@ -2,6 +2,9 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { merge, random } from 'lodash-es';
 import { isArray } from '/@/utils/is';
 import { FormSchema } from '/@/components/Form';
+import { reactive } from "vue";
+import { getTenantId, getToken } from "/@/utils/auth";
+import { useUserStoreWithOut } from "/@/store/modules/user";
 
 const globSetting = useGlobSetting();
 const baseApiUrl = globSetting.domainUrl;
@@ -364,4 +367,95 @@ export  function checkChildrenHidden(menuTreeItem){
     return false
   }
   return menuTreeItem.children?.find((item) => item.hideMenu == false) != null;
+}
+
+/**
+ * 计算文件大小
+ * @param fileSize
+ * @param unit
+ * @return 返回大小及后缀
+ */
+export function calculateFileSize(fileSize, unit?) {
+  let unitArr = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  if (unit && unit.length > 0) {
+    unitArr = unit;
+  }
+  let size = fileSize;
+  let unitIndex = 0;
+  while (size >= 1024 && unitIndex < unitArr.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+  //保留两位小数，四舍五入
+  size = Math.round(size * 100) / 100;
+  return size + unitArr[unitIndex];
+}
+
+/**
+ * 获取上传header
+ */
+export function getHeaders() {
+  let tenantId = getTenantId();
+  return reactive({
+    'X-Access-Token': getToken(),
+    'X-Tenant-Id': tenantId ? tenantId : '0',
+  });
+}
+
+/** 根据表达式获取相应的用户信息 */
+export function getUserInfoByExpression(expression) {
+  if (!expression) {
+    return expression;
+  }
+  const userStore = useUserStoreWithOut();
+  let userInfo = userStore.getUserInfo;
+  if (userInfo) {
+    switch (expression) {
+      case 'sysUserId':
+        return userInfo.id;
+      // 当前登录用户登录账号
+      case 'sysUserCode':
+      case 'sys_user_code':
+        return userInfo.username;
+      // 当前登录用户真实名称
+      case 'sysUserName':
+        return userInfo.realname;
+      // 当前登录用户部门编号
+      case 'sysOrgCode':
+      case 'sys_org_code':
+        return userInfo.orgCode;
+    }
+  }
+  return expression;
+}
+
+/**
+ * 替换表达式（#{xxx}）为用户信息
+ * @param expression
+ */
+export function replaceUserInfoByExpression(expression: string | any[]) {
+  if (!expression) {
+    return expression;
+  }
+  const isString = typeof expression === 'string';
+  const isArray = Array.isArray(expression)
+  if (!isString && !isArray) {
+    return expression;
+  }
+  const reg = /#{(.*?)}/g;
+  const replace = (str) => {
+    if (typeof str !== 'string') {
+      return str;
+    }
+    let result = str.match(reg);
+    if (result && result.length > 0) {
+      result.forEach((item) => {
+        let userInfo = getUserInfoByExpression(item.substring(2, item.length - 1));
+        str = str.replace(item, userInfo);
+      });
+    }
+    return str;
+  };
+  // @ts-ignore
+  return isString ? replace(expression) : expression.map(replace);
 }

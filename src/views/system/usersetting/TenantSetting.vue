@@ -1,6 +1,9 @@
 <template>
-  <div class="tenant-padding">
-    <div class="my-tenant">我的租户</div>
+  <div class="tenant-padding" :class="[`${prefixCls}`]">
+    <div class="my-tenant">
+      <span style="flex: 1">我的租户</span>
+      <span class="invited" @click="invitedClick">我的受邀信息<span class="approved-count" v-if="invitedCount>0">{{invitedCount}}</span></span>
+    </div>
     <div class="tenant-list" v-if="dataSource.length>0">
       <div v-for="item in dataSource" class="tenant-list-item" @click="drownClick(item)">
         <div class="tenant-title">
@@ -15,8 +18,12 @@
           </div>
           <div class="item-right">
             <span v-if="item.userTenantStatus === '3'">
-              <span class="examine">待审核</span>
+              <span class="pointer examine">待审核</span>
               <span class="pointer cancel-apply" @click.stop="cancelApplyClick(item.tenantUserId)">取消申请</span>
+            </span>
+            <span v-else-if="item.userTenantStatus === '5'">
+              <span class="pointer examine" @click="joinOrRefuseClick(item.tenantUserId,'1')">加入</span>
+              <span class="pointer cancel-apply" @click.stop="joinOrRefuseClick(item.tenantUserId,'4')">拒绝</span>
             </span>
             <div v-else style="width: 75px"></div>
             <span style="margin-left: 24px">
@@ -170,13 +177,13 @@
       <a-button @click="handleCancelOutClick">取消</a-button>
     </template>
   </a-modal>
-  
-  <a-modal 
-    title="变更拥有者" 
-    v-model:visible="owenVisible" 
-    width="800" 
-    destroy-on-close 
-    :cancelButtonProps="{display:'none'}" 
+
+  <a-modal
+    title="变更拥有者"
+    v-model:visible="owenVisible"
+    width="800"
+    destroy-on-close
+    :cancelButtonProps="{display:'none'}"
     @ok="changeOwen">
       <div style="padding: 20px">
         <a-row :span="24">
@@ -189,11 +196,34 @@
         </a-row>
       </div>
   </a-modal>
+  
+  <!-- begin 我的受邀信息 -->
+  <a-modal title="我的受邀信息" v-model:visible="invitedVisible" :footer="null">
+      <a-row :span="24" class="invited-row">
+        <a-col :span="16">
+          组织
+        </a-col>
+        <a-col :span="8">
+          操作
+        </a-col>
+      </a-row>
+    <a-row :span="24" class="invited-row-list" v-for="item in invitedList">
+      <a-col :span="16">
+        {{item.name}}
+      </a-col>
+      <a-col :span="8">
+        <span class="common" @click="joinOrRefuseClick(item.tenantUserId,'1')">加入</span>
+        <span class="common refuse" @click="joinOrRefuseClick(item.tenantUserId,'4')">拒绝</span>
+      </a-col>
+    </a-row>
+    <div style="height: 20px"></div>
+  </a-modal>
+  <!-- end 我的受邀信息 -->
 </template>
 
 <script lang="ts" name="tenant-setting" setup>
 import { onMounted, ref, unref } from "vue";
-import {getTenantListByUserId, cancelApplyTenant, exitUserTenant, changeOwenUserTenant} from "./UserSetting.api";
+import { getTenantListByUserId, cancelApplyTenant, exitUserTenant, changeOwenUserTenant, agreeOrRefuseJoinTenant } from "./UserSetting.api";
 import { useUserStore } from "/@/store/modules/user";
 import { CollapseContainer } from "/@/components/Container";
 import { getFileAccessHttpUrl } from "/@/utils/common/compUtils";
@@ -203,7 +233,10 @@ import { initDictOptions } from '/@/utils/dict';
 import { uniqWith } from 'lodash-es';
 import { Modal } from 'ant-design-vue';
 import UserSelect from '/@/components/Form/src/jeecg/components/userSelect/index.vue';
+import {router} from "/@/router";
+import { useDesign } from '/@/hooks/web/useDesign';
 
+const { prefixCls } = useDesign('j-user-tenant-setting-container');
 //数据源
 const dataSource = ref<any>([]);
 const userStore = useUserStore();
@@ -229,14 +262,40 @@ const userDetail = ref({
   async function initDataSource() {
   //获取用户数据
     //update-begin---author:wangshuai ---date:20230109  for: [QQYUN-3645]个人设置我的租户查询审核中和正常的------------
-    getTenantListByUserId({ userTenantStatus: '1,3' }).then((res) => {
-    if (res.success) {
-        dataSource.value = res.result;
+    //update-begin---author:wangshuai ---date:202307049  for：[QQYUN-5608]用户导入后，邀请后,被导入人同意即可,新增被邀信息-----------
+    getTenantListByUserId({ userTenantStatus: '1,3,5' }).then((res) => {
+      if (res.success) {
+        if(res.result && res.result.length>0){
+          let result = res.result;
+          //存放正常和审核中的数组
+          let normal:any = [];
+          //存放受邀的信息
+          let invited:any = [];
+          for (let i = 0; i < result.length; i++) {
+            let status = result[i].userTenantStatus;
+            //状态为邀请的放入invited数组中
+            if(status === '5'){
+              invited.push(result[i]);
+            }
+            normal.push(result[i]);
+          }
+          dataSource.value = normal;
+          invitedList.value = invited;
+          invitedCount.value = invited.length;
+        }else{
+          setInitedValue();
+        }
       } else {
-        dataSource.value = [];
+        setInitedValue();
+    //update-end---author:wangshuai ---date:202307049  for：[QQYUN-5608]用户导入后，邀请后,被导入人同意即可,新增被邀信息------------
       }
     });
     //update-end---author:wangshuai ---date:20230109  for：[QQYUN-3645]个人设置我的租户查询审核中和正常的------------
+  }
+  function setInitedValue() {
+    dataSource.value = [];
+    invitedList.value = [];
+    invitedCount.value = 0;  
   }
 
   /**
@@ -331,14 +390,14 @@ const userDetail = ref({
   //退出租户数据
   const formCancelState = ref<any>({});
   //租户数据
-  const myTenantInfo = ref<any>({});  
+  const myTenantInfo = ref<any>({});
   //注销租户弹窗确定按钮是否可以点击
   const outBtnDisabled = ref<boolean>(true);
   //拥有者
   const tenantOwen = ref<string>('');
   //拥有者弹窗
   const owenVisible = ref<boolean>(false);
-  
+
   /**
    * 租户名称值改变事件
    */
@@ -365,6 +424,9 @@ const userDetail = ref({
       if (res.success) {
         createMessage.success(res.message);
         cancelVisible.value = false;
+        //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5632】退出租户后 再点击主页 已退出的租户应用还可以操作------------
+        userStore.setTenant(null);
+        //update-end---author:wangshuai ---date:20230703  for：【QQYUN-5632】退出租户后 再点击主页 已退出的租户应用还可以操作------------
         //切换租户后要刷新首页
         window.location.reload();
       } else {
@@ -372,6 +434,24 @@ const userDetail = ref({
           //需要指定变更者
           owenVisible.value = true;
           cancelVisible.value = false;
+        //update-begin---author:wangshuai ---date:20230426  for：【QQYUN-5270】名下租户全部退出后，再次登录，提示租户全部冻结。拥有者提示前往注销------------
+        }else if(res.message === 'cancelTenant'){
+          cancelVisible.value = false;
+          let fullPath = router.currentRoute.value.fullPath;
+          Modal.confirm({
+            title: '您是该组织的拥有者',
+            content: '该组织下没有其他成员，需要您前往注销',
+            okText: '前往注销',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk: () => {
+              if(fullPath === '/system/usersetting'){
+                return;
+              }
+              router.push('/myapps/settings/organization/organMessage/'+unref(myTenantInfo).tenantUserId)
+            }
+          })
+        //update-end---author:wangshuai ---date:20230426  for：【QQYUN-5270】名下租户全部退出后，再次登录，提示租户全部冻结。拥有者提示前往注销------------
         } else {
           createMessage.warning(res.message);
         }
@@ -380,7 +460,7 @@ const userDetail = ref({
       createMessage.warning(res.message);
     })
   }
-  
+
   /**
    * 退出租户取消事件
    */
@@ -397,9 +477,10 @@ const userDetail = ref({
       createMessage.warning("请选择变更拥有者");
       return;
     }
-    changeOwenUserTenant({userId:unref(tenantOwen)}).then((res) =>{
+    changeOwenUserTenant({ userId:unref(tenantOwen), tenantId:unref(myTenantInfo).tenantUserId }).then((res) =>{
       if(res.success){
         createMessage.success(res.message);
+        userStore.setTenant(null);
         //切换租户后要刷新首页
         window.location.reload();
       } else {
@@ -407,9 +488,32 @@ const userDetail = ref({
       }
     })
   }
-onMounted(() => {
-  initDataSource();
-});
+  
+  //邀请数量
+  const invitedCount = ref<number>(0);
+  //受邀信息
+  const invitedList = ref<any>([]);
+  //受邀信息弹窗
+  const invitedVisible = ref<boolean>(false);
+
+  /**
+   * 受邀信息点击事件
+   */
+  function invitedClick() {
+    invitedVisible.value = true;
+  }
+
+  /**
+   * 加入组织点击事件
+   */
+  async function joinOrRefuseClick(tenantId,status) {
+    await agreeOrRefuseJoinTenant( { tenantId:Number.parseInt(tenantId), status:status });
+    initDataSource();
+  }
+  
+  onMounted(() => {
+    initDataSource();
+  });
 
 </script>
 
@@ -418,12 +522,18 @@ onMounted(() => {
   padding: 30px 40px 0 20px;
 }
 .my-tenant{
+  display: flex;
   font-size: 17px;
   font-weight: 700!important;
   /*begin 兼容暗夜模式*/
   color: @text-color;
   /*end 兼容暗夜模式*/
   margin-bottom: 20px;
+  .invited{
+    font-size: 14px;
+    text-align: right;
+    cursor: pointer;
+  }
 }
 .tenant-list{
   box-sizing: border-box;
@@ -578,4 +688,90 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 700;
 }
+//update-begin---author:wangshuai ---date:20230704  for：被邀弹窗样式------------
+.approved-count{
+  background: #ffd2d2;
+  border-radius: 19px;
+  color: red;
+  display: inline-block;
+  font-weight: 500;
+  height: 19px;
+  line-height: 18px;
+  margin-left: 8px;
+  min-width: 19px;
+  padding: 0 6px;
+  text-align: center;
+}
+
+.invited-row{
+  padding: 10px 34px;
+}
+.invited-row-list{
+  padding: 0px 34px;
+  .common{
+    color: #1e88e5;
+    cursor: pointer;
+  }
+  .refuse{
+    color: red;
+    margin-left: 20px;
+  }
+}
+.pointer{
+  cursor: pointer;
+}
+//update-end---author:wangshuai ---date:20230704  for：被邀弹窗样式------------
+</style>
+
+<style lang="less">
+  // update-begin-author:liusq date:20230625 for: [issues/563]暗色主题部分失效
+@prefix-cls: ~'@{namespace}-j-user-tenant-setting-container';
+/*begin 兼容暗夜模式*/
+.@{prefix-cls} {
+
+  .my-tenant{
+    color: @text-color;
+  }
+
+  .tenant-list-item{
+    border: 1px solid @border-color-base;
+
+    .item-name{
+      color: @text-color;
+    }
+  }
+
+  .item-content {
+
+    .content-box {
+      border-top: 1px solid @border-color-base;
+    }
+
+    .content-name {
+      color: @text-color;
+    }
+
+    .content-des-text {
+      color: @text-color;
+    }
+  }
+  .footer-box {
+    border-top: 1px solid @border-color-base;
+  }
+
+  /*begin 兼容暗夜模式*/
+  .font-color333 {
+    color: @text-color;
+  }
+
+  .font-color9e {
+    color: @text-color;
+  }
+
+  .font-color75 {
+    color: @text-color;
+  }
+}
+/*end 兼容暗夜模式*/
+  // update-end-author:liusq date:20230625 for: [issues/563]暗色主题部分失效
 </style>

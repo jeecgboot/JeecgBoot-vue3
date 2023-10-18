@@ -37,7 +37,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getFileAccessHttpUrl, getRandom } from '/@/utils/common/compUtils';
+  import { getFileAccessHttpUrl, getHeaders, getRandom } from '/@/utils/common/compUtils';
   import { uploadUrl } from '/@/api/common/api';
   import { getToken } from '/@/utils/auth';
 
@@ -94,9 +94,7 @@
         return path.substring(path.lastIndexOf('/') + 1);
       };
       //token
-      const headers = ref<object>({
-        'X-Access-Token': getToken(),
-      });
+      const headers = getHeaders();
       //上传状态
       const loading = ref<boolean>(false);
       //是否是初始化加载

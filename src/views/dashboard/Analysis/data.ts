@@ -150,7 +150,6 @@ export const table = {
       title: '办理时长',
       align: 'center',
       dataIndex: 'flowRate',
-      slots: { customRender: 'flowRate' },
     },
   ],
   ipagination: {
@@ -204,7 +203,6 @@ export const table1 = {
       title: '超时时间',
       align: 'center',
       dataIndex: 'flowRate',
-      slots: { customRender: 'flowRate' },
     },
   ],
   ipagination: {

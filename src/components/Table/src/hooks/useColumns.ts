@@ -1,6 +1,7 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import type { ComputedRef } from 'vue';
+import { Table } from 'ant-design-vue';
 import { computed, Ref, ref, toRaw, unref, watch, reactive } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
@@ -9,7 +10,7 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
-import { CUS_SEL_COLUMN_KEY } from "./useCustomSelection";
+import { CUS_SEL_COLUMN_KEY } from './useCustomSelection';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -145,7 +146,7 @@ export function useColumns(
     const viewColumns = sortFixedColumn(unref(getColumnsRef));
 
     const columns = cloneDeep(viewColumns);
-    return columns
+    const result = columns
       .filter((column) => {
         return hasPermission(column.auth) && isIfShow(column);
       })
@@ -184,6 +185,22 @@ export function useColumns(
         }
         return reactive(column);
       });
+    // update-begin--author:liaozhiyang---date:20230919---for：【QQYUN-6387】展开写法（去掉报错）
+    if (propsRef.value.expandedRowKeys) {
+      let index = 0;
+      const findIndex = result.findIndex((item) => item.key === CUS_SEL_COLUMN_KEY);
+      if (findIndex != -1) {
+        index = findIndex + 1;
+      }
+      const next: any = result[index + 1];
+      let expand = Table.EXPAND_COLUMN;
+      if (next && (next['fixed'] == true || next['fixed'] == 'left')) {
+        expand = Object.assign(expand, { fixed: 'left' });
+      }
+      result.splice(index, 0, expand);
+    }
+    return result;
+    // update-end--author:liaozhiyang---date:20230919---for：【QQYUN-6387】展开写法（去掉报错）
   });
 
   watch(
@@ -260,6 +277,9 @@ export function useColumns(
     columns = columns.filter((item) => item.key !== CUS_SEL_COLUMN_KEY);
     // update-enb--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
 
+    // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
+    columns = columns.filter((item) => !item.defaultHidden);
+    // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
     if (sort) {
       columns = sortFixedColumn(columns);
     }

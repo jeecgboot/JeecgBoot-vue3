@@ -31,7 +31,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts" setup>
-  import { ref, defineProps, watch, unref } from 'vue';
+  import { ref, watch, unref } from 'vue';
   import { BasicTable, useTable, TableAction } from '/src/components/Table';
   import { BasicDrawer, useDrawer, useDrawerInner } from '/src/components/Drawer';
   import { useModal } from '/src/components/Modal';
@@ -62,10 +62,11 @@
     api: userList,
     columns: userColumns,
     formConfig: {
-      labelWidth: 120,
+      //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示
+      labelWidth: 60,
+      //update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示
       schemas: searchUserFormSchema,
       autoSubmitOnEnter: true,
-      actionColOptions: { pull: 1 },
     },
     striped: true,
     useSearchForm: true,
@@ -183,3 +184,11 @@
     ];
   }
 </script>
+
+<style scoped>
+  /*update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示*/
+  :deep(.ant-form-item-control-input-content){
+    text-align: left;
+  }
+  /*update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示*/
+</style>

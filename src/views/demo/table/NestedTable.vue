@@ -1,30 +1,34 @@
 <template>
   <a-table :columns="columns" :data-source="data" class="components-table-demo-nested">
-    <template #operation>
-      <a>Publish</a>
+    <template #bodyCell="{ column }">
+      <template v-if="column.key === 'operation'">
+        <a>Publish</a>
+      </template>
     </template>
     <template #expandedRowRender>
       <a-table :columns="innerColumns" :data-source="innerData" :pagination="false">
-        <template #status>
-          <span>
-            <a-badge status="success" />
-            Finished
-          </span>
-        </template>
-        <template #operation>
-          <span class="table-operation">
-            <a>Pause</a>
-            <a>Stop</a>
-            <a-dropdown>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>Action 1</a-menu-item>
-                  <a-menu-item>Action 2</a-menu-item>
-                </a-menu>
-              </template>
-              <a> More </a>
-            </a-dropdown>
-          </span>
+        <template #bodyCell="{ column }">
+          <template v-if="column.dataIndex === 'state'">
+            <span>
+              <a-badge status="success" />
+              Finished
+            </span>
+          </template>
+          <template v-if="column.dataIndex === 'operation'">
+            <span class="table-operation">
+              <a>Pause</a>
+              <a>Stop</a>
+              <a-dropdown>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>Action 1</a-menu-item>
+                    <a-menu-item>Action 2</a-menu-item>
+                  </a-menu>
+                </template>
+                <a> More </a>
+              </a-dropdown>
+            </span>
+          </template>
         </template>
       </a-table>
     </template>
@@ -40,7 +44,7 @@
     { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
     { title: 'Creator', dataIndex: 'creator', key: 'creator' },
     { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-    { title: 'Action', key: 'operation', slots: { customRender: 'operation' } },
+    { title: 'Action', key: 'operation' },
   ];
 
   interface DataItem {
@@ -69,13 +73,12 @@
   const innerColumns = [
     { title: 'Date', dataIndex: 'date', key: 'date' },
     { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Status', key: 'state', slots: { customRender: 'status' } },
+    { title: 'Status', dataIndex: 'state', key: 'state' },
     { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
     {
       title: 'Action',
       dataIndex: 'operation',
       key: 'operation',
-      slots: { customRender: 'operation' },
     },
   ];
 

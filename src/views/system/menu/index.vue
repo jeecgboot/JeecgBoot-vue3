@@ -59,6 +59,10 @@
       showIndexColumn: false,
       tableSetting: { fullScreen: true },
       formConfig: {
+        // update-begin--author:liaozhiyang---date:20230803---for：【QQYUN-5873】查询区域lablel默认居左
+        labelWidth:60,
+        owProps: { gutter: 24 },
+        // update-end--author:liaozhiyang---date:20230803---for：【QQYUN-5873】查询区域lablel默认居左
         schemas: searchFormSchema,
         autoAdvancedCol: 4,
         baseColProps: { xs: 24, sm: 12, md: 6, lg: 6, xl: 6, xxl: 6 },

@@ -2,7 +2,7 @@
   <div class="comment-tabs-warp" v-if="showStatus">
     <a-tabs @change="handleChange" :animated="false">
       <a-tab-pane v-if="showComment" tab="评论" key="comment" class="comment-list-tab">
-        <comment-list :tableName="tableName" :dataId="dataId" :datetime="datetime1"></comment-list>
+        <comment-list :tableName="tableName" :dataId="dataId" :datetime="datetime1" :otherHeight="otherHeight"></comment-list>
       </a-tab-pane>
       <a-tab-pane v-if="showFiles" tab="文件" key="file">
         <comment-files :tableName="tableName" :dataId="dataId" :datetime="datetime2"></comment-files>
@@ -41,6 +41,8 @@
       showFiles: propTypes.bool.def(true),
       // 显示日志
       showDataLog: propTypes.bool.def(true),
+      // 其他需要减去的高度
+      otherHeight: propTypes.number.def(0),
     },
     setup(props) {
       const showStatus = computed(() => {

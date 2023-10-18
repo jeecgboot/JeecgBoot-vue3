@@ -29,7 +29,7 @@
   import md5 from 'crypto-js/md5';
 
   import SysMessageModal from '/@/views/system/message/components/SysMessageModal.vue'
-  
+
   export default defineComponent({
     components: {
       Popover,
@@ -154,7 +154,6 @@
           console.error(e);
         }
       }
-
 
       return {
         prefixCls,

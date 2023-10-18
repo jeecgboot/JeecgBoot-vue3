@@ -12,7 +12,7 @@
   // 声明Emits
   const emit = defineEmits(['success', 'register']);
   //表单配置
-  const [registerForm, { resetFields, setFieldsValue, validate, clearValidate }] = useForm({
+  const [registerForm, { resetFields, setFieldsValue, validate, clearValidate, updateSchema }] = useForm({
     schemas: formQuitAgentSchema,
     showActionButtonGroup: false,
   });
@@ -20,8 +20,9 @@
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     //重置表单
     await resetFields();
-    setModalProps({ confirmLoading: false });
-    setModalProps({ confirmLoading: false });
+    setModalProps({ confirmLoading: true });
+    
+    let userId = data.userId;
     //查询获取表单数据
     const res = await getUserAgent({ userName: data.userName });
     data = res.result ? res.result : data;
@@ -32,8 +33,20 @@
     if (!data.endTime) {
       data.endTime = getYear(date);
     }
+
+    //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】5、离职人员可以选自己------------
+    await updateSchema(
+      [{
+        field:'agentUserName',
+        componentProps:{
+          excludeUserIdList:[userId]
+        }
+      }]
+    )
+    //update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】5、离职人员可以选自己------------
     //表单赋值
     await setFieldsValue({ ...data });
+    setModalProps({ confirmLoading: false });
   });
   //表单提交事件
   async function handleSubmit() {

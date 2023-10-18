@@ -63,6 +63,10 @@
       api: list,
       columns: columns,
       formConfig: {
+        // update-begin--author:liaozhiyang---date:20230803---for：【QQYUN-5873】查询区域lablel默认居左
+        labelWidth:65,
+        rowProps: { gutter: 24 },
+        // update-end--author:liaozhiyang---date:20230803---for：【QQYUN-5873】查询区域lablel默认居左
         schemas: searchFormSchema,
       },
       actionColumn: {

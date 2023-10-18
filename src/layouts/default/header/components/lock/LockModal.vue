@@ -23,7 +23,8 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import BasicForm from '/@/components/Form/src/BasicForm.vue';
+  import { useForm } from '/@/components/Form/src/hooks/useForm';
 
   import { useUserStore } from '/@/store/modules/user';
   import { useLockStore } from '/@/store/modules/lock';

@@ -1,38 +1,42 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit" width="70%">
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit" width="70%" @fullScreen="handleFullScreen">
     <a-form ref="formRef" :model="orderMainModel" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="validatorRules">
-      <a-row class="form-row" :gutter="16">
-        <a-col :lg="8">
-          <a-form-item label="订单号" name="orderCode">
-            <a-input v-model:value="orderMainModel.orderCode" placeholder="请输入订单号" />
-          </a-form-item>
-        </a-col>
-        <a-col :lg="8">
-          <a-form-item label="订单类型" name="ctype">
-            <a-select placeholder="请选择订单类型" v-model:value="orderMainModel.ctype">
-              <a-select-option value="1">国内订单</a-select-option>
-              <a-select-option value="2">国际订单</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :lg="8">
-          <a-form-item label="订单日期" name="orderDate">
-            <a-date-picker showTime valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="orderMainModel.orderDate" />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row class="form-row" :gutter="16">
-        <a-col :lg="8">
-          <a-form-item label="订单金额" name="orderMoney">
-            <a-input v-model:value="orderMainModel.orderMoney" placeholder="请输入订单金额" />
-          </a-form-item>
-        </a-col>
-        <a-col :lg="8">
-          <a-form-item label="订单备注" name="content">
-            <a-input v-model:value="orderMainModel.content" placeholder="请输入订单备注" />
-          </a-form-item>
-        </a-col>
-      </a-row>
+      <!-- update-begin--author:liaozhiyang---date:20230803---for：【QQYUN-5866】鼠标放上去有左右滚动条 -->
+      <div style="overflow-x: hidden">
+        <a-row class="form-row" :gutter="16">
+          <a-col :lg="8">
+            <a-form-item label="订单号" name="orderCode">
+              <a-input v-model:value="orderMainModel.orderCode" placeholder="请输入订单号" />
+            </a-form-item>
+          </a-col>
+          <a-col :lg="8">
+            <a-form-item label="订单类型" name="ctype">
+              <a-select placeholder="请选择订单类型" v-model:value="orderMainModel.ctype">
+                <a-select-option value="1">国内订单</a-select-option>
+                <a-select-option value="2">国际订单</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :lg="8">
+            <a-form-item label="订单日期" name="orderDate">
+              <a-date-picker showTime valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="orderMainModel.orderDate" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row class="form-row" :gutter="16">
+          <a-col :lg="8">
+            <a-form-item label="订单金额" name="orderMoney">
+              <a-input v-model:value="orderMainModel.orderMoney" placeholder="请输入订单金额" />
+            </a-form-item>
+          </a-col>
+          <a-col :lg="8">
+            <a-form-item label="订单备注" name="content">
+              <a-input v-model:value="orderMainModel.content" placeholder="请输入订单备注" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </div>
+      <!-- update-end--author:liaozhiyang---date:20230803---for：【QQYUN-5866】鼠标放上去有左右滚动条 -->
       <!-- 子表单区域 -->
       <a-tabs v-model:activeKey="activeKey" @change="handleChangeTabs">
         <a-tab-pane tab="客户信息" key="tableRef1">
@@ -44,7 +48,7 @@
             rowSelection
             resizable
             keepSource
-            :maxHeight="300"
+            :height="tableH"
             :checkbox-config="{ range: true }"
             :loading="table1.loading"
             :columns="table1.columns"
@@ -61,7 +65,7 @@
             rowSelection
             resizable
             keepSource
-            :maxHeight="300"
+            :height="tableH"
             :checkbox-config="{ range: true }"
             :loading="table2.loading"
             :columns="table2.columns"
@@ -84,6 +88,7 @@
     components: { BasicModal, JVxeTable },
     emits: ['success', 'register'],
     setup(props, { emit }) {
+      const tableH = ref(300);
       const isUpdate = ref(true);
       const tableRef1 = ref();
       const tableRef2 = ref();
@@ -171,6 +176,11 @@
         //刷新列表
         emit('success');
       }
+      // update-begin--author:liaozhiyang---date:20230804---for：【QQYUN-5866】放大行数自适应
+      const handleFullScreen = (val) => {
+        tableH.value=val ? document.documentElement.clientHeight - 387 :  300;
+      };
+      // update-end--author:liaozhiyang---date:20230804---for：【QQYUN-5866】放大行数自适应
       return {
         formRef,
         activeKey,
@@ -186,6 +196,8 @@
         registerModal,
         handleChangeTabs,
         handleSubmit,
+        handleFullScreen,
+        tableH,
       };
     },
   });

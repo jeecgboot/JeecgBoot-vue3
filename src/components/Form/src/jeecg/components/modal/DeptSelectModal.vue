@@ -11,6 +11,7 @@
         @check="onCheck"
         :fieldNames="fieldNames"
         :checkedKeys="checkedKeys"
+        :multiple="multiple"
         :checkStrictly="getCheckStrictly"
       />
       <!--树操作部分-->
@@ -39,6 +40,7 @@
   import { BasicTree, TreeActionType } from '/@/components/Tree';
   import { useTreeBiz } from '/@/components/Form/src/jeecg/hooks/useTreeBiz';
   import {propTypes} from "/@/utils/propTypes";
+  import { omit } from 'lodash-es';
 
   export default defineComponent({
     name: 'DeptSelectModal',
@@ -65,13 +67,14 @@
       //update-begin-author:taoyan date:2022-10-28 for: 部门选择警告类型不匹配
       let propValue = props.value === ''?[]:props.value;
       //update-begin-author:liusq date:2023-05-26 for:  [issues/538]JSelectDept组件受 dynamicDisabled 影响
-      const getBindValue = Object.assign({}, unref(props), unref(attrs), {value: propValue},{disabled: false});
+      let temp = Object.assign({}, unref(props), unref(attrs), {value: propValue},{disabled: false});
+      const getBindValue = omit(temp, 'multiple');
       //update-end-author:liusq date:2023-05-26 for:  [issues/538]JSelectDept组件受 dynamicDisabled 影响
      //update-end-author:taoyan date:2022-10-28 for: 部门选择警告类型不匹配
       
       const queryUrl = getQueryUrl();
       const [{ visibleChange, checkedKeys, getCheckStrictly, getSelectTreeData, onCheck, onLoadData, treeData, checkALL, expandAll, onSelect }] =
-        useTreeBiz(treeRef, queryUrl, getBindValue);
+        useTreeBiz(treeRef, queryUrl, getBindValue, props);
       const searchInfo = ref(props.params);
       const tree = ref([]);
       //替换treeNode中key字段为treeData中对应的字段

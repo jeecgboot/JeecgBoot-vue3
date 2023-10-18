@@ -101,7 +101,7 @@
       const { getShowTopMenu, getShowHeaderTrigger, getSplit, getIsMixMode, getMenuWidth, getIsMixSidebar } = useMenuSetting();
       const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } = useRootSetting();
       const { title } = useGlobSetting();
-      
+
       const {
         getHeaderTheme,
         getShowFullScreen,

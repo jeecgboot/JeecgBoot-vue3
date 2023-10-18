@@ -1,6 +1,6 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="用户选择列表" width="1000px" @ok="handleSubmit">
-    <BasicTable @register="registerTable" :rowSelection="rowSelection" style="padding: 0px" />
+  <BasicModal v-bind="$attrs" @register="registerModal" title="用户选择列表" width="1000px" @ok="handleSubmit" destroyOnClose>
+    <BasicTable @register="registerTable" :rowSelection="rowSelection" />
   </BasicModal>
 </template>
 <script lang="ts" setup>

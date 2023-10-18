@@ -37,7 +37,7 @@
         createMessage.warning('token无效')
       }
       const userStore = useUserStore();
-      userStore.ThirdLogin({ token, thirdType:'email' }).then(res => {
+      userStore.ThirdLogin({ token, thirdType:'email', goHome: false }).then(res => {
         console.log("res====>doThirdLogin",res)
         if(res && res.userInfo){
           requestSuccess(res)
@@ -57,10 +57,19 @@
       function requestSuccess(res){
         let info = routeQuery.info;
         if(info){
-          let query = JSON.parse(info)
-          let taskId = query.taskId;
-          let path = '/task/handle/'+taskId
-          router.replace({ path, query })
+          let query = JSON.parse(info);
+          
+          //update-begin-author:taoyan date:2023-4-27 for: QQYUN-4882【简流】节点消息通知 邮箱 点击办理跳到了应用首页
+          let path = '';
+          if(query.isLowApp === 1){
+            path = '/myapps/personalOffice/myTodo'
+          }else{
+            let taskId = query.taskId;
+            path = '/task/handle/' + taskId
+          }
+          //update-end-author:taoyan date:2023-4-27 for: QQYUN-4882【简流】节点消息通知 邮箱 点击办理跳到了应用首页
+          
+          router.replace({ path, query });
           notification.success({
             message: t('sys.login.loginSuccessTitle'),
             description: `${t('sys.login.loginSuccessDesc')}: ${res.userInfo.realname}`,

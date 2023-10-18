@@ -14,8 +14,8 @@
 import { ref, computed, unref } from 'vue';
 import { BasicModal, useModalInner } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
-import { userColumns, userSearchFormSchema } from "./tenant.data";
-import { getTenantUserList, leaveTenant } from "./tenant.api";
+import { userColumns, userSearchFormSchema } from "../tenant.data";
+import { getTenantUserList, leaveTenant } from "../tenant.api";
 import { useListPage } from "/@/hooks/system/useListPage";
 import { BasicTable, TableAction } from '/@/components/Table';
 
@@ -29,9 +29,9 @@ const { prefixCls, tableContext } = useListPage({
     immediate:false,
     formConfig: {
       schemas: userSearchFormSchema,
-      labelCol: {
-        span: 8,
-      },
+      //update-begin---author:wangshuai ---date:20230704  for：【QQYUN-5698】样式问题------------
+      labelWidth: 40,
+      //update-end---author:wangshuai ---date:20230704  for：【QQYUN-5698】样式问题------------
       actionColOptions: {
         xs: 24,
         sm: 8,
@@ -65,7 +65,7 @@ async function handleSubmit(v) {
 function getActions(record) {
   return [
     {
-      label: '请离',
+      label: '移除',
       onClick: handleLeave.bind(null, record.id),
     },
   ]
@@ -93,3 +93,11 @@ async function  handleLeaveBatch(){
   await leaveTenant({userIds:selectedRowKeys.value.join(","),tenantId:unref(tenantId)},success)
 }
 </script>
+
+<style scoped>
+  /*update-begin---author:wangshuai ---date:20220705  for：查询组件input有后缀，隐藏掉------------*/
+  :deep(.ant-input-suffix){
+    display: none;
+  }
+  /*update-begin---author:wangshuai ---date:20220705  for：查询组件input有后缀，隐藏掉------------*/
+</style>

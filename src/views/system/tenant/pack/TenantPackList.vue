@@ -2,7 +2,7 @@
   <BasicModal v-bind="$attrs" @register="registerModal" :title="title" @ok="handleSubmit" width="800px" :showCancelBtn="false" :showOkBtn="false">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">新增 </a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px" v-if="showPackAddAndEdit">新增 </a-button>
         <a-button
           v-if="selectedRowKeys.length > 0"
           preIcon="ant-design:delete-outlined"
@@ -13,7 +13,7 @@
         </a-button>
       </template>
       <template #action="{ record }">
-        <TableAction :actions="getActions(record)" />
+        <TableAction :actions="getActions(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
   </BasicModal>
@@ -23,8 +23,8 @@
 <script lang="ts" setup name="tenant-pack-modal">
   import { reactive, ref, unref } from 'vue';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
-  import { packColumns, userColumns, packFormSchema } from './tenant.data';
-  import { getTenantUserList, leaveTenant, packList, deletePackPermissions } from './tenant.api';
+  import { packColumns, userColumns, packFormSchema } from '../tenant.data';
+  import { getTenantUserList, leaveTenant, packList, deletePackPermissions } from '../tenant.api';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { BasicTable, TableAction } from '/@/components/Table';
   import TenantPackMenuModal from './TenantPackMenuModal.vue';
@@ -57,18 +57,19 @@
         },
       },
       beforeFetch: (params) => {
-        return Object.assign(params, { tenantId: unref(tenantId) });
+        return Object.assign(params, { tenantId: unref(tenantId), packType:'custom' });
       },
     },
   });
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
   // Emits声明
   const emit = defineEmits(['register', 'success']);
-  const createBy = ref<string>('');
+  //是否显示新增和编辑产品包
+  const showPackAddAndEdit = ref<boolean>(false);
   //表单赋值
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     tenantId.value = data.tenantId;
-    createBy.value = data.createBy;
+    showPackAddAndEdit.value = data.showPackAddAndEdit;
     success();
   });
   //设置标题
@@ -88,13 +89,7 @@
       {
         label: '编辑',
         onClick: handleEdit.bind(null, record),
-      },
-      {
-        label: '删除',
-        popConfirm: {
-          title: '是否确认删除租户产品包',
-          confirm: handleDelete.bind(null, record),
-        },
+        ifShow: ()=>{ return showPackAddAndEdit.value }
       },
     ];
   }
@@ -114,7 +109,9 @@
     openModal(true, {
       isUpdate: true,
       record: record,
-      tenantId: unref(tenantId)
+      tenantId: unref(tenantId),
+      packType:'custom',
+      showFooter: true
     });
   }
 
@@ -168,6 +165,8 @@
     openModal(true, {
       isUpdate: false,
       tenantId: unref(tenantId),
+      packType:'custom',
+      showFooter: true
     });
   }
 
@@ -176,9 +175,42 @@
    * @param record
    */
   function seeTenantPackUser(record) {
-    record.createBy = unref(createBy);
     packUserOpenModal(true,{
       record:record
     })
+  }
+
+  /**
+   * 更多
+   * @param record
+   */
+  function getDropDownAction(record) {
+    return [
+      {
+        label: '详情',
+        onClick: handleDetail.bind(null, record),
+      },
+      {
+        label: '删除',
+        popConfirm: {
+          title: '是否确认删除租户产品包',
+          confirm: handleDelete.bind(null, record),
+        },
+      },
+    ]
+  }
+
+  /**
+   * 详情
+   * @param record
+   */
+  function handleDetail(record) {
+    openModal(true, {
+      isUpdate: true,
+      record: record,
+      tenantId: unref(tenantId),
+      packType:'custom',
+      showFooter: false
+    });
   }
 </script>

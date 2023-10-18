@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref, reactive, Ref, defineProps } from 'vue';
+  import { onMounted, ref, reactive, Ref } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useECharts } from '/@/hooks/web/useECharts';
   import { GaugeChart } from 'echarts/charts';

@@ -7,9 +7,6 @@
             <span class="inner-button"><upload-outlined />上传</span>
           </a-upload>
         </span>
-        <span class="j-icon">
-          <span class="inner-button"><folder-outlined />从文件库选择?</span>
-        </span>
       </template>
     </a-alert>
 
@@ -53,6 +50,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
@@ -60,6 +58,8 @@
   import { useFileList } from './useComment';
   import { Tooltip } from 'ant-design-vue';
   import { UploadOutlined, FolderOutlined, DownloadOutlined, PaperClipOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+  import {useModal} from "/@/components/Modal";
+  
   export default {
     name: 'UploadChunk',
     components: {
@@ -80,6 +80,8 @@
     setup(_p, {emit}) {
       const { selectFileList, beforeUpload, handleRemove, getBackground, isImage, getImageSrc, viewImage } = useFileList();
 
+      const [registerModel, { openModal }] = useModal();
+      
       function getUploadFileList() {
         let list = toRaw(selectFileList.value);
         console.log(list);
@@ -99,6 +101,19 @@
         }
       });
 
+      function showFileModal() {
+        openModal(true, {})
+      }
+
+      function onSelectFileOk(temp) {
+        let arr = selectFileList.value;
+        arr.push({
+          ...temp,
+          exist: true
+        })
+        selectFileList.value = arr;
+      }
+
       return {
         selectFileList,
         beforeUpload,
@@ -108,7 +123,10 @@
         clear,
         isImage, 
         getImageSrc, 
-        viewImage
+        viewImage,
+        registerModel,
+        showFileModal,
+        onSelectFileOk
       };
     },
   };

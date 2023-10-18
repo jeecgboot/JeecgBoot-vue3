@@ -92,8 +92,10 @@
   const APagination = Pagination;
   import { defHttp } from '/@/utils/http/axios';
 
-  import { computed, ref, toRaw } from 'vue';
+  import {computed, ref, toRaw, unref} from 'vue';
   import { useUserStore } from '/@/store/modules/user';
+  import { mySelfData } from './useUserSelect'
+  
   export default {
     name: 'UserSelectModal',
     components: {
@@ -120,6 +122,11 @@
         type: Boolean,
         default: false,
       },
+      //是否在高级查询中作为条件 可以选择当前用户表达式
+      inSuperQuery:{
+        type: Boolean,
+        default: false,
+      }
     },
     emits: ['selected', 'register'],
     setup(props, { emit }) {
@@ -154,6 +161,8 @@
         if (props.izExcludeMy) {
           excludeUserIdList.value.push(userStore.getUserInfo.id);
         }
+        //加载用户列表
+        loadUserList();
       });
 
       // 确定事件
@@ -215,13 +224,25 @@
         }
         const data = await defHttp.get({ url, params }, { isTransformResponse: false });
         if (data.success) {
-          const { records, total } = data.result;
+          let { records, total } = data.result;
+          //如果排除的用户id的长度不为0，那么需要改变页数
+          if(unref(excludeUserIdList) && unref(excludeUserIdList).length>0){
+             total = total - unref(excludeUserIdList).length;
+          }
           totalRecord.value = total;
+          initCurrentUserData(records);
           userDataList.value = records;
         } else {
           console.error(data.message);
         }
         console.log('loadUserList', data);
+      }
+      
+      // 往用户列表中添加一个 当前用户选项
+      function initCurrentUserData(records) {
+        if(pageNo.value==1 && props.inSuperQuery === true){
+          records.unshift({...mySelfData})
+        }
       }
       /*--------------加载数据---------------*/
 

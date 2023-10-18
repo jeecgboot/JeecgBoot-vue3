@@ -76,7 +76,7 @@
     if (result) {
       let obj = {};
       result.records.forEach((position) => {
-        obj[position['code']] = position['name'];
+        obj[position['id']] = position['name'];
       });
       positionInfo.value = obj;
     }

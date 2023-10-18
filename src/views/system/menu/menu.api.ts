@@ -99,6 +99,9 @@ export const checkPermDuplication=(model, schema, required?)=>{
   return [
     {
       validator: (_, value) => {
+        if (!required) {
+          return Promise.resolve();
+        }
         if (!value && required) {
           return Promise.reject(`请输入${schema.label}`);
         }

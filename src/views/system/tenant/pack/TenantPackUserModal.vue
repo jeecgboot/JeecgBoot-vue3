@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModal" destroyOnClose :title="title" :width="1000" @ok="handleSubmit">
+  <BasicModal @register="registerModal" destroyOnClose :title="title" :width="1000" :footer="null">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #departNames="{ text, record }">
         <template v-if="text && text.length > 0">
@@ -19,25 +19,30 @@
         <TableAction :actions="getTableAction(record)" />
       </template>
     </BasicTable>
-    <user-select-modal :multi="true" @register="registerUserModal" @selected="onSelected"></user-select-modal>
+    <tenant-user-select-modal :multi="true" @register="registerUserModal" @on-select="onSelected" :tenantId="getTenantId"></tenant-user-select-modal>
   </BasicModal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, ref } from 'vue';
+  import { computed, defineComponent, reactive, ref } from 'vue';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
-  import { tenantPackUserColumns } from './tenant.data';
-  import { queryTenantPackUserList, deleteTenantPackUser, addTenantPackUser } from './tenant.api';
-  import UserSelectModal from '/@/components/Form/src/jeecg/components/userSelect/UserSelectModal.vue';
+  import { tenantPackUserColumns } from '../tenant.data';
+  import { queryTenantPackUserList, deleteTenantPackUser, addTenantPackUser } from '../tenant.api';
+  import TenantUserSelectModal from '../components/TenantUserSelectModal.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useUserStore } from '/@/store/modules/user';
 
   export default defineComponent({
     name: 'TenantPackUserModal',
-    components: { BasicModal, BasicTable, TableAction, UserSelectModal },
+    components: { BasicModal, BasicTable, TableAction, TenantUserSelectModal },
     setup() {
+      //获取租户id
+      const getTenantId = computed(()=>{
+        return tenantPackData.tenantId;
+      })
+      
       //产品包信息
       const tenantPackData = reactive<any>({});
       //表单赋值
@@ -85,22 +90,13 @@
        * @param record
        */
       function getTableAction(record) {
-        const userStore = useUserStore();
-        let username = userStore.getUserInfo.username;
-        if (username != tenantPackData.createBy) {
-        }
         return [
           {
             label: '移除',
             popConfirm: {
               title: '是否确认移除',
               confirm: handleDelete.bind(null, record),
-            },
-            ifShow: username == tenantPackData.createBy,
-          },
-          {
-            label: '---',
-            ifShow: username != tenantPackData.createBy,
+            }
           },
         ];
       }
@@ -112,7 +108,7 @@
         let params = {
           packId: record.packId,
           packName: record.packName,
-          tenantId: record.tenantId,
+          tenantId: tenantPackData.tenantId,
           userId: record.id,
           realname: record.realname,
         };
@@ -165,6 +161,7 @@
         registerUserModal,
         addUser,
         onSelected,
+        getTenantId,
       };
     },
   });

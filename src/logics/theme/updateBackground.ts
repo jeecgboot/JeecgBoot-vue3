@@ -2,11 +2,13 @@ import { colorIsDark, lighten, darken } from '/@/utils/color';
 import { useAppStore } from '/@/store/modules/app';
 import { ThemeEnum } from '/@/enums/appEnum';
 import { setCssVar } from './util';
+import { SIDE_BAR_BG_COLOR_LIST, SIDER_LOGO_BG_COLOR_LIST } from '/@/settings/designSetting';
 
 const HEADER_BG_COLOR_VAR = '--header-bg-color';
 const HEADER_BG_HOVER_COLOR_VAR = '--header-bg-hover-color';
 const HEADER_MENU_ACTIVE_BG_COLOR_VAR = '--header-active-menu-bg-color';
 
+const SIDER_LOGO_BG_COLOR = '--sider-logo-bg-color';
 const SIDER_DARK_BG_COLOR = '--sider-dark-bg-color';
 const SIDER_DARK_DARKEN_BG_COLOR = '--sider-dark-darken-bg-color';
 const SIDER_LIGHTEN_BG_COLOR = '--sider-dark-lighten-bg-color';
@@ -59,6 +61,10 @@ export function updateSidebarBgColor(color?: string) {
       color = appStore.getMenuSetting.bgColor;
     }
   }
+  // update-begin--author:liaozhiyang---date:20230811---for：【QQYUN-5922】logo背景色渐变
+  let findIndex = SIDE_BAR_BG_COLOR_LIST.findIndex((item) => item === color);
+  setCssVar(SIDER_LOGO_BG_COLOR, findIndex == -1 ? 'linear-gradient(180deg, #000000, #282828)' : SIDER_LOGO_BG_COLOR_LIST[findIndex]);
+  // update-end--author:liaozhiyang---date:20230811---for：【QQYUN-5922】llogo背景色渐变
   setCssVar(SIDER_DARK_BG_COLOR, color);
   setCssVar(SIDER_DARK_DARKEN_BG_COLOR, darken(color!, 6));
   setCssVar(SIDER_LIGHTEN_BG_COLOR, lighten(color!, 5));

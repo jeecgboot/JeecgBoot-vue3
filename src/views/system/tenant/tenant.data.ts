@@ -1,6 +1,7 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { getAutoScrollContainer } from '/@/utils/common/compUtils';
 import { render } from "/@/utils/common/renderUtils";
+import { rules } from "/@/utils/helper/validator";
 
 export const columns: BasicColumn[] = [
   {
@@ -240,15 +241,13 @@ export const userColumns: BasicColumn[] =[
 export const userSearchFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '用户名',
+    label: '账号',
     component: 'Input',
-    colProps: { span: 10 },
   },
   {
     field: 'realname',
-    label: '真实姓名',
+    label: '姓名',
     component: 'Input',
-    colProps: { span: 10 },
   },
 ];
 
@@ -264,7 +263,6 @@ export const packColumns: BasicColumn[] = [
     dataIndex: 'status',
     width: 100,
     customRender: ({ text }) => {
-      console.log("text::",text)
       if (text === '1') {
         return '开启';
       } else {
@@ -401,3 +399,63 @@ export const tenantPackUserColumns: BasicColumn[] = [
     slots: { customRender: 'positionNames' }
   }
 ]
+
+/**
+ * 用户租户新增编辑表单
+ */
+export const tenantUserSchema: FormSchema[] = [
+  { field: 'id', label: 'id', component: 'Input', show: false },
+  { field: 'username', label: 'username', component: 'Input', show: false },
+  {
+    field: 'realname',
+    label: '姓名',
+    component: 'Input',
+    dynamicDisabled: ({ values }) => {
+      return !!values.id;
+    },
+  },
+  {
+    field: 'phone',
+    label: '手机',
+    component: 'Input',
+    dynamicRules: ({ model, schema }) => {
+      if (model.id) {
+        return [];
+      }
+      return [{ ...rules.phone(true)[0] }, { ...rules.duplicateCheckRule('sys_user', 'phone', model, schema, false)[0] }];
+    },
+    dynamicDisabled: ({ values }) => {
+      return !!values.id;
+    },
+  },
+  {
+    field: 'email',
+    label: '邮箱',
+    component: 'Input',
+    dynamicRules: ({ model, schema }) => {
+      if (model.id) {
+        return [];
+      }
+      return [{ ...rules.email(true)[0] }, { ...rules.duplicateCheckRule('sys_user', 'email', model, schema, false)[0] }];
+    },
+    dynamicDisabled: ({ values }) => {
+      return !!values.id;
+    },
+  },
+  { field: 'selecteddeparts', label: '部门', component: 'JSelectDept', componentProps: { checkStrictly: true } },
+  {
+    field: 'post',
+    label: '职位',
+    component: 'JSelectPosition',
+  },
+  {
+    field: 'workNo',
+    label: '工号',
+    component: 'Input',
+    dynamicRules: ({ model, schema }) => {
+      return [{ required: true, message: '请输入工号' }, { ...rules.duplicateCheckRule('sys_user', 'work_no', model, schema, false)[0] }];
+    },
+  },
+  { field: 'relTenantIds', label: '租户', component: 'Input',show:false },
+  { field: 'selectedroles', label: '角色', component: 'Input',show:false },
+];

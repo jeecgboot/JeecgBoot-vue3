@@ -9,7 +9,9 @@
           <DiskInfo v-if="activeKey == 4" style="height: 100%"></DiskInfo>
         </a-tab-pane>
       </a-tabs>
-      <BasicTable @register="registerTable" :searchInfo="searchInfo" :dataSource="dataSource" v-if="activeKey != 4">
+      <!--  update-begin---author:wangshuai ---date: 20230829 for：性能监控切换到磁盘监控再切回来报错列为空，不能用if判断------------>
+      <BasicTable @register="registerTable" :searchInfo="searchInfo" :dataSource="dataSource" v-show="activeKey != 4">
+      <!--  update-end---author:wangshuai ---date: 20230829 for：性能监控切换到磁盘监控再切回来报错列为空，不能用if判断------------>
         <template #tableTitle>
           <div slot="message"
             >上次更新时间：{{ lastUpdateTime }}

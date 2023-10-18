@@ -36,3 +36,18 @@ export const SIDE_BAR_BG_COLOR_LIST: string[] = [
   '#344058',
   '#383f45',
 ];
+
+// sider logo line preset color [logo½¥±äÉ«]
+export const SIDER_LOGO_BG_COLOR_LIST: string[] = [
+  'linear-gradient(180deg, #000000, #021d37)',
+  'linear-gradient(180deg, #000000, #282828)',
+  'linear-gradient(180deg, #1c253e, #2b385c)',
+  'linear-gradient(180deg, #ffffff, #faf8f8)',
+  'linear-gradient(180deg, #000000, #242735)',
+  'linear-gradient(180deg, #000000, #1d1f2a)',
+  'linear-gradient(180deg, #304156, #32455d)',
+  'linear-gradient(180deg, #000000, #001f39)',
+  'linear-gradient(180deg, #000000, #2b3743)',
+  'linear-gradient(180deg, #344058, #374560)',
+  'linear-gradient(180deg, #383f45, #3b434b)',
+];

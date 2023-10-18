@@ -1,3 +1,4 @@
+<!--回收站-->
 <template>
   <BasicModal v-bind="$attrs" @register="registerModal" title="用户回收站" :showOkBtn="false" width="1000px" destroyOnClose>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
@@ -32,8 +33,8 @@
 
 <script lang="ts" setup name="tenant-recycle-bin-modal">
   import { BasicTable, TableAction } from '/@/components/Table';
-  import { recycleBinPageList, deleteLogicDeleted, revertTenantLogic } from './tenant.api';
-  import { recycleColumns, searchRecycleFormSchema } from './tenant.data';
+  import { recycleBinPageList, deleteLogicDeleted, revertTenantLogic } from '../tenant.api';
+  import { recycleColumns, searchRecycleFormSchema } from '../tenant.data';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';

@@ -7,6 +7,7 @@
           `${prefixCls}__item`,
           {
             [`${prefixCls}__item--active`]: def === color,
+            [`${prefixCls}__item--black`]: color == '#ffffff',
           },
         ]"
         :style="{ background: color }"
@@ -81,6 +82,11 @@
           margin: 0 0 3px 3px;
           font-size: 12px;
           fill: @white !important;
+        }
+      }
+      &--black {
+        svg {
+          fill: #000 !important;
         }
       }
     }

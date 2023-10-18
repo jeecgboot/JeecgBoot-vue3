@@ -33,6 +33,7 @@ export default class signMd5Utils {
     let jsonObj = this.mergeObject(urlParams, requestParams);
     let requestBody = this.sortAsc(jsonObj);
     delete requestBody._t;
+    console.log('sign requestBody:', requestBody);
     return md5(JSON.stringify(requestBody) + signatureSecret).toUpperCase();
   }
 

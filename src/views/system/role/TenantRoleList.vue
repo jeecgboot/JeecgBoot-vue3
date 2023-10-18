@@ -16,6 +16,7 @@
           <Icon icon="mdi:chevron-down"></Icon>
         </a-button>
       </a-dropdown>
+      <div style="margin-left: 10px;margin-top: 5px">当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
     </template>
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
@@ -39,6 +40,7 @@
   import { columns, searchFormSchema } from './role.data';
   import { listByTenant, deleteRole, batchDeleteRole, getExportUrl, getImportUrl } from './role.api';
   import { useListPage } from '/@/hooks/system/useListPage';
+  import { getLoginTenantName } from "/@/views/system/tenant/tenant.api";
   const showFooter = ref(true);
   const [roleUserDrawer, { openDrawer: openRoleUserDrawer }] = useDrawer();
   const [registerDrawer, { openDrawer }] = useDrawer();
@@ -157,4 +159,20 @@
       },
     ];
   }
+
+  const loginTenantName = ref<string>('');
+  
+  getTenantName();
+  
+  async function getTenantName(){
+    loginTenantName.value = await getLoginTenantName();
+  }
 </script>
+
+<style scoped lang="less">
+  .tenant-name{
+    text-decoration:underline;
+    margin: 5px;
+    font-size: 15px;
+  }
+</style>

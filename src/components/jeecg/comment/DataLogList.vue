@@ -9,7 +9,7 @@
                         <edit-outlined v-else/>
                     </span>
                     <span class="log-item-content">
-                        <a @click="handleClickPerson">@{{item.createBy}}</a>
+                        <a @click="handleClickPerson">@{{item.createName || item.createBy}}</a>
                         {{ item.dataContent }}
                     </span>
                     <div class="log-item-date">

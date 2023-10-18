@@ -10,6 +10,8 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { RootRoute } from '/@/router/routes';
 
 import { isOAuth2AppEnv } from '/@/views/sys/login/useLogin';
+import { OAUTH2_THIRD_LOGIN_TENANT_ID } from "/@/enums/cacheEnum";
+import { setAuthCache } from "/@/utils/auth";
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
 //auth2登录路由
@@ -18,11 +20,14 @@ const OAUTH2_LOGIN_PAGE_PATH = PageEnum.OAUTH2_LOGIN_PAGE_PATH;
 //分享免登录路由
 const SYS_FILES_PATH = PageEnum.SYS_FILES_PATH;
 
+// 邮件中的跳转地址,对应此路由,携带token免登录直接去办理页面
+const TOKEN_LOGIN = PageEnum.TOKEN_LOGIN;
+
 const ROOT_PATH = RootRoute.path;
 
 //update-begin---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3不支持auth2登录------------
 //update-begin---author:wangshuai ---date:20221111  for: [VUEN-2472]分享免登录------------
-const whitePathList: PageEnum[] = [LOGIN_PATH, OAUTH2_LOGIN_PAGE_PATH,SYS_FILES_PATH];
+const whitePathList: PageEnum[] = [LOGIN_PATH, OAUTH2_LOGIN_PAGE_PATH,SYS_FILES_PATH, TOKEN_LOGIN ];
 //update-end---author:wangshuai ---date:20221111  for: [VUEN-2472]分享免登录------------
 //update-end---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3不支持auth2登录------------
 
@@ -62,7 +67,12 @@ export function createPermissionGuard(router: Router) {
       } else if (to.path === LOGIN_PATH && isOAuth2AppEnv() && !token) {
         //退出登录进入此逻辑
         //如果进入的页面是login页面并且当前是OAuth2app环境，并且token为空，就进入OAuth2登录页面
+        //update-begin---author:wangshuai ---date:20230224  for：[QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+        if(to.query.tenantId){
+          setAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID,to.query.tenantId)
+        }
         next({ path: OAUTH2_LOGIN_PAGE_PATH });
+        //update-end---author:wangshuai ---date:20230224  for：[QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
         return;
         //update-end---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3不支持auth2登录------------
       }
@@ -89,6 +99,20 @@ export function createPermissionGuard(router: Router) {
           next();
         }
       } else {
+        //update-begin---author:wangshuai ---date:20230302  for：只有首次登陆并且是企业微信或者钉钉的情况下才会调用------------
+        //----------【首次登陆并且是企业微信或者钉钉的情况下才会调用】-----------------------------------------------
+        //只有首次登陆并且是企业微信或者钉钉的情况下才会调用
+        let href = window.location.href;
+        //判断当前是auth2页面，并且是钉钉/企业微信，并且包含tenantId参数
+        if(isOAuth2AppEnv() && href.indexOf("/tenantId/")!= -1){
+          let params = to.params;
+          if(params && params.path && params.path.length>0){
+            //直接获取参数最后一位
+            setAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID,params.path[params.path.length-1])
+          }
+        }
+        //---------【首次登陆并且是企业微信或者钉钉的情况下才会调用】------------------------------------------------
+        //update-end---author:wangshuai ---date:20230302  for：只有首次登陆并且是企业微信或者钉钉的情况下才会调用------------
         // 如果当前是在OAuth2APP环境，就跳转到OAuth2登录页面，否则跳转到登录页面
         path = isOAuth2AppEnv() ? OAUTH2_LOGIN_PAGE_PATH : LOGIN_PATH;
       }
@@ -100,16 +124,38 @@ export function createPermissionGuard(router: Router) {
         //update-end---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3 Auth2未实现------------
         replace: true,
       };
-      if (to.path) {
+
+      //update-begin---author:scott ---date:2023-04-24  for：【QQYUN-4713】登录代码调整逻辑有问题，改造待观察--
+      if (to.fullPath) {
+        console.log("to.fullPath 1",to.fullPath)
+        console.log("to.path 2",to.path)
+        
+        let getFullPath = to.fullPath;
+        if(getFullPath=='/' || getFullPath=='/500' || getFullPath=='/400' || getFullPath=='/login?redirect=/' || getFullPath=='/login?redirect=/login?redirect=/'){
+          return;
+        }
+      //update-end---author:scott ---date:2023-04-24  for：【QQYUN-4713】登录代码调整逻辑有问题，改造待观察--
+        
         redirectData.query = {
           ...redirectData.query,
-          redirect: to.path,
+          // update-begin-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
+          redirect: to.fullPath,
+          // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
+
         };
       }
       next(redirectData);
       return;
     }
 
+    //==============================【首次登录并且是企业微信或者钉钉的情况下才会调用】==================
+    //判断是免登录页面,如果页面包含/tenantId/,那么就直接前往主页
+    if(isOAuth2AppEnv() && to.path.indexOf("/tenantId/") != -1){
+      next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
+      return;
+    }
+    //==============================【首次登录并且是企业微信或者钉钉的情况下才会调用】==================
+    
     // Jump to the 404 page after processing the login
     if (from.path === LOGIN_PATH && to.name === PAGE_NOT_FOUND_ROUTE.name && to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)) {
       next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);

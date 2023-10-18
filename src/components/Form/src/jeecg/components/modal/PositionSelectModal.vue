@@ -78,7 +78,8 @@
         canResize: false,
         bordered: true,
         size: 'small',
-        rowKey: 'code',
+        //改成读取rowKey,自定义传递参数
+        rowKey: props.rowKey,
       };
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
       const [{ rowSelection, visibleChange, indexColumnProps, getSelectResult, handleDeleteSelected, selectRows }] = useSelectBiz(
@@ -176,6 +177,7 @@
         selectedTable,
         selectRows,
         handleDeleteSelected,
+        searchInfo,
       };
     },
   });

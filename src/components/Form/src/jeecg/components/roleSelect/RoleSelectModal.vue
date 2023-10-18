@@ -99,19 +99,25 @@
       
       
       // 弹窗事件
-      const [register] = useModalInner(() => {
+      const [register] = useModalInner((data) => {
         let list = dataList.value;
         if(!list || list.length ==0 ){
-        }
-        for(let item of list){
-          item.checked = false
+        }else{
+          let selectedIdList = data.list || [];
+          for(let item of list){
+            if(selectedIdList.indexOf(item.id)>=0){
+              item.checked = true;
+            }else{
+              item.checked = false;
+            }
+          }
         }
       });
 
       // 确定事件
       function handleOk() {
         let arr = toRaw(selectedIdList.value);
-        emit('selected', arr);
+        emit('selected', arr, toRaw(selectedList.value));
       }
       
       const dataList = ref<any[]>([]);
@@ -161,6 +167,7 @@
               arr.push({
                 id: item.id,
                 name: item.name || item.roleName,
+                code: item.roleCode,
                 selectType: props.type,
                 checked: false
               })
@@ -177,6 +184,13 @@
       function onSelect(e, item) {
         prevent(e);
         console.log('onselect');
+        // 单选判断 只能选中一条数据 其余数据置false
+        if(props.multi === false){
+          let list = dataList.value;
+          for(let item of list){
+            item.checked = false;
+          }
+        }
         item.checked = !item.checked;
       }
 

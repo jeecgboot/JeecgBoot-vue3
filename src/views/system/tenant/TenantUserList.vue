@@ -4,9 +4,10 @@
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <!--插槽:table标题-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined"  @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
         <JThirdAppButton biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal @sync-finally="onSyncFinally" />
         <a-button type="primary" @click="openQuitModal(true, {})" preIcon="ant-design:user-delete-outlined">离职信息</a-button>
+        <div style="margin-left: 10px;margin-top: 5px"> 当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
       </template>
       <!--操作栏-->
       <template #action="{ record }">
@@ -14,32 +15,39 @@
       </template>
     </BasicTable>
     <!--用户抽屉-->
-    <UserDrawer @register="registerDrawer" @success="handleSuccess" />
+    <TenantUserDrawer @register="registerDrawer" @success="handleSuccess" />
     <!-- 离职受理人弹窗 -->
     <UserQuitAgentModal @register="registerQuitAgentModal" @success="reload" />
     <!-- 离职人员列弹窗 -->
     <UserQuitModal @register="registerQuitModal" @success="reload" />
+    <!--  变更拥有者弹窗  -->
+    <UserSelectModal @register="registerUserModal" :excludeUserIdList="excludeUserIdList" :maxSelectCount="1" @getSelectResult="selectResult" />
   </div>
 </template>
 
 <script lang="ts" name="tenant-system-user" setup>
   //ts语法
-  import { unref } from 'vue';
+  import { ref, unref } from 'vue';
   import { BasicTable, TableAction, ActionItem } from '/@/components/Table';
-  import UserDrawer from './UserDrawer.vue';
+  import UserDrawer from '../user/UserDrawer.vue';
   import JThirdAppButton from '/@/components/jeecg/thirdApp/JThirdAppButton.vue';
-  import UserQuitAgentModal from './UserQuitAgentModal.vue';
-  import UserQuitModal from './UserQuitModal.vue';
+  import UserQuitAgentModal from '../user/UserQuitAgentModal.vue';
+  import UserQuitModal from '../user/UserQuitModal.vue';
   import { useDrawer } from '/@/components/Drawer';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { columns, searchFormSchema } from './user.data';
-  import { list , deleteUser, batchDeleteUser, getImportUrl, getExportUrl, frozenBatch, syncUser, getUserTenantPageList, updateUserTenantStatus } from './user.api';
+  import { columns, searchFormSchema } from '../user/user.data';
+  import { list , deleteUser, batchDeleteUser, getImportUrl, getExportUrl, frozenBatch, syncUser, getUserTenantPageList, updateUserTenantStatus } from '../user/user.api';
   // import { usePermission } from '/@/hooks/web/usePermission'
   // const { hasPermission } = usePermission();
-  import { userTenantColumns, userTenantFormSchema } from './user.data';
+  import { userTenantColumns, userTenantFormSchema } from '../user/user.data';
   import { useUserStore } from '/@/store/modules/user';
+  import UserSelectModal from '/@/components/Form/src/jeecg/components/modal/UserSelectModal.vue';
+  import { getTenantId } from "/@/utils/auth";
+  import { changeOwenUserTenant } from "/@/views/system/usersetting/UserSetting.api";
+  import { getLoginTenantName } from "/@/views/system/tenant/tenant.api";
+  import TenantUserDrawer from './components/TenantUserDrawer.vue';
 
   const { createMessage, createConfirm } = useMessage();
 
@@ -152,9 +160,16 @@
         onClick: handleQuit.bind(null, record.username),
         //update-begin---author:wangshuai ---date:20230130  for：[QQYUN-3974]租户的创建人 不应该有离职按钮------------
         ifShow: () =>{
-          return record.username!== record.createBy;
+          return record.status === '1' && record.username!== record.createBy;
         }
         //update-end---author:wangshuai ---date:20230130  for：[QQYUN-3974]租户的创建人 不应该有离职按钮------------
+      },
+      {
+        label: '交接',
+        onClick: handleHandover.bind(null, record),
+        ifShow: () =>{
+          return record.username === record.createBy;
+        }
       },
       {
         label: '同意',
@@ -179,10 +194,11 @@
   /**
    * 离职
    * @param userName
+   * @param userId
    */
-  function handleQuit(userName) {
+  function handleQuit(userName, userId) {
     //打开离职代理人弹窗
-    openQuitAgentModal(true, { userName });
+    openQuitAgentModal(true, { userName, userId });
   }
 
   /**
@@ -201,6 +217,73 @@
         createMessage.warning(e.message);
       });
   }
+
+  //============================================ 租户离职交接  ============================================
+  //租户id
+  const tenantId = ref<string>('');
+  //排除自己的编号集合
+  const excludeUserIdList = ref<any>([]);
+  //离职代理人model
+  const [registerUserModal, { openModal: openUserModal }] = useModal();
+  const handOverUserName = ref<string>('');
+  
+  /**
+   * 人员交接
+   */
+  function handleHandover(record) {
+    tenantId.value = getTenantId();
+    excludeUserIdList.value = [record.id];
+    //记录一下当前需要交接的用户名
+    handOverUserName.value = record.createBy;
+    openUserModal(true)
+  }
+
+  /**
+   * 用户选择回调
+   * @param options
+   * @param values
+   */
+  function selectResult(options,values) {
+    console.log(values)
+    if(values && values.length>0){
+      let userId = values[0];
+      changeOwenUserTenant({ userId:userId, tenantId:unref(tenantId) }).then((res) =>{
+        if(res.success){
+          createMessage.success("交接成功");
+          //update-begin---author:wangshuai ---date:20230721  for：【QQYUN-5847】租户管理员办理交接，不是创建者不需要刷新浏览器------------
+          let username = userStore.userInfo?.username;
+          if(username == handOverUserName.value){
+            //update-begin---author:wangshuai ---date:20230724  for：如果登录人和被交接人是一个人,直接退出登录------------
+            userStore.logout(true);
+            //update-end---author:wangshuai ---date:20230724  for：如果登录人和被交接人是一个人，直接退出登录------------
+          }else{
+            reload();
+          }
+          //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5847】租户管理员办理交接，不是创建者不需要刷新浏览器------------
+        } else {
+          createMessage.warning(res.message);
+        }
+      })
+    }
+  }
+  //============================================  租户离职交接  ============================================
+
+
+  //update-begin---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
+  const loginTenantName = ref<string>('');
+
+  getTenantName();
+
+  async function getTenantName(){
+    loginTenantName.value = await getLoginTenantName();
+  }
+  //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
 </script>
 
-<style scoped></style>
+<style scoped>
+  .tenant-name{
+    text-decoration:underline;
+    margin: 5px;
+    font-size: 15px;
+  }
+</style>

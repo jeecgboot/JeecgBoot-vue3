@@ -224,7 +224,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive, defineExpose, nextTick } from 'vue';
+  import { ref, reactive, nextTick } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
   import dayjs from 'dayjs';

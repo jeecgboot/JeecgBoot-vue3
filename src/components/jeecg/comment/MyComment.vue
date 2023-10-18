@@ -1,6 +1,6 @@
 <template>
   <div :class="{'comment-active': commentActive}" style="border: 1px solid #eee; margin: 0; position: relative" @click="handleClickBlank">
-    <textarea ref="commentRef" v-model="myComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="请输入你的评论，可以@成员" />
+    <textarea ref="commentRef" v-model="myComment" @keyup.enter="sendComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="请输入你的评论，可以@成员" />
     <div class="comment-content comment-html-shower" :class="{'no-content':noConent, 'top-div': showHtml, 'bottom-div': showHtml == false }" v-html="commentHtml" @click="handleClickHtmlShower"></div>
     <div class="comment-buttons" v-if="commentActive">
       <div style="cursor: pointer">
@@ -53,7 +53,7 @@
   import { useModal } from '/@/components/Modal';
   import UploadChunk from './UploadChunk.vue';
   import 'emoji-mart-vue-fast/css/emoji-mart.css';
-  import { getGloablEmojiIndex, useEmojiHtml } from './useComment';
+  import {getGloablEmojiIndex, useEmojiHtml} from './useComment';
 
   const optionsName = {
     categories: {

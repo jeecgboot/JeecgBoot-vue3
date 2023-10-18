@@ -2,7 +2,7 @@
 <template>
   <div>
     <JSelectBiz @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs" @change="handleChange"/>
-    <DeptSelectModal @register="regModal" @getSelectResult="setValue" v-bind="getBindValue" />
+    <DeptSelectModal @register="regModal" @getSelectResult="setValue" v-bind="getBindValue" :multiple="multiple" />
   </div>
 </template>
 <script lang="ts">

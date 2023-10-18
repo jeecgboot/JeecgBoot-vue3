@@ -108,6 +108,8 @@ export const basicProps = {
   },
   minHeight: propTypes.number,
   maxHeight: propTypes.number,
+  // 统一设置列最大宽度
+  maxColumnWidth: propTypes.number,
   dataSource: {
     type: Array as PropType<Recordable[]>,
     default: null,
@@ -135,5 +137,9 @@ export const basicProps = {
   size: {
     type: String as PropType<SizeType>,
     default: DEFAULT_SIZE,
+  },
+  expandedRowKeys: {
+    type: Array,
+    default: null,
   },
 };

@@ -89,13 +89,13 @@ export const searchFormSchema: FormSchema[] = [
     label: '账号',
     field: 'username',
     component: 'JInput',
-    colProps: { span: 6 },
+    //colProps: { span: 6 },
   },
   {
     label: '名字',
     field: 'realname',
     component: 'JInput',
-    colProps: { span: 6 },
+   //colProps: { span: 6 },
   },
   {
     label: '性别',
@@ -106,13 +106,13 @@ export const searchFormSchema: FormSchema[] = [
       placeholder: '请选择性别',
       stringToNumber: true,
     },
-    colProps: { span: 6 },
+    //colProps: { span: 6 },
   },
   {
     label: '手机号码',
     field: 'phone',
     component: 'Input',
-    colProps: { span: 6 },
+    //colProps: { span: 6 },
   },
   {
     label: '用户状态',
@@ -123,7 +123,7 @@ export const searchFormSchema: FormSchema[] = [
       placeholder: '请选择状态',
       stringToNumber: true,
     },
-    colProps: { span: 6 },
+   //colProps: { span: 6 },
   },
 ];
 
@@ -179,7 +179,6 @@ export const formSchema: FormSchema[] = [
     required: false,
     component: 'JSelectPosition',
     componentProps: {
-      rowKey: 'code',
       labelKey: 'name',
     },
   },

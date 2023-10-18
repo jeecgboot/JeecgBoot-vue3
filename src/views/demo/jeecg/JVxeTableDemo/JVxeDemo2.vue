@@ -5,7 +5,7 @@
     row-number
     row-selection
     keep-source
-    :height="484"
+    :height="492"
     :loading="loading"
     :dataSource="dataSource"
     :columns="columns"

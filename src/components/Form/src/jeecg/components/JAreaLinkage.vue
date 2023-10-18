@@ -15,7 +15,7 @@
     },
     inheritAttrs: false,
     props: {
-      value: propTypes.oneOfType([propTypes.object, propTypes.array]),
+      value: propTypes.oneOfType([propTypes.object, propTypes.array, propTypes.string]),
       //是否显示区县
       showArea: propTypes.bool.def(true),
       //是否是全部

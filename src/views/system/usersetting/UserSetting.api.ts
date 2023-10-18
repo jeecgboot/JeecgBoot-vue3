@@ -10,6 +10,10 @@ enum Api {
   cancelApplyTenant = '/sys/tenant/cancelApplyTenant',
   exitUserTenant = '/sys/tenant/exitUserTenant',
   changeOwenUserTenant = '/sys/tenant/changeOwenUserTenant',
+  getThirdAccountByUserId = '/sys/thirdApp/getThirdAccountByUserId',
+  bindThirdAppAccount = '/sys/thirdApp/bindThirdAppAccount',
+  deleteThirdAccount = '/sys/thirdApp/deleteThirdAccount',
+  agreeOrRefuseJoinTenant = '/sys/tenant/agreeOrRefuseJoinTenant',
 }
 
 /**
@@ -83,3 +87,35 @@ export const exitUserTenant = (params)=>{
 export const changeOwenUserTenant = (params)=>{
   return defHttp.post({ url: Api.changeOwenUserTenant, params },{ isTransformResponse: false, joinParamsToUrl: true });
 }
+
+/**
+ * 获取账号第三方信息通过第三方类型
+ * @param params
+ */
+export const getThirdAccountByUserId = (params) => {
+  return defHttp.get({ url: Api.getThirdAccountByUserId, params }, { isTransformResponse: false });
+};
+
+/**
+ * 根据第三方uuid绑定账号
+ * @param params
+ */
+export const bindThirdAppAccount = (params) => {
+  return defHttp.post({ url: Api.bindThirdAppAccount, params }, { isTransformResponse: false, joinParamsToUrl: true });
+};
+
+/**
+ * 根据第三方uuid绑定账号
+ * @param params
+ */
+export const deleteThirdAccount = (params) => {
+  return defHttp.delete({ url: Api.deleteThirdAccount, params }, { isTransformResponse:false, joinParamsToUrl: true });
+};
+
+/**
+ * 同意和拒绝加入租户
+ * @param params
+ */
+export const agreeOrRefuseJoinTenant = (params) => {
+  return defHttp.put({ url: Api.agreeOrRefuseJoinTenant, params },{ joinParamsToUrl: true });
+};

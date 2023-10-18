@@ -1,12 +1,16 @@
 <template>
   <ScrollContainer>
-    <div ref="wrapperRef" :class="prefixCls">
-      <Tabs tab-position="left" :tabBarStyle="tabBarStyle" @tabClick="componentClick">
-        <template v-for="item in settingList" :key="item.key">
+    <div ref="wrapperRef" class="user-account-setting" :class="[prefixCls,activeKey==5?'vip-background':'']">
+      <Tabs tab-position="left" :tabBarStyle="tabBarStyle" @tabClick="componentClick" v-model:activeKey="activeKey" :class="showVip?'vip-height':''">
+        <template v-for="item in componentList" :key="item.key">
           <TabPane>
             <template #tab>
-                <span>
-                  <Icon :icon="item.icon" class="icon-font-color"/>
+                <span style="display:flex;align-items: center;cursor: pointer">
+                  <!--<Icon :icon="item.icon" class="icon-font-color"/>-->
+                  <span style="width: 30px">
+                    <img v-if="activeKey === item.key || isDark" :src="item.img2" style="height: 18px"/>
+                    <img v-else :src="item.img1" style="height: 16px"/>
+                  </span>
                   {{item.name}}
                 </span>
             </template>
@@ -19,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, onMounted, provide, computed } from "vue";
 import { Tabs } from "ant-design-vue";
 import { ScrollContainer } from "/@/components/Container";
 import { settingList } from "./UserSetting.data";
@@ -27,6 +31,10 @@ import BaseSetting from "./BaseSetting.vue";
 import AccountSetting from "./AccountSetting.vue";
 import TenantSetting from "./TenantSetting.vue";
 import WeChatDingSetting from './WeChatDingSetting.vue';
+import { useRouter } from "vue-router";
+import { useDesign } from '/@/hooks/web/useDesign';
+import {useRootSetting} from "/@/hooks/setting/useRootSetting";
+import {ThemeEnum} from "/@/enums/appEnum";
 export default defineComponent({
   components: {
     ScrollContainer,
@@ -38,7 +46,21 @@ export default defineComponent({
     WeChatDingSetting,
   }, 
   setup() {
+    const { prefixCls } = useDesign('user-account-setting-container');
+    const { getDarkMode} = useRootSetting();
+    const isDark = computed(() => getDarkMode.value === ThemeEnum.DARK);
     const activeKey = ref<string>('1');
+    //是否为vip
+    const showVip = ref<boolean>(false);
+    //vip编码
+    const vipCode = ref<string>('');
+    const router = useRouter();
+    const componentList = computed(()=>{
+      if(showVip.value){
+        return settingList;
+      }
+      return settingList.filter((item)=> item.component != 'MyVipSetting');
+    })
 
     /**
      * 组件标题点击事件,解决第二次不加载数据
@@ -47,9 +69,26 @@ export default defineComponent({
     function componentClick(key) {
       activeKey.value = key;
     }
-    
+
+    function goToMyTeantPage(){
+      //update-begin---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
+      //如果请求参数包含我的租户，直接跳转过去
+      let query = router.currentRoute.value.query;
+      if(query && query.page === 'tenantSetting'){
+        activeKey.value = "2";
+      }
+      //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
+    }
+    onMounted(()=>{
+      goToMyTeantPage();
+      if(router.currentRoute.value.fullPath == '/system/usersetting'){
+        showVip.value = false;
+        return;
+      }
+      showVip.value = true;
+    })
     return {
-      prefixCls: "account-setting",
+      prefixCls,
       settingList,
       tabBarStyle: {
         width: "220px",
@@ -57,35 +96,29 @@ export default defineComponent({
       },
       componentClick,
       activeKey,
+      showVip,
+      componentList,
+      isDark
     };
   }
 });
 </script>
 <style lang="less" scoped>
-.account-setting {
-  margin: 12px;
+.user-account-setting {
+  margin: 20px;
 
   .base-title {
     padding-left: 0;
   }
 
-  .ant-tabs-tab-active {
-    background-color: @item-active-bg;
-  }
   //tabs弹窗左边样式
   :deep(.ant-tabs-nav){
-    /*begin 兼容暗夜模式*/
-    background-color: @component-background;
-    /*end 兼容暗夜模式*/
     height: 260px;
   }
   //tabs弹窗右边边样式
   :deep(.ant-tabs-content-holder){
     position: relative;
     left: 12px;
-    /*begin 兼容暗夜模式*/
-    background: @component-background;
-    /*end 兼容暗夜模式*/
     height: auto !important;
   }
 }
@@ -108,9 +141,37 @@ export default defineComponent({
   padding-top:14px;
   padding-right:14px;
 }
-.icon-font-color{
-  /*begin 兼容暗夜模式*/
-  color: @text-color;
-  /*end 兼容暗夜模式*/
+
+.vip-height{
+  //tabs弹窗左边样式
+  :deep(.ant-tabs-nav){
+    height: 310px !important;
+  }
+}
+.vip-background{
+  :deep(.ant-tabs-content-holder){
+    background: transparent;
+  }
+  :deep(.ant-tabs-tabpane){
+    padding-left: 0 !important;
+  }
+}
+</style>
+
+<style lang="less">
+@prefix-cls: ~'@{namespace}-user-account-setting-container';
+
+.@{prefix-cls} {
+  .ant-tabs-tab-active {
+    background-color: @item-active-bg;
+  }
+  //tabs弹窗左边样式
+ .ant-tabs-nav{
+    background-color: @component-background;
+  }
+  //tabs弹窗右边边样式
+  .ant-tabs-content-holder{
+    background: @component-background;
+  }
 }
 </style>

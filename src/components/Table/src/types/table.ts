@@ -189,6 +189,8 @@ export interface BasicTableProps<T = any> {
   formConfig?: Partial<FormProps>;
   // 列配置
   columns: BasicColumn[];
+  // 统一设置列最大宽度
+  maxColumnWidth?: number;
   // 是否显示序号列
   showIndexColumn?: boolean;
   // 序号列配置
@@ -317,7 +319,7 @@ export interface BasicTableProps<T = any> {
    * you need to add style .ant-table td { white-space: nowrap; }.
    * @type object
    */
-  scroll?: { x?: number | true; y?: number };
+  scroll?: { x?: number | true | 'max-content'; y?: number };
 
   /**
    * Whether to show table header

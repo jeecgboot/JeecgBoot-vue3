@@ -162,4 +162,11 @@
      margin-bottom: 0;
      margin-top: 0;
    }
+
+   /** QQYUN-5688 【样式】鼠标放上去怎么不是手 */
+   :deep(.ant-rate-disabled){
+     .ant-rate-star{
+       cursor: pointer !important;
+     }
+   }
 </style>

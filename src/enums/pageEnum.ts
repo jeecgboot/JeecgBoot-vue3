@@ -11,4 +11,6 @@ export enum PageEnum {
   OAUTH2_LOGIN_PAGE_PATH = '/oauth2-app/login',
   //文件路由
   SYS_FILES_PATH = '/file/share',
+  // 邮件中的跳转地址
+  TOKEN_LOGIN = '/tokenLogin'
 }

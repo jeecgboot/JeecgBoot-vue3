@@ -12,6 +12,9 @@
           v-model:expandedKeys="expandedKeys"
           @select="onSelect"
         >
+          <template #title="{ title, key }">
+            <FolderFilled style="color: #9e9e9e"/><span style="margin-left: 5px">{{ title }}</span>
+          </template>
         </a-tree>
       </div>
     </a-col>
@@ -27,11 +30,13 @@
   import { defHttp } from '/@/utils/http/axios';
   import { computed, ref, watch } from 'vue';
   import UserList from './UserList.vue';
+  import { FolderFilled } from '@ant-design/icons-vue';
 
   export default {
     name: 'DepartUserList',
     components: {
       UserList,
+      FolderFilled
     },
     props: {
       searchText: {

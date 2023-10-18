@@ -27,27 +27,20 @@
     },
     setup(props) {
       const chartRef = ref<HTMLDivElement | null>(null);
-      const { setOptions, echarts } = useECharts(chartRef as Ref<HTMLDivElement>);
+      const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
       const option = reactive({
         title: {
           text: '基础雷达图',
         },
         legend: {
-          data: ['文综', '理综'],
+          data: ['文综'],
         },
         radar: {
-          indicator: [
-            { name: '历史', max: 100 },
-            { name: '地理', max: 110 },
-            { name: '生物', max: 120 },
-            { name: '化学', max: 130 },
-            { name: '物理', max: 140 },
-            { name: '政治', max: 150 },
-          ],
+          indicator: [{ name: '历史' }, { name: '地理' }, { name: '生物' }, { name: '化学' }, { name: '物理' }, { name: '政治' }],
         },
         series: [
           {
-            type: 'radar',
+            type: 'radar' as 'custom',
             data: [
               {
                 value: [82, 70, 60, 55, 90, 66],
@@ -86,7 +79,7 @@
           //data数据
           data.push(obj);
         });
-        option.radar.indicator = indicator;
+        option.radar.axisName = indicator;
         option.series[0]['data'] = data;
         setOptions(option);
       }

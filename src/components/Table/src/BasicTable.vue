@@ -31,7 +31,9 @@
         <!-- 增加对antdv3.x兼容 -->
         <template #bodyCell="data">
           <!-- update-begin--author:liaozhiyang---date:220230717---for：【issues-179】antd3 一些警告以及报错(针对表格) -->
+          <!-- update-begin--author:liusq---date:20230921---for：【issues/770】slotsBak异常报错的问题,增加判断column是否存在 -->
           <template v-if="data.column?.slotsBak?.customRender">
+          <!-- update-end--author:liusq---date:20230921---for：【issues/770】slotsBak异常报错的问题,增加判断column是否存在 -->
             <slot :name="data.column.slotsBak.customRender" v-bind="data || {}"></slot>
           </template>
           <template v-else>
@@ -46,7 +48,7 @@
 <script lang="ts">
   import type { BasicTableProps, TableActionType, SizeType, ColumnChangeParam, BasicColumn } from './types/table';
 
-  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect } from 'vue';
+  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect, watch, onUnmounted, onMounted } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page/injectionKey';
@@ -265,6 +267,10 @@
         delete propsData.rowSelection
         // update-end--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
 
+        // update-begin--author:liaozhiyang---date:20230919---for：【QQYUN-6387】展开写法（去掉报错）
+        !propsData.isTreeTable && delete propsData.expandIconColumnIndex;
+        propsData.expandedRowKeys === null && delete propsData.expandedRowKeys;
+        // update-end--author:liaozhiyang---date:20230919---for：【QQYUN-6387】展开写法（去掉报错）
         propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
       });
@@ -368,6 +374,39 @@
       expose(tableAction);
 
       emit('register', tableAction, formActions);
+
+      // update-begin--author:liaozhiyang---date:20230804---for：【issues/638】表格合计，列表table和合计table滚动联动
+      if (getProps.value.showSummary) {
+        let tableBody;
+        const handleSroll = function () {
+          const scrollLeft = this.scrollLeft;
+          tableBody.forEach((elem) => (elem.scrollLeft = scrollLeft));
+        };
+        onMounted(() => {
+          const unwatch = watch(
+            getDataSourceRef,
+            (newVal) => {
+              if (newVal.length > 0) {
+                setTimeout(() => {
+                  unwatch();
+                  tableBody = wrapRef.value.querySelectorAll('.ant-table-body');
+                  tableBody.forEach((elem) => {
+                    elem.addEventListener('scroll', handleSroll, false);
+                  });
+                }, 0);
+                console.log("---表格合计滚动---")
+              }
+            },
+            { immediate: true }
+          );
+        });
+        onUnmounted(() => {
+          if (tableBody.length) {
+            tableBody.forEach((elem) => elem.removeEventListener('scroll', handleSroll));
+          }
+        });
+      }
+      // update-begin--author:liaozhiyang---date:20230804---for：【issues/638】表格合计，列表table和合计table滚动联动
 
       return {
         tableElRef,

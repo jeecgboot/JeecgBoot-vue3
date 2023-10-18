@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { inject, nextTick, ref, unref, defineExpose } from 'vue';
+  import { inject, nextTick, ref, unref } from 'vue';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useMethods } from '/@/hooks/system/useMethods';

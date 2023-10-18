@@ -21,6 +21,11 @@
     </template>
     <Dropdown :trigger="['hover']" :dropMenuList="getDropdownList" popconfirm v-if="dropDownActions && getDropdownList.length > 0">
       <slot name="more"></slot>
+      <!--  设置插槽   -->
+      <template v-slot:[item.slot] v-for="(item, index) in getDropdownSlotList" :key="`${index}-${item.label}`">
+        <slot :name="item.slot"></slot>
+      </template>
+
       <a-button type="link" size="small" v-if="!$slots.more"> 更多 <Icon icon="mdi-light:chevron-down"></Icon> </a-button>
     </Dropdown>
   </div>
@@ -116,6 +121,9 @@
         });
       });
 
+      const getDropdownSlotList = computed((): any[] => {
+        return unref(getDropdownList).filter((item) => item.slot);
+      });
       const getAlign = computed(() => {
         const columns = (table as TableActionType)?.getColumns?.() || [];
         const actionColumn = columns.find((item) => item.flag === ACTION_COLUMN_FLAG);
@@ -139,7 +147,7 @@
         isInButton && e.stopPropagation();
       }
 
-      return { prefixCls, getActions, getDropdownList, getAlign, onCellClick, getTooltip };
+      return { prefixCls, getActions, getDropdownList, getDropdownSlotList, getAlign, onCellClick, getTooltip };
     },
   });
 </script>
@@ -152,7 +160,7 @@
     /* update-begin-author:taoyan date:2022-11-18 for: 表格默认行高比官方示例多出2px*/
     height: 22px;
     /* update-end-author:taoyan date:2022-11-18 for: 表格默认行高比官方示例多出2px*/
-    
+
     .action-divider {
       display: table;
     }
