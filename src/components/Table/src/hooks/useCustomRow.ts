@@ -60,6 +60,15 @@ export function useCustomRow(
 
           const isRadio = rowSelection.type === 'radio';
           if (isRadio) {
+            // update-begin--author:liaozhiyang---date:20231016---for：【QQYUN-6794】table列表增加radio禁用功能
+            const rowSelection = propsRef.value.rowSelection;
+            if (rowSelection.getCheckboxProps) {
+              const result = rowSelection.getCheckboxProps(record);
+              if (result.disabled) {
+                return;
+              }
+            }
+            // update-end--author:liaozhiyang---date:20231016---for：【QQYUN-6794】table列表增加radio禁用功能
             if (!keys.includes(key)) {
               if (keys.length) {
                 clearSelectedRowKeys();
