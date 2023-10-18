@@ -4,7 +4,7 @@
     <!-- radio不存在全选，所以放个空标签 -->
     <span></span>
   </template>
-  <a-checkbox v-else :checked="checked" :indeterminate="isHalf" @update:checked="onChange" />
+  <a-checkbox :disabled="disabled" v-else :checked="checked" :indeterminate="isHalf" @update:checked="onChange" />
 </template>
 <script setup lang="ts">
   import { computed } from 'vue';
@@ -23,6 +23,12 @@
       type: Number,
       required: true,
     },
+    // update-begin--author:liaozhiyang---date:20231016---for：【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+    disabled: {
+      type: Boolean,
+      required: true,
+    },
+    // update-end--author:liaozhiyang---date:20231016---for：【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
   });
   const emit = defineEmits(['select-all']);
 

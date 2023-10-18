@@ -42,7 +42,22 @@ export function useCustomSelection(
 
   // 扁平化数据，children数据也会放到一起
   const flattedData = computed(() => {
-    return flattenData(tableData.value, childrenColumnName.value);
+    // update-begin--author:liaozhiyang---date:20231016---for：【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+    const data = flattenData(tableData.value, childrenColumnName.value);
+    const rowSelection = propsRef.value.rowSelection;
+    if (rowSelection?.type === 'checkbox' && rowSelection.getCheckboxProps) {
+      for (let i = 0, len = data.length; i < len; i++) {
+        const record = data[i];
+        const result = rowSelection.getCheckboxProps(record);
+        if (result.disabled) {
+          data.splice(i, 1);
+          i--;
+          len--;
+        }
+      }
+    }
+    return data;
+    // update-end--author:liaozhiyang---date:20231016---for：【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
   });
 
   const getRowSelectionRef = computed((): TableRowSelection | null => {
@@ -103,6 +118,8 @@ export function useCustomSelection(
       isRadio: isRadio.value,
       selectedLength: flattedData.value.filter((data) => selectedKeys.value.includes(getRecordKey(data))).length,
       pageSize: currentPageSize.value,
+      // 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+      disabled: flattedData.value.length == 0,
     };
   });
 
@@ -359,8 +376,19 @@ export function useCustomSelection(
    */
   function renderRadioComponent({ record }) {
     const recordKey = getRecordKey(record);
+    // update-begin--author:liaozhiyang---date:20231016---for：【QQYUN-6794】table列表增加radio禁用功能
+    // 获取用户自定义radioProps
+    const checkboxProps = (() => {
+      const rowSelection = propsRef.value.rowSelection;
+      if (rowSelection?.getCheckboxProps) {
+        return rowSelection.getCheckboxProps(record);
+      }
+      return {};
+    })();
+    // update-end--author:liaozhiyang---date:20231016---for：【QQYUN-6794】table列表增加radio禁用功能
     return (
       <Radio
+        {...checkboxProps}
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
