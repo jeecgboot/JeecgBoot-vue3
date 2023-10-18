@@ -18,6 +18,11 @@
     // labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
+    // update-begin--author:liaozhiyang---date:20231017---for：【issues/790】弹窗内文本框不居中问题
+    labelWidth: 100,
+    labelCol: null,
+    wrapperCol: null,
+    // update-end--author:liaozhiyang---date:20231017---for：【issues/790】弹窗内文本框不居中问题
   });
   //表单赋值
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
