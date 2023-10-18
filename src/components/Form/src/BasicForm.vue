@@ -52,6 +52,8 @@
   import { useModalContext } from '/@/components/Modal';
 
   import { basicProps } from './props';
+  import componentSetting from '/@/settings/componentSetting';
+
   import { useDesign } from '/@/hooks/web/useDesign';
   import dayjs from 'dayjs';
   import { useDebounceFn } from '@vueuse/core';
@@ -89,6 +91,16 @@
           mergeProps.labelCol = undefined;
         }
         //update-end-author:sunjianlei date:20220923 for: 如果用户设置了labelWidth，则使labelCol失效，解决labelWidth设置无效的问题
+        // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6566】BasicForm支持一行显示(inline)
+        if (mergeProps.layout === 'inline') {
+          if (mergeProps.labelCol === componentSetting.form.labelCol) {
+            mergeProps.labelCol = undefined;
+          }
+          if (mergeProps.wrapperCol === componentSetting.form.wrapperCol) {
+            mergeProps.wrapperCol = undefined;
+          }
+        }
+        // update-end--author:liaozhiyang---date:20231017---for：【QQYUN-6566】BasicForm支持一行显示(inline)
         return mergeProps;
       });
 
@@ -380,5 +392,12 @@
         margin-bottom: 8px !important;
       }
     }
+    // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6566】BasicForm支持一行显示(inline)
+    &.ant-form-inline {
+      & > .ant-row {
+        .ant-col { width:auto !important; }
+      }
+    }
+    // update-end--author:liaozhiyang---date:20231017---for：【QQYUN-6566】BasicForm支持一行显示(inline)
   }
 </style>
