@@ -362,12 +362,7 @@
 
   function doDelete(deleteRows) {
     return new Promise((resolve) => {
-      let rowId;
-      if (Object.prototype.toString.call(deleteRows) === '[object Array]') {
-        rowId = deleteRows.map((row) => row.id);
-      } else {
-        rowId = deleteRows.id;
-      }
+      let rowId = deleteRows.filter((row) => row.id);
       console.log('删除 rowId: ', rowId);
       setTimeout(() => resolve(true), 1500);
     });
@@ -382,8 +377,8 @@
       if (flag) {
         // 注：如果启用了表格的 loading 状态，则必须先停止再删除，否则会导致无法从表格上删除数据
         // 2. 调用 event.confirmRemove 方法确认删除成功
-        await tableRef.value!.removeSelection();
-        // await event.confirmRemove()
+        // await tableRef.value!.removeSelection();
+        await event.confirmRemove()
         createMessage.success('删除成功！');
       } else {
         // 3. 若删除失败，不调用 event.confirmRemove() 方法就不会删除数据
