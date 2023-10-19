@@ -102,7 +102,7 @@ export const formSchema: FormSchema[] = [
             },
           ]);
           //update-begin---author:wangshuai ---date:20220729  for：[VUEN-1834]只有一级菜单，才默认值，子菜单的时候，清空------------
-          if (isMenu(e) && !formModel.id && formModel.component=='layouts/RouteView') {
+          if (isMenu(e) && !formModel.id && (formModel.component=='layouts/default/index' || formModel.component=='layouts/RouteView')) {
             formModel.component = '';
           }
           //update-end---author:wangshuai ---date:20220729  for：[VUEN-1834]只有一级菜单，才默认值，子菜单的时候，清空------------
@@ -157,7 +157,7 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       placeholder: '请输入前端组件',
     },
-    defaultValue:'layouts/RouteView',
+    defaultValue:'layouts/default/index',
     required: true,
     ifShow: ({ values }) => !isButton(values.menuType),
   },
