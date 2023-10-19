@@ -102,17 +102,17 @@ export const formSchema: FormSchema[] = [
     component: 'InputTextArea',
     required: true,
   },
-  {
-    field: 'endTime',
-    label: '截至日期',
-    component: 'DatePicker',
-    componentProps: {
-      showTime: true,
-      valueFormat: 'YYYY-MM-DD HH:mm:ss',
-      placeholder: '请选择截至日期',
-    },
-    dynamicRules: ({ model }) => rules.endTime(model.startTime, true),
-  },
+  // {
+  //   field: 'endTime',
+  //   label: '截至日期',
+  //   component: 'DatePicker',
+  //   componentProps: {
+  //     showTime: true,
+  //     valueFormat: 'YYYY-MM-DD HH:mm:ss',
+  //     placeholder: '请选择截至日期',
+  //   },
+  //   dynamicRules: ({ model }) => rules.endTime(model.startTime, true),
+  // },
   {
     field: 'msgType',
     label: '接收用户',
