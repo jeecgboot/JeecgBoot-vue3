@@ -9,7 +9,9 @@
     <div v-show="activeKey === 'ding'" class="base-collapse">
       <ThirdAppDingTalkConfigForm />
     </div>
-    <div v-show="activeKey === 'wechat'"> </div>
+    <div v-show="activeKey === 'wechat'" class="p-5 empty-image"> 
+      <a-empty description="暂不支持" :image-style="{ margin: '0 auto', height: '160px' }" />
+    </div>
   </div>
 </template>
 
@@ -93,6 +95,14 @@
     a {
       color: #333 !important;
     }
+  }
+  .empty-image{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 50px);
+    justify-content: center;
+    width: 100%;
   }
 </style>
 
