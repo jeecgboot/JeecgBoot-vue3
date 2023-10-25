@@ -2,6 +2,8 @@ import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { dictItemCheck } from './dict.api';
 import { rules } from '/@/utils/helper/validator';
+import { h } from "vue";
+
 export const columns: BasicColumn[] = [
   {
     title: '字典名称',
@@ -93,6 +95,17 @@ export const dictItemColumns: BasicColumn[] = [
     dataIndex: 'itemValue',
     width: 80,
   },
+  {
+    title: '字典颜色',
+    dataIndex: 'itemColor',
+    width: 80,
+    align:'center',
+    customRender:({ text }) => {
+      return h('div', {
+        style: {"background": text, "width":"18px","height":"18px","border-radius":"50%","margin":"0 auto"}
+      })
+    }
+  },
 ];
 
 export const dictItemSearchFormSchema: FormSchema[] = [
@@ -158,6 +171,12 @@ export const itemFormSchema: FormSchema[] = [
         },
       ];
     },
+  },
+  {
+    label: '颜色值',
+    field: 'itemColor',
+    component: 'Input',
+    slot:'itemColor'
   },
   {
     label: '描述',
