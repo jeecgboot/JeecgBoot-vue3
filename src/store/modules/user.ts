@@ -183,16 +183,14 @@ export const useUserStore = defineStore({
         //update-end-author:liusq date:2022-5-5 for: 登录成功后缓存拖拽模块的接口前缀
 
         // update-begin-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
-        // let redirect = router.currentRoute.value?.query?.redirect as string;
+        let redirect = router.currentRoute.value?.query?.redirect as string;
         // 判断是否有 redirect 重定向地址
         //update-begin---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
-        // if (redirect && goHome) {
+        if (redirect && goHome) {
         //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
-          // 当前页面打开
-          // TODO 这段代码虽然可以登录后重定向到指定窗口，但是会存在解析userInfo的错误
-        //   window.open(redirect, '_self')
-        //   return;
-        // }
+          router.push(redirect);
+          return;
+        }
         // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
 
         goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
