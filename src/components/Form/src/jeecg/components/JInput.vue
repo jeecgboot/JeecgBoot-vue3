@@ -3,10 +3,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref, watchEffect, unref, watch } from 'vue';
+  import { defineComponent, PropType, ref, watchEffect, unref, watch, computed } from 'vue';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { propTypes } from '/@/utils/propTypes';
   import { JInputTypeEnum } from '/@/enums/jeecgEnum.ts';
+  import { omit } from 'lodash-es';
 
   export default defineComponent({
     name: 'JInput',
@@ -22,8 +23,12 @@
       const attrs = useAttrs();
       //表单值
       const showText = ref('');
+      // update-begin--author:liaozhiyang---date:20231026---for：【issues/803】JIput updateSchema不生效
       //绑定属性
-      const getBindValue = Object.assign({}, unref(props), unref(attrs));
+      const getBindValue = computed(() => {
+        return omit(Object.assign({}, unref(props), unref(attrs)), ['value']);
+      });
+      // update-end--author:liaozhiyang---date:20231026---for：【issues/803】JIput updateSchema不生效
       //监听类型变化
       watch(
         () => props.type,
