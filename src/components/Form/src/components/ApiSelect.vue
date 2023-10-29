@@ -113,6 +113,10 @@
         },
         { deep: true }
       );
+     //监听数值修改，查询数据
+      watchEffect(() => {
+        props.value && handleFetch();
+      });
 
       async function fetch() {
         const api = props.api;
