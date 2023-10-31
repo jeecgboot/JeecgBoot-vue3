@@ -190,7 +190,7 @@ export const useUserStore = defineStore({
         //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
           // 当前页面打开
           window.open(redirect, '_self')
-          return;
+          return data;
         }
         // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
 
