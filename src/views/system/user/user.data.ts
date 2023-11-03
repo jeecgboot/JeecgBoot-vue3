@@ -191,6 +191,7 @@ export const formSchema: FormSchema[] = [
       api: getAllRolesListNoByTenant,
       labelField: 'roleName',
       valueField: 'id',
+      immediate: false,
     },
   },
   {
@@ -228,6 +229,7 @@ export const formSchema: FormSchema[] = [
       numberToString: true,
       labelField: 'name',
       valueField: 'id',
+      immediate: false,
     },
   },
   {

@@ -20,12 +20,20 @@ export function useToolbar(props: JVxeTableProps, data: JVxeDataProps, methods: 
           // 保存事件
           onSave: () => methods.trigger('save'),
           onRemove() {
-            let $table = methods.getXTable();
-            let deleteRows = methods.filterNewRows(data.selectedRows.value);
+            const $table = methods.getXTable();
+            // update-begin--author:liaozhiyang---date:20231018---for：【QQYUN-6805】修复asyncRemove字段不生效
             // 触发删除事件
-            if (deleteRows.length > 0) {
-              let removeEvent: any = { deleteRows, $table};
-              if (props.asyncRemove) {
+            if (data.selectedRows.value.length > 0) {
+              const deleteOldRows = methods.filterNewRows(data.selectedRows.value);
+              const removeEvent: any = { deleteRows: data.selectedRows.value, $table };
+              const insertRecords = $table.getInsertRecords();
+              if (props.asyncRemove && deleteOldRows.length) {
+                data.selectedRows.value.forEach((item) => {
+                  // 删除新添加的数据id
+                  if (insertRecords.includes(item)) {
+                    delete item.id;
+                  }
+                });
                 // 确认删除，只有调用这个方法才会真删除
                 removeEvent.confirmRemove = () => methods.removeSelection();
               } else {
@@ -35,6 +43,7 @@ export function useToolbar(props: JVxeTableProps, data: JVxeDataProps, methods: 
             } else {
               methods.removeSelection();
             }
+            // update-end--author:liaozhiyang---date:20231018---for：【QQYUN-6805】修复asyncRemove字段不生效
           },
           // 清除选择事件
           onClearSelection: () => methods.clearSelection(),

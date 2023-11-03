@@ -1,5 +1,6 @@
 import { inject, reactive, ref, watch, unref, Ref } from 'vue';
 import { useMessage } from '/@/hooks/web/useMessage';
+import { isEmpty } from '@/utils/is';
 
 export function useSelectBiz(getList, props) {
   //接收下拉框选项
@@ -25,7 +26,10 @@ export function useSelectBiz(getList, props) {
   watch(
     selectValues,
     () => {
-      if (selectValues['change'] == false) {
+      //update-begin-author:liusq---date:2023-10-19--for: [issues/788]判断有设置数值才去加载
+      //if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
+      if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
+        //update-end-author:liusq---date:2023-10-19--for: [issues/788]判断有设置数值才去加载
         //update-begin---author:wangshuai ---date:20220412  for：[VUEN-672]发文草稿箱编辑时拟稿人显示用户名------------
         let params = {};
         params[props.rowKey] = selectValues['value'].join(',');
