@@ -432,6 +432,7 @@ export function useCustomSelection(
 
   // 设置选择的key
   function setSelectedRowKeys(rowKeys: string[]) {
+    const isSomeRowKeys = selectedKeys.value === rowKeys;
     selectedKeys.value = rowKeys;
     const allSelectedRows = findNodeAll(
       toRaw(unref(flattedData)).concat(toRaw(unref(selectedRows))),
@@ -445,14 +446,33 @@ export function useCustomSelection(
       const found = allSelectedRows.find((item) => getRecordKey(item) === key);
       found && trueSelectedRows.push(found);
     });
-    // update-begin--author:liaozhiyang---date:20230823---for：【QQYUN-6283】点击表格清空，rowSelect里面的selectedRowKeys没置空。
-    // update-begin--author:liaozhiyang---date:20230811---for：【issues/657】浏览器卡死问题
-    if (trueSelectedRows.length || !rowKeys.length) {
+    // update-begin--author:liaozhiyang---date:20231103---for：【issues/828】解决卡死问题
+    if (!(isSomeRowKeys && equal(selectedRows.value, trueSelectedRows))) {
       selectedRows.value = trueSelectedRows;
       emitChange();
     }
-    // update-end--author:liaozhiyang---date:20230811---for：【issues/657】】浏览器卡死问题
-    // update-end--author:liaozhiyang---date:20230823---for：【QQYUN-6283】点击表格清空，rowSelect里面的selectedRowKeys没置空。
+    // update-end--author:liaozhiyang---date:20231103---for：【issues/828】解决卡死问题
+  }
+  /**
+   *2023-11-03
+   *廖志阳
+   *检测selectedRows.value和trueSelectedRows是否相等，防止死循环
+   */
+  function equal(oldVal, newVal) {
+    let oldKeys = [],
+      newKeys = [];
+    if (oldVal.length === newVal.length) {
+      oldKeys = oldVal.map((item) => getRecordKey(item));
+      newKeys = newVal.map((item) => getRecordKey(item));
+      for (let i = 0, len = oldKeys.length; i < len; i++) {
+        const findItem = newKeys.find((item) => item === oldKeys[i]);
+        if (!findItem) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   function getSelectRows<T = Recordable>() {
