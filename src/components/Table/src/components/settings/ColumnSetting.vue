@@ -289,7 +289,15 @@
 
       // reset columns
       function reset() {
-        state.checkedList = [...state.defaultCheckList];
+        // state.checkedList = [...state.defaultCheckList];
+        // update-begin--author:liaozhiyang---date:20231103---for：【issues/825】tabel的列设置隐藏列保存后切换路由问题[重置没勾选]
+        state.checkedList = table
+          .getColumns({ ignoreAction: true })
+          .map((item) => {
+            return item.dataIndex || item.title;
+          })
+          .filter(Boolean) as string[];
+        // update-end--author:liaozhiyang---date:20231103---for：【issues/825】tabel的列设置隐藏列保存后切换路由问题[重置没勾选]
         state.checkAll = true;
         plainOptions.value = unref(cachePlainOptions);
         plainSortOptions.value = unref(cachePlainOptions);
