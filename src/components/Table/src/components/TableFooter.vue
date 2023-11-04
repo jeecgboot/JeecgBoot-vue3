@@ -67,7 +67,10 @@
 
       const getColumns = computed(() => {
         const dataSource = unref(getDataSource);
-        const columns: BasicColumn[] = cloneDeep(table.getColumns());
+        let columns: BasicColumn[] = cloneDeep(table.getColumns());
+        // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
+        columns = columns.filter((item) => !item.defaultHidden);
+        // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
         const index = columns.findIndex((item) => item.flag === INDEX_COLUMN_FLAG);
         const hasRowSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_ROW_KEY));
         const hasIndexSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_INDEX_KEY));

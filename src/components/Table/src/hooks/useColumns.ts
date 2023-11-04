@@ -277,9 +277,6 @@ export function useColumns(
     columns = columns.filter((item) => item.key !== CUS_SEL_COLUMN_KEY);
     // update-enb--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
 
-    // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
-    columns = columns.filter((item) => !item.defaultHidden);
-    // update-begin--author:liaozhiyang---date:220230804---for：【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
     if (sort) {
       columns = sortFixedColumn(columns);
     }
