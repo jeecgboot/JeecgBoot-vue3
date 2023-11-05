@@ -27,7 +27,7 @@
 
 <script lang="ts" name="tenant-system-user" setup>
   //ts语法
-  import { ref, unref } from 'vue';
+  import { onMounted, ref, unref } from 'vue';
   import { BasicTable, TableAction, ActionItem } from '/@/components/Table';
   import UserDrawer from '../user/UserDrawer.vue';
   import JThirdAppButton from '/@/components/jeecg/thirdApp/JThirdAppButton.vue';
@@ -48,6 +48,7 @@
   import { changeOwenUserTenant } from "/@/views/system/usersetting/UserSetting.api";
   import { getLoginTenantName } from "/@/views/system/tenant/tenant.api";
   import TenantUserDrawer from './components/TenantUserDrawer.vue';
+  import { tenantSaasMessage } from "@/utils/common/compUtils";
 
   const { createMessage, createConfirm } = useMessage();
 
@@ -157,7 +158,9 @@
       },
       {
         label: '离职',
-        onClick: handleQuit.bind(null, record.username),
+        //update-begin---author:wangshuai---date:2023-10-25---for:【QQYUN-6822】9.离职交接人选的是自己，完成之后数据没了---
+        onClick: handleQuit.bind(null, record.id),
+        //update-end---author:wangshuai---date:2023-10-25---for:【QQYUN-6822】9.离职交接人选的是自己，完成之后数据没了---
         //update-begin---author:wangshuai ---date:20230130  for：[QQYUN-3974]租户的创建人 不应该有离职按钮------------
         ifShow: () =>{
           return record.status === '1' && record.username!== record.createBy;
@@ -278,6 +281,10 @@
     loginTenantName.value = await getLoginTenantName();
   }
   //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
+
+  onMounted(()=>{
+    tenantSaasMessage('租户用户')
+  })
 </script>
 
 <style scoped>

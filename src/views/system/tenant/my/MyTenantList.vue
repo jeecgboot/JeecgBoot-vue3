@@ -30,7 +30,7 @@
   </div>
 </template>
 <script lang="ts" name="my-tenant-list" setup>
-  import { ref, unref } from 'vue';
+  import { onMounted, ref, unref } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { invitationUserJoin, getTenantPageListByUserId } from '../tenant.api';
@@ -43,6 +43,7 @@
   import TenantPackList from '../pack/TenantPackList.vue';
   import { getTenantId } from '/@/utils/auth';
   import { useUserStore } from '/@/store/modules/user';
+  import { tenantSaasMessage } from "@/utils/common/compUtils";
 
   const { createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
@@ -137,4 +138,9 @@
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
+
+  onMounted(()=>{
+    //提示信息
+    tenantSaasMessage('我的租户')
+  })
 </script>

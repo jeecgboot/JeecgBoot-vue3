@@ -70,42 +70,6 @@
               <span>查看租户名片</span>
             </span>
             <span
-              v-if="item.userTenantStatus !== '3' && item.auth"
-              @click.stop="footerClick('tenantSetting', item)"
-              class="font-color333 flex-flow margin-right40 font-size13 pointer"
-            >
-              <Icon icon="ant-design:tool-outlined" class="footer-icon" />
-              <span>租户管理？</span>
-            </span>
-            <span v-else-if="item.userTenantStatus === '3' && item.auth" class="font-color9e flex-flow margin-right40 font-size13">
-              <Icon icon="ant-design:tool-outlined" class="footer-icon" />
-              <span>租户管理？</span>
-            </span>
-            <span
-              v-if="item.userTenantStatus !== '3' && !item.auth"
-              @click.stop="footerClick('tenantSetting', item)"
-              class="font-color333 flex-flow margin-right40 font-size13 pointer"
-            >
-              <Icon icon="ant-design:tool-outlined" class="footer-icon" />
-              <span>申请角色权限？</span>
-            </span>
-            <span v-else-if="item.userTenantStatus === '3' && !item.auth" class="font-color9e flex-flow margin-right40 font-size13">
-              <Icon icon="ant-design:tool-outlined" class="footer-icon" />
-              <span>申请角色权限？</span>
-            </span>
-            <span
-              v-if="item.userTenantStatus !== '3'"
-              @click.stop="footerClick('tenantSetting', item)"
-              class="font-color333 flex-flow margin-right40 font-size13 pointer"
-            >
-              <Icon icon="ant-design:gold-outlined" class="footer-icon" />
-              <span>我的汇报关系？</span>
-            </span>
-            <span v-else class="font-color9e flex-flow margin-right40 font-size13">
-              <Icon icon="ant-design:gold-outlined" class="footer-icon" />
-              <span>我的汇报关系？</span>
-            </span>
-            <span
               v-if="item.userTenantStatus !== '3'"
               @click.stop="footerClick('exitTenant', item)"
               class="font-color333 flex-flow margin-right40 font-size13 pointer"
@@ -226,7 +190,7 @@ import { onMounted, ref, unref } from "vue";
 import { getTenantListByUserId, cancelApplyTenant, exitUserTenant, changeOwenUserTenant, agreeOrRefuseJoinTenant } from "./UserSetting.api";
 import { useUserStore } from "/@/store/modules/user";
 import { CollapseContainer } from "/@/components/Container";
-import { getFileAccessHttpUrl } from "/@/utils/common/compUtils";
+import { getFileAccessHttpUrl, userExitChangeLoginTenantId } from "/@/utils/common/compUtils";
 import headerImg from "/@/assets/images/header.jpg";
 import {useMessage} from "/@/hooks/web/useMessage";
 import { initDictOptions } from '/@/utils/dict';
@@ -424,11 +388,7 @@ const userDetail = ref({
       if (res.success) {
         createMessage.success(res.message);
         cancelVisible.value = false;
-        //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5632】退出租户后 再点击主页 已退出的租户应用还可以操作------------
-        userStore.setTenant(null);
-        //update-end---author:wangshuai ---date:20230703  for：【QQYUN-5632】退出租户后 再点击主页 已退出的租户应用还可以操作------------
-        //切换租户后要刷新首页
-        window.location.reload();
+        userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
       } else {
         if (res.message === 'assignedOwen') {
           //需要指定变更者
@@ -480,9 +440,9 @@ const userDetail = ref({
     changeOwenUserTenant({ userId:unref(tenantOwen), tenantId:unref(myTenantInfo).tenantUserId }).then((res) =>{
       if(res.success){
         createMessage.success(res.message);
-        userStore.setTenant(null);
-        //切换租户后要刷新首页
-        window.location.reload();
+        //update-begin---author:wangshuai---date:2023-10-23---for:【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
+        userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
+        //update-end---author:wangshuai---date:2023-10-23---for:【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
       } else {
         createMessage.warning(res.message);
       }

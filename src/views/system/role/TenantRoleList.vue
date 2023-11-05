@@ -30,7 +30,7 @@
   <RoleDesc @register="registerDesc"></RoleDesc>
 </template>
 <script lang="ts" name="system-role" setup>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useDrawer } from '/@/components/Drawer';
   import { useModal } from '/@/components/Modal';
@@ -41,6 +41,8 @@
   import { listByTenant, deleteRole, batchDeleteRole, getExportUrl, getImportUrl } from './role.api';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { getLoginTenantName } from "/@/views/system/tenant/tenant.api";
+  import { tenantSaasMessage } from "@/utils/common/compUtils";
+  
   const showFooter = ref(true);
   const [roleUserDrawer, { openDrawer: openRoleUserDrawer }] = useDrawer();
   const [registerDrawer, { openDrawer }] = useDrawer();
@@ -167,6 +169,10 @@
   async function getTenantName(){
     loginTenantName.value = await getLoginTenantName();
   }
+
+  onMounted(()=>{
+    tenantSaasMessage('租户角色')
+  })
 </script>
 
 <style scoped lang="less">
