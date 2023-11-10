@@ -12,7 +12,9 @@
             :disabled="item.disabled"
             :class="[{ 'is-pop-confirm': item.popConfirm }, item.class ?? []]"
           >
-            <a-popconfirm v-if="popconfirm && item.popConfirm" v-bind="getPopConfirmAttrs(item.popConfirm)">
+            <!-- update-begin--author:liaozhiyang---date:20231110---for：【issues/839】BasicTable表格的更多操作按钮禁用还能点击弹出气泡框 -->
+            <a-popconfirm :disabled="item.disabled" v-if="popconfirm && item.popConfirm" v-bind="getPopConfirmAttrs(item.popConfirm)">
+              <!-- update-end--author:liaozhiyang---date:20231110---for：【issues/839】BasicTable表格的更多操作按钮禁用还能点击弹出气泡框 -->
               <template #icon v-if="item.popConfirm.icon">
                 <Icon v-if="item.iconColor" :icon="item.popConfirm.icon" :color="item.iconColor" />
                 <Icon v-else :icon="item.popConfirm.icon" />
@@ -41,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, PropType } from 'vue';
+  import { computed, PropType, ref } from 'vue';
   import type { DropMenu } from './typing';
   import { Dropdown, Menu, Popconfirm } from 'ant-design-vue';
   import { Icon } from '/@/components/Icon';
