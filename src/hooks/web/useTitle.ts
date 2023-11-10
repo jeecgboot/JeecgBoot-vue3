@@ -4,8 +4,8 @@ import { useTitle as usePageTitle } from '@vueuse/core';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useRouter } from 'vue-router';
 import { useLocaleStore } from '/@/store/modules/locale';
-
 import { REDIRECT_NAME } from '/@/router/constant';
+import { getMenus } from '/@/router/menus';
 
 /**
  * Listening to page changes and dynamically changing site titles
@@ -26,10 +26,43 @@ export function useTitle() {
       if (route.name === REDIRECT_NAME) {
         return;
       }
-
-      const tTitle = t(route?.meta?.title as string);
-      pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
+      // update-begin--author:liaozhiyang---date:20231110---for：【QQYUN-6938】online菜单名字和页面title不一致
+      if (route.params && Object.keys(route.params).length) {
+        getMenus().then((menus) => {
+          const getTitle = getMatchingRouterName(menus, route.fullPath);
+          let tTitle = '';
+          if (getTitle) {
+            tTitle = t(getTitle);
+          } else {
+            tTitle = t(route?.meta?.title as string);
+          };
+          pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
+        });
+      } else {
+        const tTitle = t(route?.meta?.title as string);
+        pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
+      }
+      // update-end--author:liaozhiyang---date:20231110---for：【QQYUN-6938】online菜单名字和页面title不一致
     },
     { immediate: true }
   );
+}
+/** 
+ 2023-11-09
+ liaozhiyang
+ 获取路由匹配模式的真实页面名字
+*/
+function getMatchingRouterName(menus, path) {
+  for (let i = 0, len = menus.length; i < len; i++) {
+    const item = menus[i];
+    if (item.path === path && !item.redirect && !item.paramPath) {
+      return item.meta?.title;
+    } else if (item.children?.length) {
+      const result = getMatchingRouterName(item.children, path);
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return '';
 }
