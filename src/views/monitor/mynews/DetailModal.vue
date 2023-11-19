@@ -3,8 +3,7 @@
     <a-card class="daily-article">
       <a-card-meta :title="content.titile" :description="'发布人：' + content.sender + ' 发布时间： ' + content.sendTime"> </a-card-meta>
       <a-divider />
-      <span v-html="content.msgContent" class="article-content"></span>
-      
+      <div v-html="content.msgContent" class="article-content"></div>
       <div>
         <a-button v-if="hasHref" @click="jumpToHandlePage">前往办理<ArrowRightOutlined /></a-button>
       </div>
@@ -17,6 +16,8 @@
   import { ArrowRightOutlined } from '@ant-design/icons-vue';
   import { useRouter } from 'vue-router'
   import xss from 'xss'
+  import { options } from './XssWhiteList'
+  
   const router = useRouter()
   
   import { ref, unref } from 'vue';
@@ -29,7 +30,9 @@
       //data.record.msgContent = '<p>2323</p><input onmouseover=alert(1)>xss test';
       //update-begin-author:taoyan date:2022-7-14 for: VUEN-1702 【禁止问题】sql注入漏洞
       if(data.record.msgContent){
-        data.record.msgContent = xss(data.record.msgContent)
+        //update-begin---author:wangshuai---date:2023-11-15---for:【QQYUN-7049】3.6.0版本 通知公告中发布的富文本消息，在我的消息中查看没有样式---
+        data.record.msgContent = xss(data.record.msgContent,options);
+        //update-end---author:wangshuai---date:2023-11-15---for:【QQYUN-7049】3.6.0版本 通知公告中发布的富文本消息，在我的消息中查看没有样式---
       }
       //update-end-author:taoyan date:2022-7-14 for: VUEN-1702 【禁止问题】sql注入漏洞
       content.value = data.record;
