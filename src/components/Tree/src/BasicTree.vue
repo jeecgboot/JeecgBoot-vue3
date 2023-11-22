@@ -302,7 +302,9 @@
       watch(
         () => props.value,
         () => {
-          state.checkedKeys = toRaw(props.value || []);
+          // update-end--author:liaozhiyang---date:20231122---for：【issues/863】关闭选择部门弹窗，再打开之前勾选的消失了
+          state.checkedKeys = toRaw(props.value || props.checkedKeys || []);
+          // update-end--author:liaozhiyang---date:20231122---for：【issues/863】关闭选择部门弹窗，再打开之前勾选的消失了
         },
         { immediate: true },
       );
