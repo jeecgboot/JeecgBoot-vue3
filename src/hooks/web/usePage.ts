@@ -7,6 +7,7 @@ import { unref } from 'vue';
 import { useRouter } from 'vue-router';
 import { REDIRECT_NAME } from '/@/router/constant';
 import { useUserStore } from '/@/store/modules/user';
+import { useMultipleTabStore } from '/@/store/modules/multipleTab';
 
 export type RouteLocationRawEx = Omit<RouteLocationRaw, 'path'> & { path: PageEnum };
 
@@ -51,40 +52,27 @@ export const useRedo = (_router?: Router) => {
         resolve(false);
         return;
       }
+      // update-begin--author:liaozhiyang---date:20231123---for：【QQYUN-7099】动态路由匹配右键重新加载404
+      const tabStore = useMultipleTabStore();
       if (name && Object.keys(params).length > 0) {
-        //update-begin-author:taoyan date:2022-10-19 for: VUEN-2356 【vue3】online表单、表单设计器 功能测试 右键刷新时 404
-        if(isDynamicRoute(params, name)){
-          params['_redirect_type'] = 'path';
-          params['path'] = fullPath;
-        }else{
-          params['_redirect_type'] = 'name';
-          params['path'] = String(name);
-        }
-        //update-end-author:taoyan date:2022-10-19 for: VUEN-2356 【vue3】online表单、表单设计器 功能测试 右键刷新时 404
+        tabStore.setRedirectPageParam({
+          redirect_type: 'name',
+          name: String(name),
+          params,
+          query,
+        });
+        params['path'] = String(name);
       } else {
-        params['_redirect_type'] = 'path';
+        tabStore.setRedirectPageParam({
+          redirect_type: 'path',
+          path: fullPath,
+          query,
+        });
         params['path'] = fullPath;
       }
+      // update-end--author:liaozhiyang---date:20231123---for：【QQYUN-7099】动态路由匹配右键重新加载404
       push({ name: REDIRECT_NAME, params, query }).then(() => resolve(true));
     });
   }
   return redo;
 };
-
-/**
- * 判断是不是动态路由的跳转
- * @param params
- * @param name
- */
-function isDynamicRoute(params, name){
-  let arr = Object.keys(params);
-  let flag = false; 
-  for(let i=0;i<arr.length;i++){
-    let key = '@'+arr[i];
-    if((name as string).indexOf(key)>0){
-      flag = true;
-      break;
-    }
-  }
-  return flag;
-}
