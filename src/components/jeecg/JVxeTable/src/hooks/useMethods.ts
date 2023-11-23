@@ -639,13 +639,45 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /** 删除一行或多行数据 */
-  async function removeRows(rows) {
+  async function removeRows(rows, asyncRemove = false) {
+    // update-begin--author:liaozhiyang---date:20231123---for：vxe-table removeRows方法加上异步删除
     const xTable = getXTable();
-    const res = await xTable.remove(rows);
-    let removeEvent: any = { deleteRows: rows, $table: xTable };
-    trigger('removed', removeEvent);
-    await recalcSortNumber();
-    return res;
+    const removeEvent: any = { deleteRows: rows, $table: xTable };
+    if (asyncRemove) {
+      const selectedRows = Array.isArray(rows) ? rows : [rows];
+      const deleteOldRows = filterNewRows(selectedRows);
+      if (deleteOldRows.length) {
+        return new Promise((resolve) => {
+          // 确认删除，只有调用这个方法才会真删除
+          removeEvent.confirmRemove = async () => {
+            const insertRecords = xTable.getInsertRecords();
+            selectedRows.forEach((item) => {
+              // 删除新添加的数据id
+              if (insertRecords.includes(item)) {
+                delete item.id;
+              }
+            });
+            const res = await xTable.remove(rows);
+            await recalcSortNumber();
+            resolve(res);
+          };
+          trigger('removed', removeEvent);
+        });
+      } else {
+        // 全新的行立马删除，不等待。
+        const res = await xTable.remove(rows);
+        removeEvent.confirmRemove = () => {};
+        trigger('removed', removeEvent);
+        await recalcSortNumber();
+        return res;
+      }
+    } else {
+      const res = await xTable.remove(rows);
+      trigger('removed', removeEvent);
+      await recalcSortNumber();
+      return res;
+    }
+    // update-end--author:liaozhiyang---date:20231123---for：vxe-table removeRows方法加上异步删除
   }
 
   /** 根据id删除一行或多行 */
@@ -780,7 +812,6 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     event.target = instanceRef.value;
     emit(name, event);
   }
-
 
   /**
    * 获取选中的行-和 getSelectionData 区别在于对于新增的行也会返回ID

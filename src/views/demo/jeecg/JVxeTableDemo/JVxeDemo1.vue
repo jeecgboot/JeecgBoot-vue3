@@ -216,7 +216,7 @@
       key: 'action',
       type: JVxeTypes.slot,
       fixed: 'right',
-      minWidth: 100,
+      minWidth: 120,
       align: 'center',
       slotName: 'myAction',
     },
@@ -291,12 +291,18 @@
     console.log('查看: ', { props });
   }
 
+  // async function onDeleteRow(props) {
+  //   // 同步调用删除方法
+  //   const res = await tableRef.value?.removeRows(props.row);
+  //   if (res && res.rows.length > 0) {
+  //     createMessage.success('删除成功');
+  //   }
+  // }
+
   async function onDeleteRow(props) {
-    // 调用删除方法
-    const res = await tableRef.value?.removeRows(props.row);
-    if (res && res.rows.length > 0) {
-      createMessage.success('删除成功');
-    }
+    // 异步调用删除方法
+    const res = await tableRef.value?.removeRows(props.row, true);
+    console.log('删除成功~', res);
   }
 
   function handleValueChange(event) {
@@ -361,8 +367,13 @@
   }
 
   function doDelete(deleteRows) {
+    let rowId;
     return new Promise((resolve) => {
-      let rowId = deleteRows.filter((row) => row.id);
+      if (Array.isArray(deleteRows)) {
+        rowId = deleteRows.filter((row) => row.id);
+      } else {
+        rowId = deleteRows.id;
+      }
       console.log('删除 rowId: ', rowId);
       setTimeout(() => resolve(true), 1500);
     });

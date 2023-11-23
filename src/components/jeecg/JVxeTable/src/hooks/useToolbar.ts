@@ -37,6 +37,10 @@ export function useToolbar(props: JVxeTableProps, data: JVxeDataProps, methods: 
                 // 确认删除，只有调用这个方法才会真删除
                 removeEvent.confirmRemove = () => methods.removeSelection();
               } else {
+                if (props.asyncRemove) {
+                  // asyncRemove删除的只有新增的数据时，防止调用confirmRemove报错
+                  removeEvent.confirmRemove = () => {};
+                }
                 methods.removeSelection();
               }
               methods.trigger('removed', removeEvent);
