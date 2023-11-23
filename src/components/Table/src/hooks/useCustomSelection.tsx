@@ -39,6 +39,9 @@ export function useCustomSelection(
   const selectedKeys = ref<string[]>([]);
   // 选择的行
   const selectedRows = ref<Recordable[]>([]);
+  // 变更的行
+  let changeRows: Recordable[] = [];
+  let allSelected: boolean = false;
 
   // 扁平化数据，children数据也会放到一起
   const flattedData = computed(() => {
@@ -184,11 +187,17 @@ export function useCustomSelection(
 
   // 选择全部
   function onSelectAll(checked: boolean) {
+    // update-begin--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
+    if (unref(propsRef)?.rowSelection?.onSelectAll) {
+      allSelected = checked;
+      changeRows = getInvertRows(selectedRows.value);
+    }
+    // update-end--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
     // 取消全选
     if (!checked) {
       selectedKeys.value = [];
       selectedRows.value = [];
-      emitChange();
+      emitChange('all');
       return;
     }
     let modal: Nullable<ReturnType<ModalFunc>> = null;
@@ -219,7 +228,7 @@ export function useCustomSelection(
       if (hidden.length > 0) {
         return batchesSelectAll(hidden, checked, minSelect);
       } else {
-        emitChange();
+        emitChange('all');
       }
     };
 
@@ -250,7 +259,7 @@ export function useCustomSelection(
             call();
           } else {
             setTimeout(() => {
-              emitChange();
+              emitChange('all');
               // update-begin--author:liaozhiyang---date:20230811---for：【QQYUN-5687】批量选择，提示成功后，又来一个提示
               setTimeout(() =>resolve(), 0);
               // update-end--author:liaozhiyang---date:20230811---for：【QQYUN-5687】批量选择，提示成功后，又来一个提示
@@ -289,7 +298,7 @@ export function useCustomSelection(
   }
 
   // 调用用户自定义的onChange事件
-  function emitChange() {
+  function emitChange(mode = 'single') {
     const { rowSelection } = unref(propsRef);
     if (rowSelection) {
       const { onChange } = rowSelection;
@@ -303,6 +312,14 @@ export function useCustomSelection(
       keys: getSelectRowKeys(),
       rows: getSelectRows(),
     });
+    // update-begin--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
+    if (mode == 'all') {
+      const rowSelection = unref(propsRef)?.rowSelection;
+      if (rowSelection?.onSelectAll) {
+        rowSelection.onSelectAll(allSelected, toRaw(getSelectRows()), toRaw(changeRows));
+      }
+    }
+    // update-end--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发
   }
 
   // 用于判断是否是自定义选择列
@@ -474,7 +491,30 @@ export function useCustomSelection(
     }
     return false;
   }
-
+  /**
+   *2023-11-22
+   *廖志阳
+   *根据全选或者反选返回源数据中这次需要变更的数据
+   */
+  function getInvertRows(rows: any): any {
+    const allRows = findNodeAll(toRaw(unref(flattedData)), () => true, {
+      children: propsRef.value.childrenColumnName ?? 'children',
+    });
+    if (rows.length === 0 || rows.length === allRows.length) {
+      return allRows;
+    } else {
+      const allRowsKey = allRows.map((item) => getRecordKey(item));
+      rows.forEach((rItem) => {
+        const rItemKey = getRecordKey(rItem);
+        const findIndex = allRowsKey.findIndex((item) => rItemKey === item);
+        if (findIndex != -1) {
+          allRowsKey.splice(findIndex, 1);
+          allRows.splice(findIndex, 1);
+        }
+      });
+    }
+    return allRows;
+  }
   function getSelectRows<T = Recordable>() {
     return unref(selectedRows) as T[];
   }
