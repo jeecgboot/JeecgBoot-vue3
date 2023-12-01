@@ -123,6 +123,7 @@ export function useCustomSelection(
       pageSize: currentPageSize.value,
       // 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
       disabled: flattedData.value.length == 0,
+      hideSelectAll: unref(propsRef)?.rowSelection?.hideSelectAll,
     };
   });
 
@@ -130,8 +131,10 @@ export function useCustomSelection(
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRowKeys,
     (val: string[]) => {
-      if (Array.isArray(val)) {
-        setSelectedRowKeys(val);
+      // 解决selectedRowKeys在页面调用处使用ref失效
+      const value = unref(val);
+      if (Array.isArray(value)) {
+        setSelectedRowKeys(value);
       }
     },
     { immediate: true }

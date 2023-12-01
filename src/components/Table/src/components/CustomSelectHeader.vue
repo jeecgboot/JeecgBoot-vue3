@@ -1,10 +1,17 @@
 <!-- 自定义选择列，表头实现部分 -->
 <template>
+  <!-- update-begin--author:liaozhiyang---date:20231130---for：【issues/5595】BasicTable组件hideSelectAll: true无法隐藏全选框 -->
   <template v-if="isRadio">
     <!-- radio不存在全选，所以放个空标签 -->
     <span></span>
   </template>
-  <a-checkbox :disabled="disabled" v-else :checked="checked" :indeterminate="isHalf" @update:checked="onChange" />
+  <template v-else>
+    <template v-if="hideSelectAll">
+      <span></span>
+    </template>
+    <a-checkbox :disabled="disabled" v-else :checked="checked" :indeterminate="isHalf" @update:checked="onChange" />
+  </template>
+  <!-- update-end--author:liaozhiyang---date:20231130---for：【issues/5595】BasicTable组件hideSelectAll: true无法隐藏全选框 -->
 </template>
 <script setup lang="ts">
   import { computed } from 'vue';
@@ -22,6 +29,10 @@
     pageSize: {
       type: Number,
       required: true,
+    },
+    hideSelectAll: {
+      type: Boolean,
+      default: false,
     },
     // update-begin--author:liaozhiyang---date:20231016---for：【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
     disabled: {
