@@ -94,6 +94,9 @@
         // 启用代码折叠相关功能:结束
         // 光标行高亮
         styleActiveLine: true,
+        // update-begin--author:liaozhiyang---date:20231201---for：【issues/869】JCodeEditor组件初始化时没有设置mode
+        mode: props.language,
+        // update-begin--author:liaozhiyang---date:20231201---for：【issues/869】JCodeEditor组件初始化时没有设置mode
         //代码格式化
         extraKeys: {
           Tab: function autoFormat(editor) {
