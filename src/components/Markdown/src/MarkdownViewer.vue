@@ -8,7 +8,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import showdown from 'showdown';
-
+  import 'vditor/dist/index.css';
   const converter = new showdown.Converter();
   converter.setOption('tables', true);
   const props = defineProps({
