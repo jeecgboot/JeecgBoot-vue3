@@ -375,38 +375,6 @@
 
       emit('register', tableAction, formActions);
 
-      // update-begin--author:liaozhiyang---date:20230804---for：【issues/638】表格合计，列表table和合计table滚动联动
-      if (getProps.value.showSummary) {
-        let tableBody;
-        const handleSroll = function () {
-          const scrollLeft = this.scrollLeft;
-          tableBody.forEach((elem) => (elem.scrollLeft = scrollLeft));
-        };
-        onMounted(() => {
-          const unwatch = watch(
-            getDataSourceRef,
-            (newVal) => {
-              if (newVal.length > 0) {
-                setTimeout(() => {
-                  unwatch();
-                  tableBody = wrapRef.value.querySelectorAll('.ant-table-body');
-                  tableBody.forEach((elem) => {
-                    elem.addEventListener('scroll', handleSroll, false);
-                  });
-                }, 0);
-                console.log("---表格合计滚动---")
-              }
-            },
-            { immediate: true }
-          );
-        });
-        onUnmounted(() => {
-          if (tableBody.length) {
-            tableBody.forEach((elem) => elem.removeEventListener('scroll', handleSroll));
-          }
-        });
-      }
-      // update-begin--author:liaozhiyang---date:20230804---for：【issues/638】表格合计，列表table和合计table滚动联动
 
       return {
         tableElRef,
