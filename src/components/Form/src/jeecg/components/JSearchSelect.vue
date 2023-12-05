@@ -83,7 +83,9 @@
     setup(props, { emit, refs }) {
       const options = ref<any[]>([]);
       const loading = ref(false);
-      const attrs = useAttrs();
+      // update-begin--author:liaozhiyang---date:20231205---for：【issues/897】JSearchSelect组件添加class/style样式不生效
+      const attrs = useAttrs({'excludeDefaultKeys': false});
+      // update-end--author:liaozhiyang---date:20231205---for：【issues/897】JSearchSelect组件添加class/style样式不生效
       const selectedValue = ref([]);
       const selectedAsyncValue = ref([]);
       const lastLoad = ref(0);
