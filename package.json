@@ -21,7 +21,7 @@
     "husky:install": "husky install"
   },
   "dependencies": {
-    "@jeecg/online": "3.5.3-vite4",
+    "@jeecg/online": "3.6.0-beta",
     "@qiaoqiaoyun/drag-free": "^1.1.4",
     "@iconify/iconify": "^3.1.1",
     "@ant-design/colors": "^7.0.0",
