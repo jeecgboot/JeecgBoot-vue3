@@ -1,10 +1,10 @@
 {
   "name": "jeecgboot-vue3",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "author": {
-    "name": "jeecg",
+    "name": "北京国炬信息技术有限公司",
     "email": "jeecgos@163.com",
-    "url": "https://github.com/jeecgboot/jeecgboot-vue3"
+    "url": "http://guojusoft.com"
   },
   "scripts": {
     "pinstall": "pnpm install",
@@ -166,7 +166,7 @@
   "bugs": {
     "url": "https://github.com/jeecgboot/jeecgboot-vue3/issues"
   },
-  "homepage": "https://github.com/jeecgboot/jeecgboot-vue3",
+  "homepage": "https://www.jeecg.com",
   "engines": {
     "node": "^12 || >=14"
   }
