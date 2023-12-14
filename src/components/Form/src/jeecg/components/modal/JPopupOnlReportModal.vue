@@ -151,10 +151,12 @@
       watch(
         () => props.param,
         () => {
-          if (visible) {
+          // update-begin--author:liaozhiyang---date:20231213---for：【issues/901】JPopup组件配置param参数后异常
+          if (visible.value) {
             dynamicParamHandler();
             loadData();
           }
+          // update-end--author:liaozhiyang---date:20231213---for：【issues/901】JPopup组件配置param参数后异常
         }
       );
       /**
