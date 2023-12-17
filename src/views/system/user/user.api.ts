@@ -96,6 +96,29 @@ export const saveOrUpdateUser = (params, isUpdate) => {
  * @param params
  */
 export const duplicateCheck = (params) => defHttp.get({ url: Api.duplicateCheck, params }, { isTransformResponse: false });
+
+/**
+ * 20231215
+ * liaozhiyang
+ * 唯一校验（ 延迟【防抖】）
+ * @param params
+ */
+let timer;
+export const duplicateCheckDelay = (params) => {
+  return new Promise((resove, rejected) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      defHttp
+        .get({ url: Api.duplicateCheck, params }, { isTransformResponse: false })
+        .then((res: any) => {
+          resove(res as any);
+        })
+        .catch((error) => {
+          rejected(error);
+        });
+    }, 500);
+  });
+};
 /**
  * 获取全部角色（租户隔离）
  * @param params

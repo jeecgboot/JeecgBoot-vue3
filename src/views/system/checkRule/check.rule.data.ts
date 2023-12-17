@@ -1,6 +1,6 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { render } from '/@/utils/common/renderUtils';
-import { duplicateCheck } from '/@/views/system/user/user.api';
+import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 import { validateCheckRule } from '/@/views/system/checkRule/check.rule.api';
 import { array } from 'vue-types';
 
@@ -80,7 +80,7 @@ export const formSchema: FormSchema[] = [
                 fieldVal: value,
                 dataId: model.id,
               };
-              duplicateCheck(params)
+              duplicateCheckDelay(params)
                 .then((res) => {
                   res.success ? resolve() : reject('规则编码已存在!');
                 })

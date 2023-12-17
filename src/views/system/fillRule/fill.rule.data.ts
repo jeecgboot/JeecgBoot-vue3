@@ -1,5 +1,5 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import { duplicateCheck } from '/@/views/system/user/user.api';
+import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 
 export const columns: BasicColumn[] = [
   {
@@ -80,7 +80,7 @@ export const formSchema: FormSchema[] = [
                 fieldVal: value,
                 dataId: model.id,
               };
-              duplicateCheck(params)
+              duplicateCheckDelay(params)
                 .then((res) => {
                   res.success ? resolve() : reject('规则编码已存在!');
                 })

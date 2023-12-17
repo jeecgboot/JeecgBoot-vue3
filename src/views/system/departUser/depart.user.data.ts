@@ -1,5 +1,5 @@
 import { Ref } from 'vue';
-import { duplicateCheck } from '/@/views/system/user/user.api';
+import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { DescItem } from '/@/components/Description';
 import { findTree } from '/@/utils/common/compUtils';
@@ -115,7 +115,7 @@ export const departRoleModalFormSchema: FormSchema[] = [
                 fieldVal: value,
                 dataId: model.id,
               };
-              duplicateCheck(params)
+              duplicateCheckDelay(params)
                 .then((res) => {
                   res.success ? resolve() : reject(res.message || '校验失败');
                 })

@@ -1,5 +1,5 @@
 import { dateUtil } from '/@/utils/dateUtil';
-import { duplicateCheck } from '/@/views/system/user/user.api';
+import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 
 export const rules = {
   rule(type, required) {
@@ -107,7 +107,7 @@ export const rules = {
             return Promise.reject(`请输入${schema.label}`);
           }
           return new Promise<void>((resolve, reject) => {
-            duplicateCheck({
+            duplicateCheckDelay({
               tableName,
               fieldName,
               fieldVal: value,
