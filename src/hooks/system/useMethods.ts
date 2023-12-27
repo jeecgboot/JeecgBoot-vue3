@@ -29,25 +29,21 @@ export function useMethods() {
     if (!name || typeof name != 'string') {
       name = '导出文件';
     }
-    let blobOptions = { type: 'application/vnd.ms-excel' };
+    const blobOptions = { type: 'application/vnd.ms-excel' };
     let fileSuffix = '.xls';
-    if (isXlsx === true) {
+    if (isXlsx) {
       blobOptions['type'] = XLSX_MIME_TYPE;
       fileSuffix = XLSX_FILE_SUFFIX;
     }
-    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-      window.navigator.msSaveBlob(new Blob([data], blobOptions), name + fileSuffix);
-    } else {
-      let url = window.URL.createObjectURL(new Blob([data], blobOptions));
-      let link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = url;
-      link.setAttribute('download', name + fileSuffix);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link); //下载完成移除元素
-      window.URL.revokeObjectURL(url); //释放掉blob对象
-    }
+    const objectURL = window.URL.createObjectURL(new Blob([data], blobOptions));
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = objectURL;
+    link.setAttribute('download', name + fileSuffix);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); //下载完成移除元素
+    window.URL.revokeObjectURL(objectURL); //释放掉blob对象
   }
 
   /**
@@ -60,11 +56,11 @@ export function useMethods() {
     const isReturn = (fileInfo) => {
       try {
         if (fileInfo.code === 201) {
-          let {
+          const {
             message,
             result: { msg, fileUrl, fileName },
           } = fileInfo;
-          let href = glob.uploadUrl + fileUrl;
+          const href = glob.uploadUrl + fileUrl;
           createWarningModal({
             title: message,
             centered: false,
