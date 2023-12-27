@@ -1,4 +1,10 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import type {
+  AxiosRequestConfig,
+  AxiosInstance,
+  AxiosResponse,
+  AxiosError,
+  InternalAxiosRequestConfig
+} from 'axios';
 import type { RequestOptions, Result, UploadFileParams, UploadFileCallBack } from '/#/axios';
 import type { CreateAxiosOptions } from './axiosTransform';
 import axios from 'axios';
@@ -87,7 +93,7 @@ export class VAxios {
       if (requestInterceptors && isFunction(requestInterceptors)) {
         config = requestInterceptors(config, this.options);
       }
-      return config;
+      return config as InternalAxiosRequestConfig;
     }, undefined);
 
     // 请求拦截器错误捕获
@@ -136,7 +142,7 @@ export class VAxios {
           return;
         }
 
-        formData.append(key, params.data[key]);
+        formData.append(key, params.data?.[key]);
       });
     }
 
