@@ -31,7 +31,7 @@ export function useSelectBiz(getList, props) {
       if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
         //update-end-author:liusq---date:2023-10-19--for: [issues/788]判断有设置数值才去加载
         //update-begin---author:wangshuai ---date:20220412  for：[VUEN-672]发文草稿箱编辑时拟稿人显示用户名------------
-        let params = {};
+        const params = {};
         params[props.rowKey] = selectValues['value'].join(',');
         //update-end---author:wangshuai ---date:20220412  for：[VUEN-672]发文草稿箱编辑时拟稿人显示用户名--------------
         loadingEcho.value = isFirstLoadEcho;
@@ -52,7 +52,7 @@ export function useSelectBiz(getList, props) {
     checkedKeys.value = selectedRowKeys;
     //判断全选的问题checkedKeys和selectRows必须一致
     if (props.showSelected && unref(checkedKeys).length !== unref(selectRow).length) {
-      let { records } = await getList({
+      const { records } = await getList({
         code: unref(checkedKeys).join(','),
         pageSize: unref(checkedKeys).length,
       });
@@ -74,7 +74,7 @@ export function useSelectBiz(getList, props) {
     onChange: onSelectChange,
     //update-begin-author:wangshuai---date:20221102--for: [VUEN-2562]用户选择，跨页选择后，只有当前页人员 ---
     //table4.4.0新增属性选中之后是否清空上一页下一页的数据，默认false
-    preserveSelectedRowKeys:true,
+    preserveSelectedRowKeys: true,
     //update-end-author:wangshuai---date:20221102--for: [VUEN-2562]用户选择，跨页选择后，只有当前页人员 ---
   };
 
@@ -92,10 +92,10 @@ export function useSelectBiz(getList, props) {
    * @param flag 是否是默认回显模式加载
    */
   async function getDataSource(params, flag) {
-    let { records } = await getList(params);
+    const { records } = await getList(params);
     dataSource.value = records;
     if (flag) {
-      let options = <any[]>[];
+      const options = <any[]>[];
       records.forEach((item) => {
         options.push({ label: item[props.labelKey], value: item[props.rowKey] });
       });
@@ -103,7 +103,7 @@ export function useSelectBiz(getList, props) {
     }
   }
   async function initSelectRows() {
-    let { records } = await getList({
+    const { records } = await getList({
       code: selectValues['value'].join(','),
       pageSize: selectValues['value'].length,
     });
@@ -125,8 +125,8 @@ export function useSelectBiz(getList, props) {
    * 确定选择
    */
   function getSelectResult(success) {
-    let options = <any[]>[];
-    let values = <any[]>[];
+    const options = <any[]>[];
+    const values = <any[]>[];
     selectRows.value.forEach((item) => {
       options.push({ label: item[props.labelKey], value: item[props.rowKey] });
     });
