@@ -44,7 +44,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
-  import { useMessage } from '/src/hooks/web/useMessage';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useGo } from '/@/hooks/web/usePage';
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
@@ -53,10 +53,10 @@
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
   import { refreshCache, queryAllDictItems } from '/@/views/system/dict/dict.api';
-  import { DB_DICT_DATA_KEY } from '/src/enums/cacheEnum';
-  import { removeAuthCache, setAuthCache } from '/src/utils/auth';
+  import { DB_DICT_DATA_KEY } from '/@/enums/cacheEnum';
+  import { removeAuthCache, setAuthCache } from '/@/utils/auth';
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
-  import { getRefPromise } from '/@/utils/index';
+  import { getRefPromise } from '/@/utils';
 
   type MenuEvent = 'logout' | 'doc' | 'lock' | 'cache' | 'depart';
   const { createMessage } = useMessage();
