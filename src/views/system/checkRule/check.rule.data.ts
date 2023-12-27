@@ -2,7 +2,6 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 import { render } from '/@/utils/common/renderUtils';
 import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 import { validateCheckRule } from '/@/views/system/checkRule/check.rule.api';
-import { array } from 'vue-types';
 
 export const columns: BasicColumn[] = [
   {
@@ -74,7 +73,7 @@ export const formSchema: FormSchema[] = [
               if (!value) {
                 return reject('请输入规则编码！');
               }
-              let params = {
+              const params = {
                 tableName: 'sys_check_rule',
                 fieldName: 'rule_code',
                 fieldVal: value,

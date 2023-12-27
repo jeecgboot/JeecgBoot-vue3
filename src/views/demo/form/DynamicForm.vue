@@ -18,7 +18,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container/index';
+  import { CollapseContainer } from '@/components/Container';
   import { PageWrapper } from '/@/components/Page';
   import { usePermission } from '/@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
