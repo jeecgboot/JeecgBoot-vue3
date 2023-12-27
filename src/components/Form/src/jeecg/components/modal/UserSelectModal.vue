@@ -40,7 +40,7 @@
           >
             <!--操作栏-->
             <template #action="{ record }">
-              <a href="javascript:void(0)" @click="handleDeleteSelected(record)"><Icon icon="ant-design:delete-outlined"></Icon></a>
+              <a href="javascript:void(0)" @click="handleDeleteSelected(record)"><Icon icon="ant-design:delete-outlined" /></a>
             </template>
           </BasicTable>
         </a-col>
@@ -77,12 +77,12 @@
       //排除用户id的集合
       excludeUserIdList: {
         type: Array,
-        default: [],
+        default: () => [],
       },
       //update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】5、离职人员可以选自己------------
     },
     emits: ['register', 'getSelectResult'],
-    setup(props, { emit, refs }) {
+    setup(props, { emit }) {
       // update-begin-author:taoyan date:2022-5-24 for: VUEN-1086 【移动端】用户选择 查询按钮 效果不好 列表展示没有滚动条
       const tableScroll = ref<any>({ x: false });
       const tableRef = ref();
@@ -118,7 +118,7 @@
       // update-begin--author:liaozhiyang---date:20230811---for：【issues/657】右侧选中列表删除无效
       watch(rowSelection.selectedRowKeys, (newVal) => {
         //update-begin---author:wangshuai ---date: 20230829  for：null指针异常导致控制台报错页面不显示------------
-        if(tableRef.value){
+        if (tableRef.value) {
           tableRef.value.setSelectedRowKeys(newVal);
         }
         //update-end---author:wangshuai ---date: 20230829 for：null指针异常导致控制台报错页面不显示------------
@@ -226,22 +226,22 @@
           closeModal();
         });
       }
-      
+
       //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】5、离职人员可以选自己------------
       /**
        * 用户返回结果逻辑查询
        */
       function afterFetch(record) {
         let excludeList = props.excludeUserIdList;
-        if(!excludeList){
+        if (!excludeList) {
           return record;
         }
-        let arr:any[] = [];
+        let arr: any[] = [];
         //如果存在过滤用户id集合，并且后台返回的数据不为空
-        if(excludeList.length>0 && record && record.length>0){
-          for(let item of record){
-            if(excludeList.indexOf(item.id)<0){
-              arr.push({...item})
+        if (excludeList.length > 0 && record && record.length > 0) {
+          for (let item of record) {
+            if (excludeList.indexOf(item.id) < 0) {
+              arr.push({ ...item });
             }
           }
           return arr;
