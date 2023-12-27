@@ -19,7 +19,7 @@
   </Form>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, ref, computed, unref, toRaw, toRefs } from 'vue';
+  import { defineComponent, reactive, ref, toRaw } from 'vue';
   import { Form, Input, Button } from 'ant-design-vue';
   import { StrengthMeter } from '/@/components/StrengthMeter';
   import { useI18n } from '/@/hooks/web/useI18n';
