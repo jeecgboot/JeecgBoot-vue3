@@ -37,7 +37,7 @@ export function useThirdLogin() {
   const thirdCaptcha = ref('');
   //第三方登录
   function onThirdLogin(source) {
-    let url = `${glob.uploadUrl}/sys/thirdLogin/render/${source}`;
+    const url = `${glob.uploadUrl}/sys/thirdLogin/render/${source}`;
     window.open(
       url,
       `login ${source}`,
@@ -46,15 +46,15 @@ export function useThirdLogin() {
     thirdType.value = source;
     thirdLoginInfo.value = {};
     thirdLoginState.value = false;
-    let receiveMessage = function (event) {
-      let token = event.data;
+    const receiveMessage = function (event) {
+      const token = event.data;
       if (typeof token === 'string') {
         //如果是字符串类型 说明是token信息
         if (token === '登录失败') {
           createMessage.warning(token);
         } else if (token.includes('绑定手机号')) {
           bindingPhoneModal.value = true;
-          let strings = token.split(',');
+          const strings = token.split(',');
           thirdUserUuid.value = strings[1];
         } else {
           doThirdLogin(token);
@@ -113,7 +113,7 @@ export function useThirdLogin() {
       .post({ url: '/sys/third/user/create', params: { thirdLoginInfo: unref(thirdLoginInfo) } }, { isTransformResponse: false })
       .then((res) => {
         if (res.success) {
-          let token = res.result;
+          const token = res.result;
           doThirdLogin(token);
           thirdConfirmShow.value = false;
         } else {
@@ -126,7 +126,7 @@ export function useThirdLogin() {
   }
   // 核实密码
   function thirdLoginCheckPassword() {
-    let params = Object.assign({}, unref(thirdLoginInfo), { password: unref(thirdLoginPassword) });
+    const params = Object.assign({}, unref(thirdLoginInfo), { password: unref(thirdLoginPassword) });
     defHttp.post({ url: '/sys/third/user/checkPassword', params }, { isTransformResponse: false }).then((res) => {
       if (res.success) {
         thirdLoginNoPassword();
@@ -156,7 +156,7 @@ export function useThirdLogin() {
     if (!unref(thirdCaptcha)) {
       cmsFailed('请输入验证码');
     }
-    let params = {
+    const params = {
       mobile: unref(thirdPhone),
       captcha: unref(thirdCaptcha),
       thirdUserUuid: unref(thirdUserUuid),
