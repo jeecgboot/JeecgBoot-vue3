@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useUserStore } from '/@/store/modules/user';
-import { setThirdCaptcha, getCaptcha } from '/@/api/sys/user';
+import { getCaptcha } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 
 export function useThirdLogin() {
