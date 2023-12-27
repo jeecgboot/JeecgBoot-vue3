@@ -136,7 +136,7 @@ export const rules = {
  */
 export async function duplicateValidate(tableName, fieldName, fieldVal, dataId) {
   try {
-    let params = {
+    const params = {
       tableName,
       fieldName,
       fieldVal,
