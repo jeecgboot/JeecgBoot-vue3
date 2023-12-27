@@ -6,9 +6,9 @@ import { ref, onUnmounted, unref, nextTick, watch } from 'vue';
 import { isProdMode } from '/@/utils/env';
 import { error } from '/@/utils/log';
 import { getDynamicProps, getValueType } from '/@/utils';
-import { add } from "/@/components/Form/src/componentMap";
+import { add } from '/@/components/Form/src/componentMap';
 //集成online专用控件
-import { OnlineSelectCascade, LinkTableCard, LinkTableSelect } from  '@jeecg/online';
+import { OnlineSelectCascade, LinkTableCard, LinkTableSelect } from '@jeecg/online';
 
 export declare type ValidateFields = (nameList?: NamePath[], options?: ValidateOptions) => Promise<Recordable>;
 
@@ -19,10 +19,10 @@ export function useForm(props?: Props): UseFormReturnType {
   const loadedRef = ref<Nullable<boolean>>(false);
 
   //集成online专用控件
-  add("OnlineSelectCascade", OnlineSelectCascade)
-  add("LinkTableCard", LinkTableCard)
-  add("LinkTableSelect", LinkTableSelect)
-  
+  add('OnlineSelectCascade', OnlineSelectCascade);
+  add('LinkTableCard', LinkTableCard);
+  add('LinkTableSelect', LinkTableSelect);
+
   async function getForm() {
     const form = unref(formRef);
     if (!form) {
@@ -93,12 +93,12 @@ export function useForm(props?: Props): UseFormReturnType {
     // TODO promisify
     getFieldsValue: <T>() => {
       //update-begin-author:taoyan date:2022-7-5 for: VUEN-1341【流程】编码方式 流程节点编辑表单时，填写数据报错 包括用户组件、部门组件、省市区
-      let values = unref(formRef)?.getFieldsValue() as T;
-      if(values){
-        Object.keys(values).map(key=>{
+      const values = unref(formRef)?.getFieldsValue() as T;
+      if (values) {
+        Object.keys(values).map((key) => {
           if (values[key] instanceof Array) {
             // update-begin-author:sunjianlei date:20221205 for: 【issues/4330】判断如果是对象数组，则不拼接
-            let isObject = typeof (values[key][0] || '') === 'object';
+            const isObject = typeof (values[key][0] || '') === 'object';
             if (!isObject) {
               values[key] = values[key].join(',');
             }
@@ -133,11 +133,11 @@ export function useForm(props?: Props): UseFormReturnType {
      */
     validate: async (nameList?: NamePath[]): Promise<Recordable> => {
       const form = await getForm();
-      let getProps = props || form.getProps;
-      let values = form.validate(nameList).then((values) => {
-        for (let key in values) {
+      const getProps = props || form.getProps;
+      const values = form.validate(nameList).then((values) => {
+        for (const key in values) {
           if (values[key] instanceof Array) {
-            let valueType = getValueType(getProps, key);
+            const valueType = getValueType(getProps, key);
             if (valueType === 'string') {
               values[key] = values[key].join(',');
             }
