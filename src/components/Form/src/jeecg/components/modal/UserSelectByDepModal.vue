@@ -15,13 +15,13 @@
             :selectedKeys="selectedDepIds"
             :expandedKeys="expandedKeys"
             :clickRowToExpand="false"
-          ></BasicTree>
+          />
         </a-card>
       </a-col>
       <a-col :md="17" :sm="24">
         <a-card :style="{ minHeight: '613px', overflow: 'auto' }">
           <!--用户列表-->
-          <BasicTable ref="tableRef" v-bind="getBindValue" :searchInfo="searchInfo" :api="getTableList" :rowSelection="rowSelection"></BasicTable>
+          <BasicTable ref="tableRef" v-bind="getBindValue" :searchInfo="searchInfo" :api="getTableList" :rowSelection="rowSelection" />
         </a-card>
       </a-col>
     </a-row>
@@ -31,7 +31,7 @@
   import { defineComponent, unref, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree/index';
-  import { queryTreeList, getTableList } from '/@/api/common/api';
+  import { getTableList } from '/@/api/common/api';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import { useSelectBiz } from '/@/components/Form/src/jeecg/hooks/useSelectBiz';
   import { useAttrs } from '/@/hooks/core/useAttrs';
@@ -56,7 +56,7 @@
       },
     },
     emits: ['register', 'getSelectResult'],
-    setup(props, { emit, refs }) {
+    setup(props, { emit }) {
       const tableRef = ref();
       const treeRef = ref();
       //注册弹框
@@ -112,12 +112,12 @@
           },
           //update-begin-author:liusq date:2023-10-30 for: [issues/5514]组件页面显示错位
           actionColOptions: {
-              xs: 24,
-              sm: 12,
-              md: 12,
-              lg: 12,
-              xl: 8,
-              xxl: 8,
+            xs: 24,
+            sm: 12,
+            md: 12,
+            lg: 12,
+            xl: 8,
+            xxl: 8,
           },
           //update-end-author:liusq date:2023-10-30 for: [issues/5514]组件页面显示错位
           schemas: [
