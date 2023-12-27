@@ -37,7 +37,7 @@ export const SIDE_BAR_BG_COLOR_LIST: string[] = [
   '#383f45',
 ];
 
-// sider logo line preset color [logo½¥±äÉ«]
+// sider logo line preset color [logoï¿½ï¿½ï¿½ï¿½É«]
 export const SIDER_LOGO_BG_COLOR_LIST: string[] = [
   'linear-gradient(180deg, #000000, #021d37)',
   'linear-gradient(180deg, #000000, #282828)',
