@@ -48,7 +48,7 @@
 <script lang="ts">
   import type { BasicTableProps, TableActionType, SizeType, ColumnChangeParam, BasicColumn } from './types/table';
 
-  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect, watch, onUnmounted, onMounted } from 'vue';
+  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect, watch, onUnmounted, onMounted, nextTick } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page/injectionKey';
@@ -370,7 +370,11 @@
         return { native, custom };
       });
       // update-end--author:sunjianlei---date:220230718---for：【issues/179】兼容新老slots写法，移除控制台警告
-
+      // update-begin--author:liaozhiyang---date:20231226---for：【issues/945】BasicTable组件设置默认展开不生效
+      nextTick(() => {
+        getProps.value.defaultExpandAllRows && expandAll();
+      })
+      // update-end--author:sunjianlei---date:20231226---for：【issues/945】BasicTable组件设置默认展开不生效
       expose(tableAction);
 
       emit('register', tableAction, formActions);
@@ -421,8 +425,8 @@
     .@{prefix-cls} {
       //表格选择工具栏样式
       .alert {
-        background-color: #323232;
-        border-color: #424242;
+        // background-color: #323232;
+        // border-color: #424242;
       }
     }
   }
@@ -523,8 +527,8 @@
     //表格选择工具栏样式
     .alert {
       height: 38px;
-      background-color: #e6f7ff;
-      border-color: #91d5ff;
+      // background-color: #e6f7ff;
+      // border-color: #91d5ff;
     }
     &--inset {
       .ant-table-wrapper {

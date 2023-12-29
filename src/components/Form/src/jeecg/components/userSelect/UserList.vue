@@ -3,8 +3,9 @@
     <template #renderItem="{ item }">
       <a-list-item style="padding: 3px 0">
         <div class="user-select-user-info" @click="(e) => onClickUser(e, item)">
-          <div>
-            <a-checkbox v-model:checked="checkStatus[item.id]" />
+          <div style="margin-left: 10px">
+            <a-checkbox v-model:checked="checkStatus[item.id]" v-if="multi" />
+            <a-radio v-model:checked="checkStatus[item.id]" v-else />
           </div>
           <div>
             <a-avatar v-if="item.avatar" :src="getFileAccessHttpUrl(item.avatar)"></a-avatar>
@@ -38,6 +39,10 @@
   export default {
     name: 'UserList',
     props: {
+      multi: {
+        type: Boolean,
+        default: false,
+      },
       dataList: {
         type: Array,
         default: () => [],

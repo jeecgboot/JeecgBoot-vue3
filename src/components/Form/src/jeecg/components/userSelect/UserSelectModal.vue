@@ -35,7 +35,7 @@
         <a-tabs v-model:activeKey="myActiveKey" :centered="true" @change="onChangeTab">
           <!-- 所有用户 -->
           <a-tab-pane key="1" tab="全部" forceRender>
-            <user-list :excludeUserIdList="excludeUserIdList" :dataList="userDataList" :selectedIdList="selectedIdList" depart @selected="onSelectUser" @unSelect="unSelectUser" />
+            <user-list :multi="multi" :excludeUserIdList="excludeUserIdList" :dataList="userDataList" :selectedIdList="selectedIdList" depart @selected="onSelectUser" @unSelect="unSelectUser" />
           </a-tab-pane>
 
           <!-- 部门用户 -->

@@ -488,9 +488,15 @@ export async function userExitChangeLoginTenantId(tenantId){
       }
     }
   }
+  let loginTenantId = getTenantId();
   userStore.setTenant(currentTenantId);
-  //切换租户后要刷新首页
-  window.location.reload();
+
+  //update-begin---author:wangshuai---date:2023-11-07---for:【QQYUN-7005】退租户，判断退出的租户ID与当前租户ID一致，再刷新---
+  //租户为空，说明没有租户了，需要刷新页面。或者当前租户和退出的租户一致则需要刷新浏览器
+  if(!currentTenantId || tenantId == loginTenantId){
+    window.location.reload();
+  }
+  //update-end---author:wangshuai---date:2023-11-07---for:【QQYUN-7005】退租户，判断退出的租户ID与当前租户ID一致，再刷新---
 }
 
 /**

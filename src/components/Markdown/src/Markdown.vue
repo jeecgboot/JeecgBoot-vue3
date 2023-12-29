@@ -113,6 +113,7 @@
           theme: getDarkMode.value === 'dark' ? 'dark' : 'classic',
           lang: unref(getCurrentLang),
           mode: 'sv',
+          cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6',
           fullscreen: {
             index: 520,
           },

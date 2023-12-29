@@ -61,6 +61,18 @@ export function handleInputNumberValue(component?: ComponentType, val?: any) {
   }
   return val;
 }
+/** 
+*liaozhiyang
+*2023-12-26
+*某些组件的传值需要把字符串类型转成数值类型
+*/ 
+export function handleInputStringValue(component?: ComponentType, val?: any) {
+  if (!component) return val;
+  if (['InputNumber'].includes(component) && typeof val === 'string') {
+    return Number(val);
+  }
+  return val;
+}
 
 /**
  * 时间字段

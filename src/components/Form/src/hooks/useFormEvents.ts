@@ -4,7 +4,7 @@ import type { NamePath, ValidateOptions } from 'ant-design-vue/lib/form/interfac
 import { unref, toRaw } from 'vue';
 import { isArray, isFunction, isObject, isString } from '/@/utils/is';
 import { deepMerge, getValueType } from '/@/utils';
-import { dateItemType, handleInputNumberValue } from '../helper';
+import { dateItemType, handleInputNumberValue, handleInputStringValue } from '../helper';
 import { dateUtil } from '/@/utils/dateUtil';
 import { cloneDeep, uniqBy } from 'lodash-es';
 import { error } from '/@/utils/log';
@@ -65,6 +65,9 @@ export function useFormEvents({
       const hasKey = Reflect.has(values, key);
 
       value = handleInputNumberValue(schema?.component, value);
+      // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7535】popup回填字段inputNumber组件验证错误
+      value = handleInputStringValue(schema?.component, value);
+      // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7535】popup回填字段inputNumber组件验证错误
       // 0| '' is allow
       if (hasKey && fields.includes(key)) {
         // time type

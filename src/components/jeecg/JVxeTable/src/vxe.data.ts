@@ -90,7 +90,8 @@ export const vxeProps = () => ({
   keyboardEdit: propTypes.bool.def(false),
   // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级
   // 横向虚拟滚动配置（不支持展开行）
-  scrollX: propTypes.object.def(() => ({ enabled: true })),
+  // 【QQYUN-7676】x滚动条滚动时字典变成了id
+  scrollX: propTypes.object.def(() => ({ enabled: false })),
   // 纵向虚拟滚动配置（不支持展开行）
   scrollY: propTypes.object.def(() => ({ enabled: true })),
   // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】JVxeTable 行编辑升级

@@ -206,7 +206,13 @@ export function usePopBiz(ob, tableRef?) {
             width: 60,
             align: 'center',
             customRender: function ({ text }) {
-              return parseInt(text) + 1;
+              // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7584】popup有合计时序号列会出现NaN
+              if (text == undefined) {
+                return '';
+              } else {
+                return parseInt(text) + 1;
+              }
+              // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7584】popup有合计时序号列会出现NaN
             },
           });
         }
@@ -777,7 +783,7 @@ export function usePopBiz(ob, tableRef?) {
       title: '',
       okText: '关闭',
       width: '100%',
-      visible: false,
+      open: false,
       destroyOnClose: true,
       style: dialogStyle,
       // dialogStyle: dialogStyle,
@@ -791,8 +797,8 @@ export function usePopBiz(ob, tableRef?) {
       cancelButtonProps: { style: { display: 'none' } },
     },
     on: {
-      ok: () => (hrefComponent.value.model.visible = false),
-      cancel: () => (hrefComponent.value.model.visible = false),
+      ok: () => (hrefComponent.value.model.open = false),
+      cancel: () => (hrefComponent.value.model.open = false),
     },
     is: <any>null,
     params: {},
@@ -816,7 +822,7 @@ export function usePopBiz(ob, tableRef?) {
     } else {
       hrefComponent.value.params = {};
     }
-    hrefComponent.value.model.visible = true;
+    hrefComponent.value.model.open = true;
     hrefComponent.value.model.title = '操作';
     hrefComponent.value.is = markRaw(defineAsyncComponent(() => importViewsFile(path)));
   }
