@@ -1,7 +1,7 @@
 <template>
   <ScrollContainer>
-    <div ref="wrapperRef" class="user-account-setting" :class="[prefixCls,activeKey==5?'vip-background':'']">
-      <Tabs tab-position="left" :tabBarStyle="tabBarStyle" @tabClick="componentClick" v-model:activeKey="activeKey" :class="showVip?'vip-height':''">
+    <div ref="wrapperRef" class="user-account-setting" :class="[prefixCls]">
+      <Tabs tab-position="left" :tabBarStyle="tabBarStyle" @tabClick="componentClick" v-model:activeKey="activeKey">
         <template v-for="item in componentList" :key="item.key">
           <TabPane>
             <template #tab>
@@ -14,7 +14,8 @@
                   {{item.name}}
                 </span>
             </template>
-            <component :is="item.component" v-if="activeKey === item.key" />
+            <component :is="item.component" v-if="activeKey === item.key && !item.isSlot" />
+            <slot name="component" v-if="activeKey === item.key && item.isSlot" />
           </TabPane>
         </template>
       </Tabs>
@@ -44,7 +45,13 @@ export default defineComponent({
     AccountSetting,
     TenantSetting,
     WeChatDingSetting,
-  }, 
+  },
+  props:{
+    componentList:{
+      type:Array,
+      default:settingList
+    }
+  },
   setup() {
     const { prefixCls } = useDesign('user-account-setting-container');
     const { getDarkMode} = useRootSetting();
@@ -79,14 +86,6 @@ export default defineComponent({
       }
       //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
     }
-    onMounted(()=>{
-      goToMyTeantPage();
-      if(router.currentRoute.value.fullPath == '/system/usersetting'){
-        showVip.value = false;
-        return;
-      }
-      showVip.value = true;
-    })
     return {
       prefixCls,
       settingList,
@@ -96,8 +95,6 @@ export default defineComponent({
       },
       componentClick,
       activeKey,
-      showVip,
-      componentList,
       isDark
     };
   }

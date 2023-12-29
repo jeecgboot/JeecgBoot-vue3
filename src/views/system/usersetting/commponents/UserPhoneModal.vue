@@ -47,11 +47,19 @@ const validatorRules: Record<string, Rule[]> = {
 const useForm = Form.useForm;
 const title = ref<string>('');
 const emit = defineEmits(['register','success']);
+//修改手机号还是绑定手机号
+const type = ref<string>('updatePhone');
 const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
   formRef.value.resetFields();
   formRef.value.clearValidate();
   setModalProps({ confirmLoading: false });
-  title.value = '修改手机号';
+  if(data.record.phone){
+    title.value = '修改手机号';
+    type.value = "updatePhone"
+  }else{
+    title.value = '绑定手机号';
+    type.value = "bindPhone"
+  }
   //赋值
   data.record.smscode = '';
   Object.assign(formState, data.record);
@@ -72,7 +80,7 @@ async function updatePhone() {
   await formRef.value.validateFields();
   updateMobile(formState).then((res) =>{
     if(res.success){
-      createMessage.success("修改手机号成功")
+      createMessage.success(type.value === "updatePhone"?"修改手机号成功":"绑定手机号成功")
       emit("success")
       closeModal();
     }else{

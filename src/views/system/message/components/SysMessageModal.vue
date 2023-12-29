@@ -53,7 +53,7 @@
         <!-- 头部图标 -->
         <div class="icon-right">
           <div class="icons">
-            <a-popover placement="bottomRight" :overlayStyle="{ width: '400px' }" trigger="click" v-model:visible="showSearch">
+            <a-popover placement="bottomRight" :overlayStyle="{ width: '400px' }" trigger="click" v-model:open="showSearch">
               <template #content>
                 <div>
                   <span class="search-label">回复、提到我的人?：</span>
@@ -97,7 +97,7 @@
     </template>
 
     <div class="sys-message-card">
-      <a-tabs :activeKey="activeKey" center @tabClick="handleChangePanel">
+      <a-tabs :activeKey="activeKey" center @tabClick="handleChangePanel" animated>
         <template #renderTabBar>
           <div></div>
         </template>
@@ -376,12 +376,6 @@
           padding: 10px;
           display: inline-block;
           cursor: pointer;
-          &:hover {
-            color: #1890ff;
-          }
-          &:active {
-            color: #1890ff;
-          }
         }
 
         > span.filtera{
@@ -397,7 +391,7 @@
           display: flex;
           
           >span.anticon{
-            height: 30px;
+            height: auto;
             line-height: 9px;
             display: inline-block;
           }
@@ -409,6 +403,34 @@
     .ant-tabs-nav-wrap {
       display: inline-block;
       width: calc(100% - 340px);
+      .ant-tabs-tab {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 0;
+        font-size: 14px;
+        background: transparent;
+        border: 0;
+        outline: none;
+        cursor: pointer;
+      }
+      .ant-tabs-tab {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 0;
+        font-size: 14px;
+        background: transparent;
+        border: 0;
+        outline: none;
+        cursor: pointer;
+      }
+      .ant-tabs-tab+.ant-tabs-tab {
+         margin: 0 0 0 32px;
+      }
+      .ant-tabs-ink-bar {
+        background: @primary-color;
+      }
     }
     .ant-tabs-nav-scroll {
       text-align: center;
@@ -466,7 +488,6 @@
           cursor: pointer;
           &.active {
             background-color: #d3eafd !important;
-            color: #2196f3;
           }
         }
       }
@@ -479,12 +500,6 @@
     border-radius: 30px;
     .clear-user-icon{
       margin-left: 5px;
-
-      .anticon{
-        &:hover{
-          color: #2196f3;
-        }
-      }
     }
   }
 </style>

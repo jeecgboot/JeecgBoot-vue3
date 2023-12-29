@@ -3,8 +3,9 @@
     <div class="my-account">账户</div>
     <div class="account-row-item clearfix">
       <div class="account-label gray-75">手机</div>
-      <span class="gray">{{ userDetail.phone ? userDetail.phone : '未填写' }}</span>
+      <span class="gray" v-if="userDetail.phone">{{ userDetail.phone}}</span>
       <span class="pointer blue-e5 phone-margin" @click="updatePhone" v-if="userDetail.phone">修改</span>
+      <span class="pointer blue-e5 phone-margin" @click="bindPhone" v-else>绑定</span>
       <!--      <span class="pointer blue-e5" @click="unbindPhone" v-if="userDetail.phone">解绑?</span>-->
       <!--      <span class="pointer blue-e5" @click="unbindPhone" v-else>绑定?</span>-->
     </div>
@@ -75,6 +76,15 @@
   function updatePhone() {
     openModal(true, {
       record: { phone: userDetail.value.phone, username: userDetail.value.username, id: userDetail.value.id },
+    });
+  }
+  
+  /**
+   * 绑定手机号
+   */ 
+  function bindPhone() {
+    openModal(true, {
+      record: { username: userDetail.value.username, id: userDetail.value.id },
     });
   }
 

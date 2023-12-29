@@ -1,6 +1,17 @@
 <template>
   <div :class="[`${prefixCls}`]">
     <div class="my-account">第三方APP</div>
+<!--    <div class="account-row-item">-->
+<!--      <div class="account-label gray-75">企业微信绑定</div>-->
+<!--      <span>-->
+<!--        <icon-font :style="!bindEnterpriseData.sysUserId ? { color: '#9e9e9e' } : { color: '#0082EF' }" class="item-icon" type="icon-qiyeweixin3" />-->
+<!--        <span class="gray-75" style="margin-left: 12px">企业微信</span>-->
+<!--        <span class="gray-75" style="margin-left: 8px" v-if="bindEnterpriseData.realname">{{ '已绑定：' + bindEnterpriseData.realname }}</span>-->
+<!--        <span class="blue-e5 pointer" style="margin-left: 24px" @click="wechatEnterpriseBind">{{-->
+<!--          !bindEnterpriseData.sysUserId ? '绑定' : '解绑'-->
+<!--        }}</span>-->
+<!--      </span>-->
+<!--    </div>-->
     <div class="account-row-item">
       <div class="account-label gray-75">钉钉绑定</div>
       <span>
