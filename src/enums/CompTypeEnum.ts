@@ -18,7 +18,7 @@ export enum CompTypeEnum {
   CatTree = 'cat_tree',
   //下拉搜索
   SelSearch = 'search',
-  //用户现在框
+  //用户选择框
   SelUser = 'sel_user',
   //复选框
   Checkbox = 'checkbox',
