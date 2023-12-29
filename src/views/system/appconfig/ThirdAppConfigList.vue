@@ -3,14 +3,14 @@
     <div class="ding-header">
       <ul class="ding-menu-tab">
         <li :class="activeKey === 'ding' ? 'active' : ''" @click="dingLiClick('ding')"><a>钉钉集成</a></li>
-        <li :class="activeKey === 'wechat' ? 'active' : ''" @click="dingLiClick('wechat')"><a>企业微信集成?</a></li>
+        <li :class="activeKey === 'wechat' ? 'active' : ''" @click="dingLiClick('wechat')"><a>企业微信集成</a></li>
       </ul>
     </div>
     <div v-show="activeKey === 'ding'" class="base-collapse">
       <ThirdAppDingTalkConfigForm />
     </div>
-    <div v-show="activeKey === 'wechat'" class="p-5 empty-image"> 
-      <a-empty description="暂不支持" :image-style="{ margin: '0 auto', height: '160px' }" />
+    <div v-show="activeKey === 'wechat'" class="base-collapse">
+      <ThirdAppWeEnterpriseConfigForm />
     </div>
   </div>
 </template>
@@ -18,12 +18,14 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import ThirdAppDingTalkConfigForm from './ThirdAppDingTalkConfigForm.vue';
+  import ThirdAppWeEnterpriseConfigForm from './ThirdAppWeEnterpriseConfigForm.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
 
   export default defineComponent({
     name: 'ThirdAppConfigList',
     components: {
       ThirdAppDingTalkConfigForm,
+      ThirdAppWeEnterpriseConfigForm,
     },
     setup() {
       const { prefixCls } = useDesign('j-dd-container');

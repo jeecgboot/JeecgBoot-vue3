@@ -37,7 +37,7 @@ export const thirdAppFormSchema: FormSchema[] = [
     label: 'agentAppSecret',
     field: 'agentAppSecret',
     component: 'Input',
-    ifShow: ({ values }) => values.thirdType == 'wechat_enterprise',
+    ifShow: false,
   },{
     label: '启用',
     field: 'status',
