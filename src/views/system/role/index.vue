@@ -50,7 +50,6 @@
   const showFooter = ref(true);
   const [roleUserDrawer, { openDrawer: openRoleUserDrawer }] = useDrawer();
   const [registerDrawer, { openDrawer }] = useDrawer();
-  const [registerModal, { openModal }] = useModal();
   const [registerIndexModal, { openModal: openIndexModal }] = useModal();
   const [rolePermissionDrawer, { openDrawer: openRolePermissionDrawer }] = useDrawer();
   const [registerDesc, { openDrawer: openRoleDesc }] = useDrawer();
@@ -136,7 +135,6 @@
   function handlePerssion(record) {
     openRolePermissionDrawer(true, { roleId: record.id });
   }
-
   /**
    * 首页配置弹窗
    */

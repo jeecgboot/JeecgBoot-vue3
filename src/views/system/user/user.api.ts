@@ -200,7 +200,6 @@ export const saveOrUpdateAgent = (params) => {
   return defHttp.post({ url: url, params });
 };
 
-
 /**
  * 用户离职(新增代理人和用户状态变更操作)
  * @param params
@@ -230,14 +229,14 @@ export const putCancelQuit = (params, handleSuccess) => {
 /**
  * 待审批获取列表数据
  */
-export const getUserTenantPageList = (params)=>{
-  return defHttp.get({url:Api.getUserTenantPageList,params})
-}
+export const getUserTenantPageList = (params) => {
+  return defHttp.get({ url: Api.getUserTenantPageList, params });
+};
 
 /**
  * 更新租户状态
  * @param params
  */
-export const updateUserTenantStatus = (params)=>{
-  return defHttp.put({ url: Api.updateUserTenantStatus, params }, { joinParamsToUrl: true,isTransformResponse: false });
-}
+export const updateUserTenantStatus = (params) => {
+  return defHttp.put({ url: Api.updateUserTenantStatus, params }, { joinParamsToUrl: true, isTransformResponse: false });
+};

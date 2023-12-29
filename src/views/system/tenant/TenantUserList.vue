@@ -38,7 +38,7 @@
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { columns, searchFormSchema } from '../user/user.data';
-  import { list , deleteUser, batchDeleteUser, getImportUrl, getExportUrl, frozenBatch, syncUser, getUserTenantPageList, updateUserTenantStatus } from '../user/user.api';
+  import { list , deleteUser, batchDeleteUser, getImportUrl, getExportUrl, frozenBatch , getUserTenantPageList, updateUserTenantStatus } from '../user/user.api';
   // import { usePermission } from '/@/hooks/web/usePermission'
   // const { hasPermission } = usePermission();
   import { userTenantColumns, userTenantFormSchema } from '../user/user.data';

@@ -467,14 +467,6 @@ const comp: AppRouteModule = {
           },
         },
         {
-          path: 'codemirror',
-          name: 'codemirrorDemo',
-          component: () => import('/@/views/demo/codemirror/index.vue'),
-          meta: {
-            title: t('routes.demo.feat.codemirror'),
-          },
-        },
-        {
           path: 'ripple',
           name: 'RippleDemo',
           component: () => import('/@/views/demo/feat/ripple/index.vue'),

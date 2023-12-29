@@ -196,6 +196,7 @@
    */
   function handleDetail(record) {
     openModal(true,{
+      title: "消息模板详情",
       isUpdate: true,
       showFooter: false,
       record:record
