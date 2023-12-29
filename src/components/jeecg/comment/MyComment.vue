@@ -25,7 +25,7 @@
     <upload-chunk ref="uploadRef" :visible="uploadVisible" @select="selectFirstFile"></upload-chunk>
   </div>
   <UserSelectModal labelKey="realname" rowKey="username" @register="registerModal" @getSelectResult="setValue" isRadioSelection></UserSelectModal>
-  <a-modal v-model:visible="visibleEmoji" :footer="null" wrapClassName="emoji-modal" :closable="false" :width="490">
+  <a-modal v-model:open="visibleEmoji" :footer="null" wrapClassName="emoji-modal" :closable="false" :width="490">
     <template #title>
       <span></span>
     </template>

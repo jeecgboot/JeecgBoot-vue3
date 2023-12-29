@@ -2,14 +2,14 @@
   <div>
     <BasicModal v-bind="$attrs" @register="register" title="导入EXCEL" :width="600" @cancel="handleClose" :confirmLoading="uploading" destroyOnClose>
       <!--是否校验-->
-      <div style="margin: 0 5px 1px" v-if="online">
+      <div style="margin: 0 5px 5px" v-if="online">
         <span style="display: inline-block; height: 32px; line-height: 32px; vertical-align: middle">是否开启校验:</span>
         <span style="margin-left: 6px">
-          <a-switch :checked="validateStatus == 1" @change="handleChangeValidateStatus" checked-children="是" un-checked-children="否" size="small" />
+          <a-switch :checked="validateStatus == 1" @change="handleChangeValidateStatus" checked-children="是" un-checked-children="否" />
         </span>
       </div>
       <!--上传-->
-      <a-upload name="file" accept=".xls,.xlsx" :multiple="true" :fileList="fileList" :remove="handleRemove" :beforeUpload="beforeUpload">
+      <a-upload name="file" accept=".xls,.xlsx" :multiple="true" :fileList="fileList" @remove="handleRemove" :beforeUpload="beforeUpload">
         <a-button preIcon="ant-design:upload-outlined">选择导入文件</a-button>
       </a-upload>
       <!--页脚-->
@@ -81,7 +81,10 @@
 
       //关闭方法
       function handleClose() {
-        closeModal() && reset();
+        // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7477】关闭弹窗清空内容（之前上传失败关闭后不会清除）
+        closeModal();
+        reset();
+        // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7477】关闭弹窗清空内容（之前上传失败关闭后不会清除）
       }
 
       //校验状态切换
@@ -139,6 +142,8 @@
           } else {
             createMessage.warning(res.message);
           }
+        }).catch(() => {
+          uploading.value = false;
         });
       }
 

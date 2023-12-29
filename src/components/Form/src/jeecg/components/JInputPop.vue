@@ -1,7 +1,7 @@
 <template>
   <a-popover
     trigger="contextmenu"
-    v-model:visible="visible"
+    v-model:open="visible"
     :overlayClassName="`${prefixCls}-popover`"
     :getPopupContainer="getPopupContainer"
     :placement="position"
@@ -80,7 +80,7 @@
   // 获取弹出框挂载的元素
   function getPopupContainer(node) {
     if (!props.popContainer) {
-      return node.parentNode;
+      return node?.parentNode;
     } else if (typeof props.popContainer === 'function') {
       return props.popContainer(node);
     } else {

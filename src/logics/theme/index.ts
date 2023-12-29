@@ -2,8 +2,14 @@ import { getThemeColors, generateColors } from '../../../build/config/themeConfi
 
 import { replaceStyleVariables } from '@rys-fe/vite-plugin-theme/es/client';
 import { mixLighten, mixDarken, tinycolor } from '@rys-fe/vite-plugin-theme/es/colorUtils';
+import { useAppStore } from '/@/store/modules/app';
+
 
 export async function changeTheme(color: string) {
+  // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+  const appStore = useAppStore();
+  appStore.setProjectConfig({ themeColor: color });
+  // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
   const colors = generateColors({
     mixDarken,
     mixLighten,

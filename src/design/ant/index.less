@@ -1,6 +1,6 @@
 @import './pagination.less';
 @import './input.less';
-@import './btn.less';
+//@import './btn.less';
 // @import './table.less';
 
 // TODO beta.11 fix
@@ -13,11 +13,11 @@
     display: unset;
   }
 }
-//update-begin---author:scott ---date:2023-08-28  for£º¡¾QQYUN-6374¡¿UnoCSSÌæ´úwindicssµ¼ÖÂÓ¦ÓÃÑùÊ½ÎÊÌâ--
+//update-begin---author:scott ---date:2023-08-28  forï¿½ï¿½ï¿½ï¿½QQYUN-6374ï¿½ï¿½UnoCSSï¿½ï¿½ï¿½windicssï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½--
 /*span.anticon:not(.app-iconify) {
   vertical-align: 0.125em !important;
 }*/
-//update-end---author:scott ---date::2023-08-28  for£º¡¾QQYUN-6374¡¿UnoCSSÌæ´úwindicssµ¼ÖÂÓ¦ÓÃÑùÊ½ÎÊÌâ--
+//update-end---author:scott ---date::2023-08-28  forï¿½ï¿½ï¿½ï¿½QQYUN-6374ï¿½ï¿½UnoCSSï¿½ï¿½ï¿½windicssï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½--
 
 .ant-back-top {
   right: 20px;
@@ -64,3 +64,64 @@
   border-top: 0 !important;
   border-left: 0 !important;
 }
+
+// update-begin--author:liaozhiyang---date:20231218---forï¼šã€QQYUN-6366ã€‘å‡çº§åˆ°antd4.x
+.ant-modal {
+  .ant-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+  }
+  .ant-modal-content {
+    padding: 0;
+  }
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+  font-size: 14px;
+}
+
+.ant-pagination-options-size-changer.ant-select {
+  display: inline-block;
+  width: auto;
+}
+
+.ant-tree-select-dropdown .ant-select-tree .ant-select-tree-list-holder-inner {
+  align-items: stretch;
+}
+
+.ant-list .ant-list-item {padding-left: 0;padding-right: 0;}
+
+
+.ant-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  color: #000000d9;
+}
+/** anticon-downè·Ÿ3.xä¿æŒä¸€è‡´*/ 
+.ant-dropdown-trigger>.anticon.anticon-down, .ant-dropdown-link>.anticon.anticon-down, .ant-dropdown-button>.anticon.anticon-down {
+  font-size: 10px;
+  vertical-align: baseline;
+}
+/** è¡¨æ ¼æ’åºç®­å¤´å°ºå¯¸ä¿æŒè·Ÿ3.xä¸€è‡´ */ 
+.ant-table-wrapper .ant-table-column-sorter-up, .ant-table-wrapper .ant-table-column-sorter-down {
+  font-size: 11px;
+}
+ /** è¡¨æ ¼å¤´éƒ¨æ–‡å­—é¢œè‰²è·Ÿ3.xç‰ˆæœ¬ä¿æŒä¸€è‡´ */
+.ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
+  color: #000000d9;
+  font-weight: 500;
+}
+html[data-theme='dark'] .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
+  color:rgba(255,255,255,.65);
+}
+ /** ä¸‹æ‹‰èœå•æ–‡å­—å’Œå›¾æ ‡æŠ˜å äº† */
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-title-content, .ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-title-content{
+  flex: auto;
+  white-space:nowrap;
+}
+// update-end--author:liaozhiyang---date:20231218---forï¼šã€QQYUN-6366ã€‘å‡çº§åˆ°antd4.x

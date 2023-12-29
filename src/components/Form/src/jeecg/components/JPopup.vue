@@ -115,7 +115,10 @@
         //匹配popup设置的回调值
         let values = {};
         for (let item of fieldConfig) {
-          let val = rows.map((row) => row[item.source]).join(',');
+          let val = rows.map((row) => row[item.source]);
+          // update-begin--author:liaozhiyang---date:20230831---for：【QQYUN-7535】数组只有一个且是number类型，join会改变值的类型为string
+          val = val.length == 1 ? val[0] : val.join(',');
+          // update-begin--author:liaozhiyang---date:20230831---for：【QQYUN-7535】数组只有一个且是number类型，join会改变值的类型为string
           item.target.split(',').forEach((target) => {
             values[target] = val;
           });

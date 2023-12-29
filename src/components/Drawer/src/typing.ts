@@ -11,6 +11,7 @@ export interface ReturnMethods extends DrawerInstance {
   openDrawer: <T = any>(visible?: boolean, data?: T, openOnSet?: boolean) => void;
   closeDrawer: () => void;
   getVisible?: ComputedRef<boolean>;
+  getOpen?: ComputedRef<boolean>;
 }
 
 export type RegisterFn = (drawerInstance: DrawerInstance, uuid?: string) => void;
@@ -20,6 +21,7 @@ export interface ReturnInnerMethods extends DrawerInstance {
   changeLoading: (loading: boolean) => void;
   changeOkLoading: (loading: boolean) => void;
   getVisible?: ComputedRef<boolean>;
+  getOpen?: ComputedRef<boolean>;
 }
 
 export type UseDrawerReturnType = [RegisterFn, ReturnMethods];
@@ -74,6 +76,7 @@ export interface DrawerProps extends DrawerFooterProps {
   loading?: boolean;
   showDetailBack?: boolean;
   visible?: boolean;
+  open?: boolean;
   /**
    * Built-in ScrollContainer component configuration
    * @type ScrollContainerOptions

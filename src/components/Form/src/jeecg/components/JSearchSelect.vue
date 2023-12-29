@@ -63,7 +63,7 @@
       pageSize: propTypes.number.def(10),
       getPopupContainer: {
         type: Function,
-        default: (node) => node.parentNode,
+        default: (node) => node?.parentNode,
       },
       //默认开启Y轴溢出位置调整，因此在可视空间不足时下拉框位置会自动上移，导致Select的输入框被遮挡。需要注意的是，默认情况是是可视空间，而不是所拥有的空间
       //update-begin-author:liusq date:2023-04-04 for:[issue/286]下拉搜索框遮挡问题
@@ -288,7 +288,7 @@
           if (typeof props.getPopupContainer === 'function') {
             return props.getPopupContainer(node);
           } else {
-            return node.parentNode;
+            return node?.parentNode;
           }
         }
         // update-end-author:taoyan date:20220407 for: getPopupContainer一直有值 导致popContainer的逻辑永远走不进去，把它挪到前面判断

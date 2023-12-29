@@ -16,8 +16,8 @@
       placement="right"
       :overlayClassName="`${prefixCls}-menu-popover`"
       v-else
-      :visible="getIsOpend"
-      @visibleChange="handleVisibleChange"
+      :open="getIsOpend"
+      @openChange="handleVisibleChange"
       :overlayStyle="getOverlayStyle"
       :align="{ offset: [0, 0] }"
     >

@@ -186,7 +186,7 @@ export function useColumns(
         return reactive(column);
       });
     // update-begin--author:liaozhiyang---date:20230919---for：【QQYUN-6387】展开写法（去掉报错）
-    if (propsRef.value.expandedRowKeys) {
+    if (propsRef.value.expandedRowKeys && !propsRef.value.isTreeTable) {
       let index = 0;
       const findIndex = result.findIndex((item) => item.key === CUS_SEL_COLUMN_KEY);
       if (findIndex != -1) {

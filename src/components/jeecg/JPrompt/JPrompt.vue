@@ -62,7 +62,7 @@
         let modalProps: Partial<ModalProps> = {
           width: (opt.width ?? 500) as number,
           title: (opt.title ?? 'prompt') as string,
-          visible: unref(visible),
+          open: unref(visible),
           confirmLoading: unref(loading),
         };
         let finalProps: Recordable = {

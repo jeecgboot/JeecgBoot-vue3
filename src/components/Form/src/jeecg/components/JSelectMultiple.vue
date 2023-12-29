@@ -118,7 +118,7 @@
 
       function getParentContainer(node) {
         if (!props.popContainer) {
-          return node.parentNode;
+          return node?.parentNode;
         } else {
           return document.querySelector(props.popContainer);
         }

@@ -145,3 +145,11 @@
   @import './tabs.theme.card.less';
   @import './tabs.theme.smooth.less';
 </style>
+<style lang="less" scoped>
+@prefix-cls: ~'@{namespace}-multiple-tabs';
+.@{prefix-cls} {
+  :deep(.anticon) {
+    display: inline-block;
+  }
+}
+</style>

@@ -1,4 +1,4 @@
-.fullscreen-modal {
+.ant-modal-root .fullscreen-modal {
   overflow: hidden;
 
   .ant-modal {
@@ -30,7 +30,7 @@
     padding: 14px;
   }
 
-  &-title {
+  .ant-modal-title {
     font-size: 16px;
     font-weight: bold;
     line-height: 16px;
@@ -48,7 +48,7 @@
     }
   }
 
-  &-large {
+  .ant-modal-large {
     top: 60px;
 
     &--mini {
@@ -56,34 +56,33 @@
     }
   }
 
-  &-header {
+  .ant-modal-header {
     padding: 16px;
   }
 
-  &-content {
+  .ant-modal-content {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
-  &-footer {
+  .ant-modal-footer {
     button + button {
       margin-left: 10px;
     }
   }
 
-  &-close {
+  .ant-modal-close {
     font-weight: normal;
     outline: none;
   }
 
-  &-close-x {
+  .ant-modal-close-x {
     display: inline-block;
     width: 96px;
-/*    width: auto;*/
     height: 56px;
     line-height: 56px;
   }
 
-  &-confirm-body {
+  .ant-modal-confirm-body {
     .ant-modal-confirm-content {
       // color: #fff;
 
@@ -93,23 +92,23 @@
     }
   }
 
-  &-confirm-confirm.error .ant-modal-confirm-body > .anticon {
+  .ant-modal-confirm-confirm.error .ant-modal-confirm-body > .anticon {
     color: @error-color;
   }
 
-  &-confirm-btns {
+  .ant-modal-confirm-btns {
     .ant-btn:last-child {
       margin-right: 0;
     }
   }
 
-  &-confirm-info {
+  .ant-modal-confirm-info {
     .ant-modal-confirm-body > .anticon {
       color: @warning-color;
     }
   }
 
-  &-confirm-confirm.success {
+  .ant-modal-confirm-confirm.success {
     .ant-modal-confirm-body > .anticon {
       color: @success-color;
     }

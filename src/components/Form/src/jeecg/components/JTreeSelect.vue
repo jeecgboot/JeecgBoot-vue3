@@ -3,7 +3,7 @@
     allowClear
     labelInValue
     style="width: 100%"
-    :getPopupContainer="(node) => node.parentNode"
+    :getPopupContainer="(node) => node?.parentNode"
     :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
     :placeholder="placeholder"
     :loadData="asyncLoadTreeData"

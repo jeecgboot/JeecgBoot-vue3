@@ -44,7 +44,7 @@
       allowClear: propTypes.bool.def(false),
       getPopupContainer: {
         type: Function,
-        default: (node) => node.parentNode,
+        default: (node) => node?.parentNode,
       },
     },
     emits: ['change', 'update:value','update:area','update:city','update:province'],

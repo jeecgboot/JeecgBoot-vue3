@@ -63,4 +63,9 @@
     justify-content: space-between;
     margin: 16px 0;
   }
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
 </style>

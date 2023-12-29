@@ -77,7 +77,7 @@ export interface ColumnProps<T> {
    * Whether filterDropdown is visible
    * @type boolean
    */
-  filterDropdownVisible?: boolean;
+  filterDropdownOpen?: boolean;
 
   /**
    * Whether the dataSource is filtered
@@ -181,7 +181,7 @@ export interface ColumnProps<T> {
   onFilter?: (value: any, record: T) => boolean;
 
   /**
-   * Callback executed when filterDropdownVisible is changed, Use as a filterDropdownVisible event when using template or jsx
+   * Callback executed when filterDropdownOpen is changed, Use as a filterDropdownVisible event when using template or jsx
    * @type Function
    */
   onFilterDropdownVisibleChange?: (visible: boolean) => void;

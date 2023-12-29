@@ -4,7 +4,7 @@
     allowClear
     :format="dateFormat"
     :showTime="isDatetime"
-    dropdownClassName="j-vxe-date-picker"
+    popupClassName="j-vxe-date-picker"
     style="min-width: 0"
     v-model:open="openPicker"
     v-bind="cellProps"

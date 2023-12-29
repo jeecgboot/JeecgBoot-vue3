@@ -60,7 +60,7 @@
       // 是否显示全屏按钮
       fullScreen: propTypes.bool.def(false),
       // 全屏以后的z-index
-      zIndex: propTypes.any.def(999),
+      zIndex: propTypes.any.def(1500),
       theme: propTypes.string.def('idea'),
       language: propTypes.string.def(''),
       // 代码提示

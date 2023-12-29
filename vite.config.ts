@@ -82,7 +82,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
           // manualChunks配置 (依赖包从大到小排列)
           manualChunks: {
-            'tinymce-vendor': ['tinymce'],
+            'tinymce-vendor': ['tinymce','@tinymce/tinymce-vue'],
             'echarts-vendor': ['echarts'],
             'antd-vue-vendor': ['ant-design-vue','@ant-design/icons-vue','@ant-design/colors'],
             'vxe-table-vendor': ['vxe-table','vxe-table-plugin-antd','xe-utils'],
