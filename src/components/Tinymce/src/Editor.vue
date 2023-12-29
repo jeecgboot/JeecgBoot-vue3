@@ -8,52 +8,28 @@
       v-show="editorRef"
       :disabled="disabled"
     />
-    <textarea :id="tinymceId" ref="elRef" :style="{ visibility: 'hidden' }" v-if="!initOptions.inline"></textarea>
+    <Editor :id="tinymceId" ref="elRef" :disabled="disabled" :init="initOptions" :style="{ visibility: 'hidden' }" v-if="!initOptions.inline"></Editor>
     <slot v-else></slot>
   </div>
 </template>
 
 <script lang="ts">
-  import type { Editor, RawEditorSettings } from 'tinymce';
   import tinymce from 'tinymce/tinymce';
+  import Editor from '@tinymce/tinymce-vue'
   import 'tinymce/themes/silver';
   import 'tinymce/icons/default/icons';
-  import 'tinymce/plugins/advlist';
-  import 'tinymce/plugins/anchor';
-  import 'tinymce/plugins/autolink';
-  import 'tinymce/plugins/autosave';
-  import 'tinymce/plugins/code';
-  import 'tinymce/plugins/codesample';
-  import 'tinymce/plugins/directionality';
+  import 'tinymce/models/dom';
+
+  // tinymce插件可按自己的需要进行导入
+  // 更多插件参考：https://www.tiny.cloud/docs/plugins/
   import 'tinymce/plugins/fullscreen';
-  import 'tinymce/plugins/hr';
-  import 'tinymce/plugins/insertdatetime';
   import 'tinymce/plugins/link';
   import 'tinymce/plugins/lists';
-  import 'tinymce/plugins/media';
-  import 'tinymce/plugins/nonbreaking';
-  import 'tinymce/plugins/noneditable';
-  import 'tinymce/plugins/pagebreak';
-  import 'tinymce/plugins/paste';
   import 'tinymce/plugins/preview';
-  import 'tinymce/plugins/print';
-  import 'tinymce/plugins/save';
-  import 'tinymce/plugins/searchreplace';
-  import 'tinymce/plugins/spellchecker';
-  import 'tinymce/plugins/tabfocus';
-  // import 'tinymce/plugins/table';
-  import 'tinymce/plugins/template';
-  import 'tinymce/plugins/textpattern';
-  import 'tinymce/plugins/visualblocks';
-  import 'tinymce/plugins/visualchars';
-  import 'tinymce/plugins/wordcount';
   import 'tinymce/plugins/image';
-  import 'tinymce/plugins/table';
-  import 'tinymce/plugins/textcolor';
-  import 'tinymce/plugins/contextmenu';
   import { defineComponent, computed, nextTick, ref, unref, watch, onDeactivated, onBeforeUnmount } from 'vue';
   import ImgUpload from './ImgUpload.vue';
-  import { toolbar, plugins, simplePlugins, simpleToolbar, menubar } from './tinymce';
+  import {simpleToolbar, menubar, simplePlugins} from './tinymce';
   import { buildShortUUID } from '/@/utils/uuid';
   import { bindHandlers } from './helper';
   import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
@@ -74,11 +50,11 @@
 
     toolbar: {
       type: [Array as PropType<string[]>, String],
-      default: toolbar,
+      default: simpleToolbar,
     },
     plugins: {
-      type: Array as PropType<string[]>,
-      default: plugins,
+      type: [Array as PropType<string[]>, String],
+      default: simplePlugins,
     },
     menubar: {
       type: [Object, String],
@@ -105,12 +81,14 @@
 
   export default defineComponent({
     name: 'Tinymce',
-    components: { ImgUpload },
+    components: { ImgUpload,Editor },
     inheritAttrs: false,
     props: tinymceProps,
     emits: ['change', 'update:modelValue', 'inited', 'init-error'],
     setup(props, { emit, attrs }) {
-      const editorRef = ref<Nullable<Editor>>(null);
+      console.log("---Tinymce---初始化---")
+      
+      const editorRef = ref<Nullable<any>>(null);
       const fullscreen = ref(false);
       const tinymceId = ref<string>(buildShortUUID('tiny-vue'));
       const elRef = ref<Nullable<HTMLElement>>(null);
@@ -138,14 +116,14 @@
         return ['zh_CN', 'en'].includes(lang) ? lang : 'zh_CN';
       });
 
-      const initOptions = computed((): RawEditorSettings => {
+      const initOptions = computed(() => {
         const { height, options, toolbar, plugins, menubar } = props;
         const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
         return {
           selector: `#${unref(tinymceId)}`,
           height,
           toolbar,
-          menubar: menubar,
+          menubar: false,
           plugins,
           language_url: publicPath + 'resource/tinymce/langs/' + langName.value + '.js',
           language: langName.value,
@@ -155,10 +133,11 @@
           object_resizing: true,
           toolbar_mode: 'sliding',
           auto_focus: true,
-          toolbar_groups: true,
+          // toolbar_groups: true,
           skin: skinName.value,
           skin_url: publicPath + 'resource/tinymce/skins/ui/' + skinName.value,
-          images_upload_handler: (blobInfo, success) => {
+          images_upload_handler: (blobInfo, process) =>
+            new Promise((resolve, reject) => {
             let params = {
               file: blobInfo.blob(),
               filename: blobInfo.filename(),
@@ -168,18 +147,20 @@
               if (res.success) {
                 if (res.message == 'local') {
                   const img = 'data:image/jpeg;base64,' + blobInfo.base64();
-                  success(img);
+                      resolve(img);
                 } else {
                   let img = getFileAccessHttpUrl(res.message);
-                  success(img);
+                  resolve(img);
                 }
+              } else {
+                  reject('上传失败！');
               }
             };
             uploadFile(params, uploadSuccess);
-          },
+        }),
           content_css: publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
           ...options,
-          setup: (editor: Editor) => {
+          setup: (editor: any) => {
             editorRef.value = editor;
             editor.on('init', (e) => initSetup(e));
           },
@@ -191,7 +172,7 @@
         const getdDisabled = options && Reflect.get(options, 'readonly');
         const editor = unref(editorRef);
         // update-begin-author:taoyan date:20220407 for: 设置disabled，图片上传没有被禁用
-        if (editor) {
+        if (editor && editor?.setMode) {
           editor.setMode(getdDisabled || attrs.disabled === true ? 'readonly' : 'design');
         }
         if (attrs.disabled === true) {
@@ -208,7 +189,7 @@
           if (!editor) {
             return;
           }
-          editor.setMode(attrs.disabled ? 'readonly' : 'design');
+         editor?.setMode && editor.setMode(attrs.disabled ? 'readonly' : 'design');
         }
       );
 
@@ -239,7 +220,7 @@
 
       function initEditor() {
         const el = unref(elRef);
-        if (el) {
+        if (el && el?.style && el?.style?.visibility) {
           el.style.visibility = '';
         }
         tinymce
