@@ -91,7 +91,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             'jeecg-online-vendor': ['@jeecg/online'],
             // 将 Lodash 库的代码单独打包
             'lodash-es-vendor': ['lodash-es'],
-            'html2canvas-vendor': ['html2canvas'],
             // vue vue-router合并打包
             vue: ['vue', 'vue-router'],
             'cron-parser-vendor': ['cron-parser'],
