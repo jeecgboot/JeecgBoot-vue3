@@ -88,7 +88,7 @@
                 </div>
                 <div class="aui-formButton">
                   <div class="aui-flex">
-                    <a-button :loading="loginLoading" class="aui-link-login aui-flex-box" type="primary" @click="loginHandleClick">
+                    <a-button :loading="loginLoading" class="aui-link-login" type="primary" @click="loginHandleClick">
                       {{ t('sys.login.loginButton') }}</a-button>
                   </div>
                   <div class="aui-flex">
@@ -459,6 +459,8 @@
     border-radius: 8px;
     margin-top: 15px;
     margin-bottom: 8px;
+    flex: 1;
+    color: #fff;
   }
   .aui-phone-logo{
     position: absolute;

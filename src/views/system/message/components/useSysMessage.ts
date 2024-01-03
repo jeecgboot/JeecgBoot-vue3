@@ -159,7 +159,7 @@ export function useSysMessage() {
  * 用于消息跳转
  */
 export function useMessageHref(emit, props){
-  const messageHrefArray:any[] = getDictItemsByCode('messageHref');
+  const messageHrefArray: any[] = getDictItemsByCode('messageHref');
   const router = useRouter();
   const appStore = useAppStore();
   const rt = useRoute();

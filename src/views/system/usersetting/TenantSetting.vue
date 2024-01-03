@@ -9,11 +9,13 @@
         <div class="tenant-title">
           <div class="item-left">
             <div class="item-name">{{ item.name }}</div>
-            <div class="item-house" @click.stop="copyClick(item.houseNumber)">
-              <span>
-                组织门牌号：{{ item.houseNumber }}
-                <Icon icon="ant-design:copy-outlined" style="font-size: 13px; margin-left: 2px" />
-              </span>
+            <div class="vip-message">
+              <div class="item-house" @click.stop="copyClick(item.houseNumber)">
+                <span>
+                  组织门牌号：{{ item.houseNumber }}
+                  <Icon icon="ant-design:copy-outlined" style="font-size: 13px; margin-left: 2px" />
+                </span>
+              </div>
             </div>
           </div>
           <div class="item-right">
@@ -60,24 +62,24 @@
             <span
               v-if="item.userTenantStatus !== '3'"
               @click.stop="footerClick('editTenant', item)"
-              class="font-color333 flex-flow margin-right40 font-size13 pointer"
+              class="font-color333 flex-center margin-right40 font-size13 pointer"
             >
               <Icon icon="ant-design:edit-outlined" class="footer-icon" />
               <span>查看租户名片</span>
             </span>
-            <span v-else class="font-color9e flex-flow margin-right40 font-size13">
+            <span v-else class="font-color9e flex-center margin-right40 font-size13">
               <Icon icon="ant-design:edit-outlined" class="footer-icon" />
               <span>查看租户名片</span>
             </span>
             <span
               v-if="item.userTenantStatus !== '3'"
               @click.stop="footerClick('exitTenant', item)"
-              class="font-color333 flex-flow margin-right40 font-size13 pointer"
+              class="font-color333 flex-center margin-right40 font-size13 pointer"
             >
               <Icon icon="ant-design:export-outlined" class="footer-icon" />
               <span>退出租户</span>
             </span>
-            <span v-else class="font-color9e flex-flow margin-right40 font-size13">
+            <span v-else class="font-color9e flex-center margin-right40 font-size13">
               <Icon icon="ant-design:export-outlined" class="footer-icon" />
               <span>退出租户</span>
             </span>
@@ -87,7 +89,7 @@
     </div>
     <a-empty v-else description="暂无数据" style="position: relative;top: 50px;"/>
   </div>
-  <a-modal v-model:visible="tenantVisible" width="400px" wrapClassName="edit-tenant-setting">
+  <a-modal v-model:open="tenantVisible" width="400px" wrapClassName="edit-tenant-setting">
     <template #title>
       <div style="font-size: 17px; font-weight: 700">查看名片</div>
       <div style="color: #9e9e9e; margin-top: 10px; font-size: 13px"> 名片是您在该组织下的个人信息，只在本组织中展示。 </div>
@@ -107,7 +109,7 @@
   </a-modal>
 
   <!-- 退出租户 -->
-  <a-modal v-model:visible="cancelVisible" width="800" destroy-on-close>
+  <a-modal v-model:open="cancelVisible" width="800" destroy-on-close>
     <template #title>
       <div class="cancellation">
         <Icon icon="ant-design:warning-outlined" style="font-size: 20px;color: red"/>
@@ -144,7 +146,7 @@
 
   <a-modal
     title="变更拥有者"
-    v-model:visible="owenVisible"
+    v-model:open="owenVisible"
     width="800"
     destroy-on-close
     :cancelButtonProps="{display:'none'}"
@@ -162,7 +164,7 @@
   </a-modal>
   
   <!-- begin 我的受邀信息 -->
-  <a-modal title="我的受邀信息" v-model:visible="invitedVisible" :footer="null">
+  <a-modal title="我的受邀信息" v-model:open="invitedVisible" :footer="null">
       <a-row :span="24" class="invited-row">
         <a-col :span="16">
           组织
@@ -388,6 +390,7 @@ const userDetail = ref({
       if (res.success) {
         createMessage.success(res.message);
         cancelVisible.value = false;
+        initDataSource();
         userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
       } else {
         if (res.message === 'assignedOwen') {
@@ -440,6 +443,7 @@ const userDetail = ref({
     changeOwenUserTenant({ userId:unref(tenantOwen), tenantId:unref(myTenantInfo).tenantUserId }).then((res) =>{
       if(res.success){
         createMessage.success(res.message);
+        initDataSource();
         //update-begin---author:wangshuai---date:2023-10-23---for:【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
         userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
         //update-end---author:wangshuai---date:2023-10-23---for:【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
@@ -470,7 +474,7 @@ const userDetail = ref({
     await agreeOrRefuseJoinTenant( { tenantId:Number.parseInt(tenantId), status:status });
     initDataSource();
   }
-  
+
   onMounted(() => {
     initDataSource();
   });
@@ -585,6 +589,13 @@ const userDetail = ref({
   min-width: 0;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
 .footer-box {
   /*begin 兼容暗夜模式*/
   border-top: 1px solid @border-color-base;
@@ -622,7 +633,7 @@ const userDetail = ref({
   font-size: 13px !important;
   margin-right: 13px;
   position: relative;
-  top: 4px;
+  top: 0px;
 }
 :deep(.edit-tenant-setting) {
   color: #0a8fe9;
@@ -636,6 +647,30 @@ const userDetail = ref({
 .item-right {
   align-items: center;
   display: flex;
+  .buy-margin{
+    margin-left: 10px;
+    width: 66px;
+    border-radius: 20px;
+    background: rgba(255, 154, 0, 1);
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    text-align: center;
+    span{
+      font-size: 14px;
+      font-weight: 400;
+      color: #ffffff;
+    }
+  }
+  .ordinary-user{
+    margin-left: 10px;
+    width: 66px;
+    span{
+      font-size: 14px;
+      font-weight: 400;
+      color: #9e9e9e;
+    }
+  }
 }
 .tenant-title {
   align-items: center;
@@ -643,6 +678,12 @@ const userDetail = ref({
   display: flex;
   justify-content: space-between;
   padding: 24px 0;
+  .vip-message{
+    display: flex;
+    .vip-message-margin{
+      margin-right: 20px;
+    }
+  }
 }
 .change-owen{
   font-size: 14px;

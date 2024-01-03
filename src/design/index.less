@@ -22,7 +22,9 @@ html,
 body {
   width: 100%;
   height: 100%;
-
+  // body添加行高保持跟3.x一致
+  line-height: 1.5715;
+  
   &.color-weak {
     filter: invert(80%);
   }
@@ -82,3 +84,8 @@ img, video {
   
 }
 // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】升级之后提示样式跟之前一致
+// update-begin--author:liaozhiyang---date:20231116---for：【QQYUN-7011】online表单多了一个蓝色的边框
+// .vxe-table.vxe-table--render-default .vxe-body--column.col--selected {
+//   box-shadow: none;
+// }
+// update-end--author:liaozhiyang---date:20231116---for：【QQYUN-7011】online表单多了一个蓝色的边框

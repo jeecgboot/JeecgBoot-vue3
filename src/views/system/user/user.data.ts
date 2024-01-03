@@ -152,6 +152,10 @@ export const formSchema: FormSchema[] = [
         required: true,
         message: '请输入登录密码',
       },
+      {
+        pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
+        message: '密码由8位数字、大小写字母和特殊符号组成!',
+      },
     ],
   },
   {
@@ -171,7 +175,7 @@ export const formSchema: FormSchema[] = [
     field: 'workNo',
     required: true,
     component: 'Input',
-    dynamicRules: ({ model, schema }) => ({ ...rules.duplicateCheckRule('sys_user', 'work_no', model, schema, true), trigger: 'blur' }),
+    dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_user', 'work_no', model, schema, true),
   },
   {
     label: '职务',
@@ -340,6 +344,10 @@ export const formPasswordSchema: FormSchema[] = [
       {
         required: true,
         message: '请输入登录密码',
+      },
+      {
+        pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
+        message: '密码由8位数字、大小写字母和特殊符号组成!',
       },
     ],
   },

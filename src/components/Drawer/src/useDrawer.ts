@@ -58,10 +58,16 @@ export function useDrawer(): UseDrawerReturnType {
       return visibleData[~~unref(uid)];
     }),
 
+    getOpen: computed((): boolean => {
+      return visibleData[~~unref(uid)];
+    }),
+
     openDrawer: <T = any>(visible = true, data?: T, openOnSet = true): void => {
+      // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
       getInstance()?.setDrawerProps({
-        visible: visible,
+        open: visible,
       });
+      // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
       if (!data) return;
 
       if (openOnSet) {
@@ -75,7 +81,9 @@ export function useDrawer(): UseDrawerReturnType {
       }
     },
     closeDrawer: () => {
-      getInstance()?.setDrawerProps({ visible: false });
+      // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+      getInstance()?.setDrawerProps({ open: false });
+      // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
     },
   };
 
@@ -133,9 +141,11 @@ export const useDrawerInner = (callbackFn?: Fn): UseDrawerInnerReturnType => {
       getVisible: computed((): boolean => {
         return visibleData[~~unref(uidRef)];
       }),
-
+      getOpen: computed((): boolean => {
+        return visibleData[~~unref(uidRef)];
+      }),
       closeDrawer: () => {
-        getInstance()?.setDrawerProps({ visible: false });
+        getInstance()?.setDrawerProps({ open: false });
       },
 
       setDrawerProps: (props: Partial<DrawerProps>) => {

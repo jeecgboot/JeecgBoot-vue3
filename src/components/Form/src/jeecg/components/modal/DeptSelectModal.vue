@@ -1,7 +1,7 @@
 <!--部门选择框-->
 <template>
   <div>
-    <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="500px" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
+    <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="500px" :maxHeight="maxHeight" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
       <BasicTree
         ref="treeRef"
         :treeData="treeData"
@@ -55,6 +55,12 @@
         type: String,
         default: '部门选择',
       },
+      // update-begin--author:liaozhiyang---date:20231220---for：【QQYUN-7678】部门组件内容过多没有滚动条（给一个默认最大高）
+      maxHeight: {
+        type: Number,
+        default: 500,
+      },
+      // update-end--author:liaozhiyang---date:20231220---for：【QQYUN-7678】部门组件内容过多没有滚动条（给一个默认最大高）
       value: propTypes.oneOfType([propTypes.string, propTypes.array])
     },
     emits: ['register', 'getSelectResult'],

@@ -11,7 +11,7 @@
     </a-col>
     <a-col :span="12" style="padding-left: 10px">
       <div :style="containerStyle">
-        <user-list :excludeUserIdList="excludeUserIdList" :dataList="userDataList" :selectedIdList="selectedIdList" @selected="onSelectUser" @unSelect="unSelectUser" />
+        <user-list :multi="multi" :excludeUserIdList="excludeUserIdList" :dataList="userDataList" :selectedIdList="selectedIdList" @selected="onSelectUser" @unSelect="unSelectUser" />
       </div>
     </a-col>
   </a-row>
@@ -41,6 +41,10 @@
       excludeUserIdList:{
         type: Array,
         default: () => [],
+      },
+      multi: {
+        type: Boolean,
+        default: false,
       }
     },
     emits: ['selected', 'unSelect'],

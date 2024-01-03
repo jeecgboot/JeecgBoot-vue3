@@ -58,13 +58,13 @@
           <template #title="{ key: treeKey, title, dataRef }">
             <a-dropdown :trigger="['contextmenu']">
               <Popconfirm
-                :visible="visibleTreeKey === treeKey"
+                :open="visibleTreeKey === treeKey"
                 title="确定要删除吗？"
                 ok-text="确定"
                 cancel-text="取消"
                 placement="rightTop"
                 @confirm="onDelete(dataRef)"
-                @visibleChange="onVisibleChange"
+                @openChange="onVisibleChange"
               >
                 <span>{{ title }}</span>
               </Popconfirm>

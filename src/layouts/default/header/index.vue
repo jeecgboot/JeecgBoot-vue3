@@ -219,9 +219,10 @@
   //顶部欢迎语展示样式
   @prefix-cls: ~'@{namespace}-layout-header';
   
-  .@{prefix-cls} {
+  .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
+    height: 48px;
     align-items: center;
     
     .headerIntroductionClass {
@@ -241,7 +242,7 @@
       .headerIntroductionClass {
         color: rgba(255, 255, 255, 0.6);
       }
-      .anticon {
+      .anticon, .truncate {
         color: rgba(255, 255, 255, 0.8);
       }
     }

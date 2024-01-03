@@ -5,7 +5,7 @@
       v-bind="$attrs"
       @register="register"
       :title="modalTitle"
-      width="900px"
+      width="1100px"
       wrapClassName="j-user-select-modal"
       @ok="handleOk"
       destroyOnClose
@@ -90,7 +90,7 @@
       //查询form
       const formConfig = {
         labelCol: {
-          span: 8,
+          span: 4,
         },
         baseColProps: {
           xs: 24,

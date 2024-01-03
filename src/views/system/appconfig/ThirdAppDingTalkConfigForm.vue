@@ -6,7 +6,7 @@
         <template #header>
           <div style="font-size: 16px"> 1.获取对接信息</div>
         </template>
-        <div class="base-desc">从企业微信获取对接信息，即可开始集成以及同步通讯录</div>
+        <div class="base-desc">从钉钉开放平台获取对接信息，即可开始集成以及同步通讯录</div>
         <div style="margin-top: 5px">
           <a href='https://help.qiaoqiaoyun.com/expand/dingding.html' target='_blank'>如何获取对接信息?</a>
         </div>
@@ -24,19 +24,19 @@
           <div class="flex-flow">
             <div class="base-title">Agentld</div>
             <div class="base-message">
-              <a-input v-model:value="appConfigData.agentId" readonly />
+              <a-input-password v-model:value="appConfigData.agentId" readonly />
             </div>
           </div>
           <div class="flex-flow">
             <div class="base-title">AppKey</div>
             <div class="base-message">
-              <a-input v-model:value="appConfigData.clientId" readonly />
+              <a-input-password v-model:value="appConfigData.clientId" readonly />
             </div>
           </div>
           <div class="flex-flow">
             <div class="base-title">AppSecret</div>
             <div class="base-message">
-              <a-input v-model:value="appConfigData.clientSecret" readonly />
+              <a-input-password v-model:value="appConfigData.clientSecret" readonly />
             </div>
           </div>
           <div style="margin-top: 20px; width: 100%; text-align: right">
@@ -291,4 +291,5 @@
     position: relative;
     top: 2px
   }
+ :deep(.ant-collapse-borderless >.ant-collapse-item:last-child) {border-bottom-width:1px;}
 </style>

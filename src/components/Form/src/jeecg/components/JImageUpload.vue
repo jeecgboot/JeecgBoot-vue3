@@ -25,7 +25,7 @@
         </a-button>
       </div>
     </a-upload>
-    <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel()">
+    <a-modal :open="previewVisible" :footer="null" @cancel="handleCancel()">
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>

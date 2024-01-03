@@ -27,6 +27,7 @@
           :loading="getProps.loading"
           :loading-tip="getProps.loadingTip"
           :minHeight="getProps.minHeight"
+          :maxHeight="getProps.maxHeight"
           :height="getWrapperHeight"
           :visible="visibleRef"
           :modalFooterHeight="footer !== undefined && !footer ? 0 : undefined"
@@ -69,7 +70,7 @@
     components: { Modal, ModalWrapper, ModalClose, ModalFooter, ModalHeader },
     inheritAttrs: false,
     props: basicProps,
-    emits: ['visible-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'fullScreen'],
+    emits: ['visible-change', 'open-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'update:open', 'fullScreen'],
     setup(props, { emit, attrs , slots}) {
       const visibleRef = ref(false);
       const propsRef = ref<Partial<ModalProps> | null>(null);
@@ -131,16 +132,18 @@
       });
 
       const getBindValue = computed((): Recordable => {
+        // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
         const attr = {
           ...attrs,
           ...unref(getMergeProps),
-          visible: unref(visibleRef),
+          open: unref(visibleRef),
           wrapClassName: unref(getWrapClassName),
         };
         if (unref(fullScreenRef)) {
-          return omit(attr, ['height', 'title']);
+          return omit(attr, ['height', 'title', 'visible']);
         }
-        return omit(attr, 'title');
+        return omit(attr, ['title', 'visible']);
+        // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
       });
 
       const getWrapperHeight = computed(() => {
@@ -156,11 +159,16 @@
         visibleRef.value = !!props.visible;
       });
 
+      watchEffect(() => {
+        visibleRef.value = !!props.open;
+      });
+
       watch(
         () => unref(visibleRef),
         (v) => {
           emit('visible-change', v);
           emit('update:visible', v);
+          emit('update:open', v);
           instance && modalMethods.emitVisible?.(v, instance.uid);
           nextTick(() => {
             if (props.scrollTop && v && unref(modalWrapperRef)) {
@@ -196,6 +204,9 @@
         propsRef.value = deepMerge(unref(propsRef) || ({} as any), props);
         if (Reflect.has(props, 'visible')) {
           visibleRef.value = !!props.visible;
+        }
+        if (Reflect.has(props, 'open')) {
+          visibleRef.value = !!props.open;
         }
         if (Reflect.has(props, 'defaultFullscreen')) {
           fullScreenRef.value = !!props.defaultFullscreen;
@@ -272,7 +283,9 @@
   }
   .jeecg-modal-content{
     >.scroll-container{
-      padding: 14px;
+      //update-begin---author:wangshuai---date:2023-12-05---for:【QQYUN-7297】表单讨论弹窗放大按钮时只显示一部分---
+      padding: 6px;
+      //update-end---author:wangshuai---date:2023-12-05---for:【QQYUN-7297】表单讨论弹窗放大按钮时只显示一部分---
     }
   }
   /*update-end-author:taoyan date:2022-7-27 for:modal评论区域样式*/

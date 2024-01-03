@@ -15,7 +15,7 @@
                 <template v-if="item.toUserId">
                   <span>回复</span>
                   <span>{{ item.toUserId_dictText }}</span>
-                  <Tooltip class="comment-last-content" @visibleChange="(v)=>visibleChange(v, item)">
+                  <Tooltip class="comment-last-content" @openChange="(v)=>visibleChange(v, item)">
                     <template #title>
                       <div v-html="getHtml(item.commentId_dictText)"></div>
                     </template>
@@ -320,7 +320,7 @@
     .comment-last-content {
       margin-left: 5px;
       &:hover{
-        color: #1890ff;
+        color: @primary-color;
       }
     }
   }

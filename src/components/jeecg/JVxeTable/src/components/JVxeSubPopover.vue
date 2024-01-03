@@ -1,5 +1,5 @@
 <template>
-  <a-popover :visible="visible" :placement="placement" overlayClassName="j-vxe-popover-overlay" :overlayStyle="overlayStyle">
+  <a-popover :open="visible" :placement="placement" overlayClassName="j-vxe-popover-overlay" :overlayStyle="overlayStyle">
     <template #title>
       <div class="j-vxe-popover-title">
         <div>子表</div>

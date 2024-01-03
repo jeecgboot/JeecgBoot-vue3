@@ -62,7 +62,9 @@
     flex-wrap: wrap;
     margin: 16px 0;
     justify-content: space-around;
-
+    // update-begin--author:liaozhiyang---date:20231220---for：【QQYUN-7677】antd4兼容改造，勾选垂直居中
+    line-height: 1.3;
+    // update-end--author:liaozhiyang---date:20231220---for：【QQYUN-7677】antd4兼容改造，勾选垂直居中
     &__item {
       width: 20px;
       height: 20px;

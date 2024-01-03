@@ -29,7 +29,16 @@
       const { prefixCls } = useDesign('basic-table-header-cell');
 
       const getIsEdit = computed(() => !!props.column?.edit);
-      const getTitle = computed(() => props.column?.customTitle || props.column?.title);
+      const getTitle = computed(() => {
+        // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+        const result = props.column?.customTitle || props.column?.title;
+        if (typeof result === 'string') {
+          return result;
+        } else {
+          return '';
+        }
+        // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+      });
       const getHelpMessage = computed(() => props.column?.helpMessage);
 
       return { prefixCls, getIsEdit, getTitle, getHelpMessage };

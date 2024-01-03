@@ -55,15 +55,19 @@ export function useModal(): UseModalReturnType {
     getVisible: computed((): boolean => {
       return visibleData[~~unref(uid)];
     }),
-
+    getOpen: computed((): boolean => {
+      return visibleData[~~unref(uid)];
+    }),
     redoModalHeight: () => {
       getInstance()?.redoModalHeight?.();
     },
 
     openModal: <T = any>(visible = true, data?: T, openOnSet = true): void => {
+      // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
       getInstance()?.setModalProps({
-        visible: visible,
+        open: visible,
       });
+      // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
 
       if (!data) return;
       const id = unref(uid);
@@ -79,7 +83,9 @@ export function useModal(): UseModalReturnType {
     },
 
     closeModal: () => {
-      getInstance()?.setModalProps({ visible: false });
+      // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+      getInstance()?.setModalProps({ open: false });
+      // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
     },
   };
   return [register, methods];
@@ -126,13 +132,15 @@ export const useModalInner = (callbackFn?: Fn): UseModalInnerReturnType => {
       getVisible: computed((): boolean => {
         return visibleData[~~unref(uidRef)];
       }),
-
+      getOpen: computed((): boolean => {
+        return visibleData[~~unref(uidRef)];
+      }),
       changeOkLoading: (loading = true) => {
         getInstance()?.setModalProps({ confirmLoading: loading });
       },
 
       closeModal: () => {
-        getInstance()?.setModalProps({ visible: false });
+        getInstance()?.setModalProps({ open: false });
       },
 
       setModalProps: (props: Partial<ModalProps>) => {

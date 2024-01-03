@@ -155,15 +155,17 @@ export function getCustomHeaderColumns(): BasicColumn[] {
     },
   ];
 }
-const renderContent = ({ text, index }: { text: any; index: number }) => {
-  const obj: any = {
-    children: text,
-    attrs: {},
+const renderContent = (filed) => {
+  return (record, rowIndex) => {
+    const obj: any = {
+      children: record[filed],
+      attrs: {},
+    };
+    if (rowIndex === 9) {
+      obj.attrs.colSpan = 0;
+    }
+    return obj;
   };
-  if (index === 9) {
-    obj.attrs.colSpan = 0;
-  }
-  return obj;
 };
 export function getMergeHeaderColumns(): BasicColumn[] {
   return [
@@ -171,13 +173,13 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       title: 'ID',
       dataIndex: 'id',
       width: 300,
-      customRender: renderContent,
+      customCell: renderContent('id'),
     },
     {
       title: '姓名',
       dataIndex: 'name',
       width: 300,
-      customRender: renderContent,
+      customCell: renderContent('name'),
     },
     {
       title: '地址',
@@ -185,15 +187,15 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       colSpan: 2,
       width: 120,
       sorter: true,
-      customRender: ({ text, index }: { text: any; index: number }) => {
+      customCell: (record: any, rowIndex) => {
         const obj: any = {
-          children: text,
+          children: record['address'],
           attrs: {},
         };
-        if (index === 2) {
+        if (rowIndex === 2) {
           obj.attrs.rowSpan = 2;
         }
-        if (index === 3) {
+        if (rowIndex === 3) {
           obj.attrs.colSpan = 0;
         }
         return obj;
@@ -207,19 +209,19 @@ export function getMergeHeaderColumns(): BasicColumn[] {
         { text: 'Male', value: 'male', children: [] },
         { text: 'Female', value: 'female', children: [] },
       ],
-      customRender: renderContent,
+      customCell: renderContent('no'),
     },
     {
       title: '开始时间',
       dataIndex: 'beginTime',
       width: 200,
-      customRender: renderContent,
+      customCell: renderContent('beginTime'),
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       width: 200,
-      customRender: renderContent,
+      customCell: renderContent('endTime'),
     },
   ];
 }

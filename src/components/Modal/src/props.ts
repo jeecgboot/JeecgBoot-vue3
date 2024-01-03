@@ -75,12 +75,14 @@ export const basicProps = Object.assign({}, modalProps, {
 
   visible: { type: Boolean },
 
+  open: { type: Boolean },
+
   width: [String, Number] as PropType<string | number>,
 
   wrapClassName: { type: String },
 
   zIndex: { type: Number },
-
+  maxHeight: { type: Number },
   // 是否开启评论区域
   enableComment: { type: Boolean, default: false },
 });

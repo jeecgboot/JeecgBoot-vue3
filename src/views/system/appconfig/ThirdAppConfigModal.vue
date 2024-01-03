@@ -25,6 +25,11 @@
       //表单赋值
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: true });
+        if (data.thirdType == 'dingtalk') {
+          title.value = '钉钉配置';
+        } else {
+          title.value = '企业微信配置';
+        }
         //重置表单
         await resetFields();
         let values = await getThirdConfigByTenantId({ tenantId: data.tenantId, thirdType: data.thirdType });

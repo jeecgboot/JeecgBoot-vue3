@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <Popover v-model:visible="popoverVisible" title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
+    <Popover v-model:open="popoverVisible" title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
       <Badge :count="count" :overflowCount="9" :offset="[-4, 10]" :numberStyle="numberStyle">
         <BellOutlined />
       </Badge>

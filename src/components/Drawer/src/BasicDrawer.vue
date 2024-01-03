@@ -40,7 +40,7 @@
     components: { Drawer, ScrollContainer, DrawerFooter, DrawerHeader },
     inheritAttrs: false,
     props: basicProps,
-    emits: ['visible-change', 'ok', 'close', 'register'],
+    emits: ['visible-change', 'open-change', 'ok', 'close', 'register'],
     setup(props, { emit }) {
       const visibleRef = ref(false);
       const attrs = useAttrs();
@@ -63,12 +63,14 @@
       });
 
       const getProps = computed((): DrawerProps => {
+        // update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
         const opt = {
           placement: 'right',
           ...unref(attrs),
           ...unref(getMergeProps),
-          visible: unref(visibleRef),
+          open: unref(visibleRef),
         };
+        // update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
         opt.title = undefined;
         let { isDetail, width, wrapClassName, getContainer } = opt;
         if (isDetail) {
@@ -124,10 +126,19 @@
       );
 
       watch(
+        () => props.open,
+        (newVal, oldVal) => {
+          if (newVal !== oldVal) visibleRef.value = newVal;
+        },
+        { deep: true }
+      );
+
+      watch(
         () => visibleRef.value,
         (visible) => {
           nextTick(() => {
             emit('visible-change', visible);
+            emit('open-change', visible);
             instance && drawerInstance.emitVisible?.(visible, instance.uid);
           });
         }
@@ -151,6 +162,9 @@
 
         if (Reflect.has(props, 'visible')) {
           visibleRef.value = !!props.visible;
+        }
+        if (Reflect.has(props, 'open')) {
+          visibleRef.value = !!props.open;
         }
       }
 

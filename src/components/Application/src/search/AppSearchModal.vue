@@ -178,7 +178,7 @@
     &-input {
       width: 100%;
       height: 48px;
-      font-size: 1.5em;
+      font-size: 1.3em;
       color: #1c1e21;
       border-radius: 6px;
 
@@ -222,7 +222,7 @@
         font-size: 14px;
         color: @text-color-base;
         cursor: pointer;
-        background-color: @component-background;
+        // background-color: @component-background;
         border-radius: 4px;
         box-shadow: 0 1px 3px 0 #d4d9e1;
         align-items: center;

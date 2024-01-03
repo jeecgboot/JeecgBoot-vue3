@@ -59,9 +59,9 @@ export interface FormProps {
   // Submit form on reset
   submitOnReset?: boolean;
   // Col configuration for the entire form
-  labelCol?: Partial<ColEx>;
+  labelCol?: Partial<ColEx> | null;
   // Col configuration for the entire form
-  wrapperCol?: Partial<ColEx>;
+  wrapperCol?: Partial<ColEx> | null;
 
   // General row style
   baseRowStyle?: CSSProperties;

@@ -15,6 +15,7 @@ export interface ReturnMethods extends ModalMethods {
   openModal: <T = any>(props?: boolean, data?: T, openOnSet?: boolean) => void;
   closeModal: () => void;
   getVisible?: ComputedRef<boolean>;
+  getOpen?: ComputedRef<boolean>;
 }
 
 export type UseModalReturnType = [RegisterFn, ReturnMethods];
@@ -24,6 +25,7 @@ export interface ReturnInnerMethods extends ModalMethods {
   changeLoading: (loading: boolean) => void;
   changeOkLoading: (loading: boolean) => void;
   getVisible?: ComputedRef<boolean>;
+  getOpen?: ComputedRef<boolean>;
   redoModalHeight: () => void;
 }
 
@@ -41,6 +43,7 @@ export interface ModalProps {
   canFullscreen?: boolean;
   defaultFullscreen?: boolean;
   visible?: boolean;
+  open?: boolean;
   // 温馨提醒信息
   helpMessage: string | string[];
 

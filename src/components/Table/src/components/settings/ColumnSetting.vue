@@ -4,10 +4,10 @@
       <span>{{ t('component.table.settingColumn') }}</span>
     </template>
     <Popover
-      v-model:visible="popoverVisible"
+      v-model:open="popoverVisible"
       placement="bottomLeft"
       trigger="click"
-      @visible-change="handleVisibleChange"
+      @open-change="handleVisibleChange"
       :overlayClassName="`${prefixCls}__cloumn-list`"
       :getPopupContainer="getPopupContainer"
     >
@@ -174,7 +174,7 @@
       const getBindProps = computed(() => {
         let obj = {};
         if (props.isMobile) {
-          obj['visible'] = false;
+          obj['open'] = false;
         }
         return obj;
       });

@@ -1,5 +1,5 @@
 <template>
-  <BasicTitle v-if="!isDetail" :class="prefixCls">
+  <BasicTitle v-if="!isDetail" :class="[prefixCls, 'is-drawer']">
     <slot name="title"></slot>
     {{ !$slots.title ? title : '' }}
   </BasicTitle>

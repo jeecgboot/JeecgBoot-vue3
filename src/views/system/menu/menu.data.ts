@@ -132,7 +132,7 @@ export const formSchema: FormSchema[] = [
       dropdownStyle: {
         maxHeight: '50vh',
       },
-      getPopupContainer: (node) => node.parentNode,
+      getPopupContainer: (node) => node?.parentNode,
     },
     ifShow: ({ values }) => !isDir(values.menuType),
   },

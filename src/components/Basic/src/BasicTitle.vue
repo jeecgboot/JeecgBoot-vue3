@@ -53,6 +53,10 @@
     cursor: move;
     user-select: none;
 
+    &.is-drawer {
+      cursor: default;
+    }
+
     &-normal {
       font-size: 14px;
       font-weight: 500;
