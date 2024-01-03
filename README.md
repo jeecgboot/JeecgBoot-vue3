@@ -12,7 +12,7 @@ JEECG BOOT 低代码开发平台（Vue3前端）
 
 
 ## 简介
-JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue3、TypeScript 等新技术方案，包括二次封装组件、utils、hooks、动态菜单、权限校验、按钮级别权限控制等功能。
+JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue4、TypeScript 等新技术方案，包括二次封装组件、utils、hooks、动态菜单、权限校验、按钮级别权限控制等功能。
 是采用Vben实现的 JeecgBoot低代码平台的全新vue3版本。
  
 > 强大的代码生成器让前后端代码一键生成! JeecgBoot引领低代码开发模式(OnlineCoding-> 代码生成-> 手工MERGE)， 帮助解决Java项目70%的重复工作，让开发更多关注业务。既能快速提高效率，节省成本，同时又不失灵活性
@@ -44,8 +44,8 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue3、TypeScript 等新技术�
 
 ## 技术文档
 
--   官方文档：[http://help.jeecg.com](http://help.jeecg.com)
--   官方网站： [http://www.jeecg.com](http://www.jeecg.com)
+-   官方文档：[https://help.jeecg.com](https://help.jeecg.com)
+-   官方网站： [https://www.jeecg.com](https://www.jeecg.com)
 -   快速入门：[快速入门](http://jeecg.com/doc/quickstart) | [常见问题](http://help.jeecg.com/qa.html) | [视频教程](https://www.bilibili.com/video/BV1V34y187Y9 "入门视频") |  [ 代码生成](http://help.jeecg.com/vue3/codegen/online.html)
 -   QQ交流群：⑧825232878、⑦791696430(满)、683903138(满)
 -   在线演示 ：  [Vue3演示](http://boot3.jeecg.com)   | [APP演示](http://jeecg.com/appIndex)|  [敲敲云零代码](https://www.qiaoqiaoyun.com)
