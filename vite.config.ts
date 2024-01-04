@@ -89,8 +89,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             'codemirror-vendor': ['codemirror'],
             //'emoji-mart-vue-fast': ['emoji-mart-vue-fast'],
             'jeecg-online-vendor': ['@jeecg/online'],
-            // 将 Lodash 库的代码单独打包
-            'lodash-es-vendor': ['lodash-es'],
             // vue vue-router合并打包
             vue: ['vue', 'vue-router'],
             'cron-parser-vendor': ['cron-parser'],

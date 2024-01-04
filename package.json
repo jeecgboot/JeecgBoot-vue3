@@ -63,7 +63,7 @@
     "sortablejs": "^1.15.0",
     "tinymce": "^6.6.2",
     "vditor": "^3.9.5",
-    "vue": "^3.3.4",
+    "vue": "3.3.11",
     "vue-cropper": "^0.6.2",
     "vue-cropperjs": "^5.0.0",
     "vue-i18n": "9.2.2",
