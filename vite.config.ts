@@ -74,6 +74,24 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       target: 'es2015',
       cssTarget: 'chrome80',
       outDir: OUTPUT_DIR,
+      rollupOptions: {
+        // 关闭除屑优化，防止删除重要代码，导致打包后功能出现异常
+        treeshake: false,
+        output: {
+          chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
+          entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
+          // manualChunks配置 (依赖包从大到小排列)
+          manualChunks: {
+            'tinymce-vendor': ['tinymce','@tinymce/tinymce-vue'],
+            'echarts-vendor': ['echarts'],
+            'antd-vue-vendor': ['ant-design-vue','@ant-design/icons-vue','@ant-design/colors'],
+            'vxe-table-vendor': ['vxe-table','vxe-table-plugin-antd','xe-utils'],
+            'codemirror-vendor': ['codemirror'],
+            'jeecg-online-vendor': ['@jeecg/online'],
+            'cron-parser-vendor': ['cron-parser'],
+          },
+        },
+      },
       // 关闭brotliSize显示可以稍微减少打包时间
       reportCompressedSize: false,
       // 提高超大静态资源警告大小
