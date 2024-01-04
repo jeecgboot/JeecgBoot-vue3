@@ -142,7 +142,7 @@ const transform: AxiosTransform = {
     let tenantId: string | number = getTenantId();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
+      config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : 'Bearer ' + token;
       config.headers[ConfigEnum.TOKEN] = token;
       //--update-begin--author:liusq---date:20210831---for:将签名和时间戳，添加在请求接口 Header
 

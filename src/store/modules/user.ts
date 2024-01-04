@@ -134,14 +134,15 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
+        loginParams.grant_type = 'password';
         const data = await loginApi(loginParams, mode);
-        const { token, userInfo } = data;
+        const { access_token, userInfo } = data;
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         this.setTenant(userInfo.loginTenantId);
         return this.afterLoginAction(goHome, data);
       } catch (error) {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
       }
     },
     /**

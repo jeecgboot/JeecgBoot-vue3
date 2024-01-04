@@ -4,6 +4,7 @@
 export interface LoginParams {
   username: string;
   password: string;
+  grant_type: string;
 }
 
 export interface ThirdLoginParams {
@@ -21,7 +22,7 @@ export interface RoleInfo {
  */
 export interface LoginResultModel {
   userId: string | number;
-  token: string;
+  access_token: string;
   role: RoleInfo;
   userInfo?: any
 }
