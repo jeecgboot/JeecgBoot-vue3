@@ -9,7 +9,7 @@ export enum ResultEnum {
 }
 
 /**
- * @description: Request method
+ * @description: request method
  */
 export enum RequestEnum {
   GET = 'GET',
@@ -19,7 +19,7 @@ export enum RequestEnum {
 }
 
 /**
- * @description: Content type
+ * @description:  contentTyp
  */
 export enum ContentTypeEnum {
   // json
@@ -32,7 +32,7 @@ export enum ContentTypeEnum {
 
 /**
  * 请求header
- * @description: Request header
+ * @description:  contentTyp
  */
 export enum ConfigEnum {
   // TOKEN

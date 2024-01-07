@@ -90,6 +90,12 @@
           })
           .map((action) => {
             const { popConfirm } = action;
+            // update-begin--author:liaozhiyang---date:20240105---for：【issues/951】table删除记录时按钮显示错位
+            if (popConfirm) {
+              const overlayClassName = popConfirm.overlayClassName;
+              popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
+            }
+            // update-end--author:liaozhiyang---date:20240105---for：【issues/951】table删除记录时按钮显示错位
             return {
               getPopupContainer: () => unref((table as any)?.wrapRef.value) ?? document.body,
               type: 'link',
@@ -110,6 +116,12 @@
         });
         return list.map((action, index) => {
           const { label, popConfirm } = action;
+          // update-begin--author:liaozhiyang---date:20240105---for：【issues/951】table删除记录时按钮显示错位
+          if (popConfirm) {
+            const overlayClassName = popConfirm.overlayClassName;
+            popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
+          }
+          // update-end--author:liaozhiyang---date:20240105---for：【issues/951】table删除记录时按钮显示错位
           return {
             ...action,
             ...popConfirm,
@@ -203,6 +215,11 @@
       svg {
         font-size: 1.1em;
         font-weight: 700;
+      }
+    }
+    &-popconfirm {
+      .ant-popconfirm-buttons {
+        min-width: 120px;
       }
     }
   }

@@ -28,4 +28,5 @@ export interface PopConfirm {
   cancel?: Fn;
   icon?: string;
   placement?: string;
+  overlayClassName?: string;
 }

@@ -58,7 +58,7 @@
       //关闭弹窗
       closeModal();
       //刷新列表
-      emit('success');
+      emit('success',values.userName);
     } finally {
       setModalProps({ confirmLoading: false });
     }
