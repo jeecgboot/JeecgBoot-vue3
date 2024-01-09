@@ -138,3 +138,25 @@ html[data-theme='dark'] .ant-input-affix-wrapper-textarea-with-clear-btn {
   }
 }
 // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7493】多行文本内容过多时内容会覆盖掉清空按钮
+
+// update-begin--author:liaozhiyang---date:20230108---for：【QQYUN-7855】table页码同步3.x页面效果
+.ant-table-pagination.ant-pagination {
+  .ant-pagination-item-active,
+  .ant-pagination-item-active:hover {
+    background-color: @primary-color;
+    border-color: transparent;
+    a {
+      color: #fff;
+    }
+  }
+  .ant-pagination-item:not(.ant-pagination-item-active) {
+    background-color: transparent !important;
+    border-color: transparent;
+  }
+  .ant-pagination-prev,
+  .ant-pagination-next,
+  .ant-pagination-item {
+    margin: 0 4px;
+  }
+}
+// update-end--author:liaozhiyang---date:20230108---for：【QQYUN-7855】table页码同步3.x页面效果
