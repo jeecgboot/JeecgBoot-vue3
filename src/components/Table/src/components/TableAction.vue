@@ -102,7 +102,9 @@
               size: 'small',
               ...action,
               ...(popConfirm || {}),
-              onConfirm: popConfirm?.confirm,
+              // update-begin--author:liaozhiyang---date:20240108---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
+              onConfirm: handelConfirm(popConfirm?.confirm),
+              // update-end--author:liaozhiyang---date:20240108---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
               onCancel: popConfirm?.cancel,
               enable: !!popConfirm,
             };
@@ -122,17 +124,46 @@
             popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
           }
           // update-end--author:liaozhiyang---date:20240105---for：【issues/951】table删除记录时按钮显示错位
+          // update-begin--author:liaozhiyang---date:20240108---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
+          if (popConfirm) {
+            popConfirm.confirm = handelConfirm(popConfirm?.confirm);
+          }
+          // update-end--author:liaozhiyang---date:20240108---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
           return {
             ...action,
             ...popConfirm,
-            onConfirm: popConfirm?.confirm,
+            onConfirm: handelConfirm(popConfirm?.confirm),
             onCancel: popConfirm?.cancel,
             text: label,
             divider: index < list.length - 1 ? props.divider : false,
           };
         });
       });
-
+      /*
+      2023-01-08
+      liaozhiyang
+      给传进来的函数包一层promise
+      */
+      const handelConfirm = (fn) => {
+        if (typeof fn !== 'function') return fn;
+        const anyc = () => {
+          return new Promise<void>((resolve) => {
+            const result = fn();
+            if (Object.prototype.toString.call(result) === '[object Promise]') {
+              result
+                .finally(() => {
+                  resolve();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              resolve();
+            }
+          });
+        };
+        return anyc;
+      };
       const getDropdownSlotList = computed((): any[] => {
         return unref(getDropdownList).filter((item) => item.slot);
       });
