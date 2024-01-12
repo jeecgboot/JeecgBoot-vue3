@@ -9,10 +9,10 @@
         </template>
         <template v-else-if="file['path']">
           <template v-for="src of imgList">
-            <img class="j-vxe-image" :src="src" alt="图片错误" @click="handleMoreOperation" />
+            <img class="j-vxe-image" :src="src" alt="图片错误" @[clickEvent]="handleMoreOperation" />
           </template>
         </template>
-        <a-tooltip v-else :title="file.message || '上传失败'" @click="handleClickShowImageError">
+        <a-tooltip v-else :title="file.message || '上传失败'" @[clickEvent]="handleClickShowImageError">
           <Icon icon="ant-design:exclamation-circle" style="color: red" />
         </a-tooltip>
       </div>
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent ,unref } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { JVxeComponent } from '/@/components/jeecg/JVxeTable/types';
   import { useJVxeCompProps } from '/@/components/jeecg/JVxeTable/hooks';
@@ -51,8 +51,14 @@
     components: components,
     props: useJVxeCompProps(),
     setup(props: JVxeComponent.Props) {
+      
       const { createErrorModal } = useMessage();
       const setup = useFileCell(props, UploadTypeEnum.image, { multiple: true });
+      // update-begin--author:liaozhiyang---date:20240105---for：【issues/953】online子表vxe-table展现形式详情图片上传可点击
+      const clickEvent = computed(() => {
+        return unref(setup.cellProps).disabled ? null : 'click';
+      });
+      // update-end--author:liaozhiyang---date:20240105---for：【issues/953】online子表vxe-table展现形式详情图片上传可点击
       const { innerFile, maxCount } = setup;
 
       const imgList = computed(() => {
@@ -84,6 +90,7 @@
         imgList,
         maxCount,
         handleClickShowImageError,
+        clickEvent
       };
     },
     // 【组件增强】注释详见：JVxeComponent.Enhanced

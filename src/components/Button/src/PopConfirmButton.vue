@@ -30,30 +30,13 @@
 
       // get inherit binding value
       const getBindValues = computed(() => {
-        // update-begin--author:liaozhiyang---date:20231228---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
-        const result: any = Object.assign(
+        return Object.assign(
           {
             okText: t('common.okText'),
             cancelText: t('common.cancelText'),
           },
           { ...props, ...unref(attrs) }
         );
-        if (result.onConfirm) {
-          const confirm = result.confirm;
-          result.onConfirm = () => {
-            return new Promise<void>((resolve) => {
-              confirm()
-                ?.finally(() => {
-                  resolve();
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            });
-          };
-        }
-        return result;
-        // update-end--author:liaozhiyang---date:20231228---for：【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
       });
 
       return () => {

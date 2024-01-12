@@ -8,6 +8,7 @@ import { h } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMethods } from '/@/hooks/system/useMethods';
 import { importViewsFile, _eval } from '/@/utils';
+import {getToken} from "@/utils/auth";
 
 export function usePopBiz(ob, tableRef?) {
   // update-begin--author:liaozhiyang---date:20230811---for：【issues/675】子表字段Popup弹框数据不更新
@@ -71,6 +72,7 @@ export function usePopBiz(ob, tableRef?) {
    */
   const rowSelection = {
     fixed: true,
+    type: props.multi ? 'checkbox' : 'radio',
     selectedRowKeys: checkedKeys,
     selectionRows: selectRows,
     onChange: onSelectChange,
@@ -111,6 +113,13 @@ export function usePopBiz(ob, tableRef?) {
    * @param selectRow
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
+    // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7514】popup单选显示radio
+    if (!props.multi) {
+      selectRows.value = [];
+      checkedKeys.value = [];
+      selectedRowKeys = [selectedRowKeys[selectedRowKeys.length - 1]];
+    }
+    // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7514】popup单选显示radio
     // update-begin--author:liaozhiyang---date:20230919---for：【QQYUN-4263】跨页选择导出问题
     if (!selectedRowKeys || selectedRowKeys.length == 0) {
       selectRows.value = [];
@@ -456,6 +465,11 @@ export function usePopBiz(ob, tableRef?) {
       if (jsPattern.test(href)) {
         href = href.replace(jsPattern, function (text, s0) {
           try {
+            // 支持 {{ ACCESS_TOKEN }} 占位符
+            if (s0.trim() === 'ACCESS_TOKEN') {
+              return getToken()
+            }
+
             // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
             return _eval(s0);
             // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
@@ -713,6 +727,12 @@ export function usePopBiz(ob, tableRef?) {
    */
   function clickThenCheck(record) {
     if (clickThenCheckFlag === true) {
+      // update-begin--author:liaozhiyang---date:20240104---for：【QQYUN-7514】popup单选显示radio
+      if (!props.multi) {
+        selectRows.value = [];
+        checkedKeys.value = [];
+      }
+      // update-end--author:liaozhiyang---date:20240104---for：【QQYUN-7514】popup单选显示radio
       let rowKey = combineRowKey(record);
       if (!unref(checkedKeys) || unref(checkedKeys).length == 0) {
         let arr1: any[] = [],

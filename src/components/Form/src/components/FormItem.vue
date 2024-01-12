@@ -391,10 +391,10 @@
         // update-begin--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效 
         const { getIsMobile } = useAppInject();
         let realColProps;
-        if (colProps['span'] && !unref(getIsMobile)) {
-          ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].forEach((name) => delete baseColProps[name]);
-        }
         realColProps = { ...baseColProps, ...colProps };
+        if (colProps['span'] && !unref(getIsMobile)) {
+          ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].forEach((name) => delete realColProps[name]);
+        }
         // update-end--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效 
         const { isIfShow, isShow } = getShow();
         const values = unref(getValues);
