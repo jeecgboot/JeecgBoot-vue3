@@ -189,6 +189,12 @@ export const useUserStore = defineStore({
         //update-begin---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
         if (redirect && goHome) {
         //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
+          // update-begin--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
+          const publicPath = import.meta.env.VITE_PUBLIC_PATH;
+          if (publicPath && publicPath != '/') {
+            redirect = publicPath + redirect;
+          }
+          // update-end--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
           // 当前页面打开
           window.open(redirect, '_self')
           return data;
@@ -211,10 +217,11 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
+        loginParams.grant_type = 'phone';
         const data = await phoneLoginApi(loginParams, mode);
-        const { token } = data;
+        const { access_token } = data;
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         return this.afterLoginAction(goHome, data);
       } catch (error) {
         return Promise.reject(error);

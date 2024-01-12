@@ -7,7 +7,10 @@ import { useUserStore } from '/@/store/modules/user';
 const globSetting = useGlobSetting();
 const openSso = globSetting.openSso;
 export function useSso() {
-  let locationUrl = 'http://' + window.location.host + '/';
+  //update-begin---author:wangshuai---date:2024-01-03---for:【QQYUN-7805】SSO登录强制用http #957---
+  let locationUrl = document.location.protocol +"//" + window.location.host + '/';
+  //update-end---author:wangshuai---date:2024-01-03---for:【QQYUN-7805】SSO登录强制用http #957---
+
   /**
    * 单点登录
    */

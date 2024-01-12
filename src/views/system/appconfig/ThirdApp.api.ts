@@ -33,7 +33,7 @@ export const getThirdConfigByTenantId = (params) => {
  * @param params
  */
 export const syncDingTalkDepartUserToLocal = () => {
-  return defHttp.get({ url: Api.syncDingTalkDepartUserToLocal }, { isTransformResponse: false });
+  return defHttp.get({ url: Api.syncDingTalkDepartUserToLocal, timeout: 60000 }, { isTransformResponse: false });
 };
 
 /**

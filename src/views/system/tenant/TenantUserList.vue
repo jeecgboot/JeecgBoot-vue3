@@ -17,7 +17,7 @@
     <!--用户抽屉-->
     <TenantUserDrawer @register="registerDrawer" @success="handleSuccess" />
     <!-- 离职受理人弹窗 -->
-    <UserQuitAgentModal @register="registerQuitAgentModal" @success="reload" />
+    <UserQuitAgentModal @register="registerQuitAgentModal" @success="handleQuitSuccess" />
     <!-- 离职人员列弹窗 -->
     <UserQuitModal @register="registerQuitModal" @success="reload" />
     <!--  变更拥有者弹窗  -->
@@ -159,7 +159,7 @@
       {
         label: '离职',
         //update-begin---author:wangshuai---date:2023-10-25---for:【QQYUN-6822】9.离职交接人选的是自己，完成之后数据没了---
-        onClick: handleQuit.bind(null, record.id),
+        onClick: handleQuit.bind(null,record.username, record.id),
         //update-end---author:wangshuai---date:2023-10-25---for:【QQYUN-6822】9.离职交接人选的是自己，完成之后数据没了---
         //update-begin---author:wangshuai ---date:20230130  for：[QQYUN-3974]租户的创建人 不应该有离职按钮------------
         ifShow: () =>{
@@ -282,6 +282,21 @@
   }
   //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
 
+  /**
+   * 离职成功之后需要判断一下是否为当前用户，当前用户需要刷新浏览器
+   * @param userName
+   */
+  function handleQuitSuccess(userName) {
+    //判断如果当前离职的是当前登录用户，需要刷新页面，便将租户id设置成null
+    let username = userStore.getUserInfo.username;
+    if (username && userName === username) {
+      userStore.setTenant(null);
+      window.location.reload();
+    }else{
+      reload();
+    }
+  }
+  
   onMounted(()=>{
     tenantSaasMessage('租户用户')
   })

@@ -63,6 +63,9 @@
       wrapperCol: {},
       schemas: dictItemSearchFormSchema,
       autoSubmitOnEnter: true,
+      actionColOptions: {
+        span: 8
+      }
     },
     striped: true,
     useSearchForm: true,

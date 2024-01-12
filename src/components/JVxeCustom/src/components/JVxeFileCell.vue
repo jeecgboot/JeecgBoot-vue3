@@ -17,7 +17,7 @@
           <span style="margin-left: 5px">{{ ellipsisFileName }}</span>
         </a-tooltip>
 
-        <Dropdown :trigger="['click']" placement="bottomRight" style="margin-left: 10px">
+        <Dropdown :trigger="['click']" placement="bottomRight" style="margin-left: 10px" :disabled="cellProps.disabled">
           <a-tooltip title="操作">
             <Icon v-if="file.status !== 'uploading'" icon="ant-design:setting" style="cursor: pointer" />
           </a-tooltip>

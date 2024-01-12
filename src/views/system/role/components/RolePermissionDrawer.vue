@@ -27,7 +27,7 @@
       :selectedKeys="selectedKeys"
       :checkStrictly="checkStrictly"
       :clickRowToExpand="false"
-      title="所拥有的权限"
+      title="所拥有的的权限"
       @check="onCheck"
       @select="onTreeNodeSelect"
     >

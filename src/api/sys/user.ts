@@ -12,7 +12,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 const { createErrorModal } = useMessage();
 enum Api {
   Login = '/oauth2/token',
-  phoneLogin = '/sys/phoneLogin',
+  phoneLogin = '/oauth2/token',
   Logout = '/sys/logout',
   GetUserInfo = '/sys/user/getUserInfo',
   // 获取系统权限
@@ -72,8 +72,13 @@ export function phoneLoginApi(params: LoginParams, mode: ErrorMessageMode = 'mod
     {
       url: Api.phoneLogin,
       params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic amVlY2ctY2xpZW50OnNlY3JldA=='
+      },
     },
     {
+      isTransformResponse: false,
       errorMessageMode: mode,
     }
   );
