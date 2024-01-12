@@ -211,10 +211,11 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
+        loginParams.grant_type = 'phone';
         const data = await phoneLoginApi(loginParams, mode);
-        const { token } = data;
+        const { access_token } = data;
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         return this.afterLoginAction(goHome, data);
       } catch (error) {
         return Promise.reject(error);
