@@ -10,6 +10,7 @@ export interface LoginParams {
 export interface ThirdLoginParams {
   token: string;
   thirdType: string;
+  grant_type: string;
 }
 
 export interface RoleInfo {
