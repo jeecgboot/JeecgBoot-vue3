@@ -321,10 +321,11 @@ export const useUserStore = defineStore({
     ): Promise<any | null> {
       try {
         const { goHome = true, mode, ...ThirdLoginParams } = params;
+        ThirdLoginParams.grant_type = "social";
         const data = await thirdLogin(ThirdLoginParams, mode);
-        const { token } = data;
+        const { access_token } = data;
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         return this.afterLoginAction(goHome, data);
       } catch (error) {
         return Promise.reject(error);

@@ -35,7 +35,7 @@ enum Api {
   //修改密码
   passwordChange = '/sys/user/passwordChange',
   //第三方登录
-  thirdLogin = '/sys/thirdLogin/getLoginUser',
+  thirdLogin = '/oauth2/token',
   //第三方登录
   getThirdCaptcha = '/sys/thirdSms',
   //获取二维码信息
@@ -172,12 +172,19 @@ export function thirdLogin(params, mode: ErrorMessageMode = 'modal') {
     tenantId = params.tenantId;
   }
   //==========end 第三方登录/auth2登录需要传递租户id===========
-  return defHttp.get<LoginResultModel>(
+  return defHttp.post<LoginResultModel>(
     {
-      url: `${Api.thirdLogin}/${params.token}/${params.thirdType}/${tenantId}`,
+      url: `${Api.thirdLogin}`,
+      params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic amVlY2ctY2xpZW50OnNlY3JldA=='
+      },
     },
     {
+      isTransformResponse: false,
       errorMessageMode: mode,
+      
     }
   );
 }
