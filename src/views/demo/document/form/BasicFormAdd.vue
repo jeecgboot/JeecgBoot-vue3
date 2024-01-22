@@ -17,7 +17,7 @@
   //引入依赖
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { CollapseContainer } from '/@/components/Container';
-  import { ref } from '@vue/runtime-core';
+  import { ref } from 'vue';
 
   //自定义表单字段
   const formSchemas: FormSchema[] = [

@@ -27,9 +27,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@logicflow/core": "^1.2.12",
     "@logicflow/extension": "^1.2.13",
-    "@vue/runtime-core": "^3.3.4",
     "@vue/shared": "^3.3.4",
-    "@vueuse/shared": "^10.4.1",
     "@vueuse/core": "^10.4.1",
     "@tinymce/tinymce-vue": "^4.0.7",
     "@zxcvbn-ts/core": "^3.0.3",
@@ -57,7 +55,6 @@
     "print-js": "^1.6.0",
     "qs": "^6.11.2",
     "qrcode": "^1.5.3",
-    "qrcodejs2": "0.0.2",
     "resize-observer-polyfill": "^1.5.1",
     "showdown": "^2.1.0",
     "sortablejs": "^1.15.0",
@@ -75,7 +72,6 @@
     "vxe-table": "4.5.12",
     "vxe-table-plugin-antd": "3.1.0",
     "xe-utils": "3.5.13",
-    "vue-json-pretty": "^2.2.4",
     "xss": "^1.0.14"
   },
   "devDependencies": {
