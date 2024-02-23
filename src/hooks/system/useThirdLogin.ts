@@ -68,6 +68,9 @@ export function useThirdLogin() {
       } else {
         createMessage.warning('不识别的信息传递');
       }
+      //update-begin---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】连续登录失败，导致失败提醒累加---
+      window.removeEventListener('message', unref(receiveMessage),false);
+      //update-end---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】连续登录失败，导致失败提醒累加---
     };
     window.addEventListener('message', receiveMessage, false);
   }
