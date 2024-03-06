@@ -82,7 +82,8 @@
     updateSchema([
       {
         field: 'password',
-        show: !unref(isUpdate),
+        // 【QQYUN-8324】
+        ifShow: !unref(isUpdate),
       },
       {
         field: 'confirmPassword',

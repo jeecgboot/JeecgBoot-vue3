@@ -56,6 +56,9 @@ export const useUserStore = defineStore({
   }),
   getters: {
     getUserInfo(): UserInfo {
+      if(this.userInfo == null){
+        this.userInfo = getAuthCache<UserInfo>(USER_INFO_KEY)!=null ? getAuthCache<UserInfo>(USER_INFO_KEY) : null;
+      }
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
     getLoginInfo(): LoginInfo {
@@ -168,15 +171,19 @@ export const useUserStore = defineStore({
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
-        const permissionStore = usePermissionStore();
-        if (!permissionStore.isDynamicAddedRoute) {
-          const routes = await permissionStore.buildRoutesAction();
-          routes.forEach((route) => {
-            router.addRoute(route as unknown as RouteRecordRaw);
-          });
-          router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
-          permissionStore.setDynamicAddedRoute(true);
-        }
+        //update-begin---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
+        // // 构建后台菜单路由
+        // const permissionStore = usePermissionStore();
+        // if (!permissionStore.isDynamicAddedRoute) {
+        //   const routes = await permissionStore.buildRoutesAction();
+        //   routes.forEach((route) => {
+        //     router.addRoute(route as unknown as RouteRecordRaw);
+        //   });
+        //   router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+        //   permissionStore.setDynamicAddedRoute(true);
+        // }
+        //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
+        
         await this.setLoginInfo({ ...data, isLogin: true });
         //update-begin-author:liusq date:2022-5-5 for:登录成功后缓存拖拽模块的接口前缀
         localStorage.setItem(JDragConfigEnum.DRAG_BASE_URL, useGlobSetting().domainUrl);
@@ -279,6 +286,7 @@ export const useUserStore = defineStore({
       this.setUserInfo(null);
       this.setLoginInfo(null);
       this.setTenant(null);
+      this.setAllDictItems(null);
       //update-begin-author:liusq date:2022-5-5 for:退出登录后清除拖拽模块的接口前缀
       localStorage.removeItem(JDragConfigEnum.DRAG_BASE_URL);
       //update-end-author:liusq date:2022-5-5 for: 退出登录后清除拖拽模块的接口前缀

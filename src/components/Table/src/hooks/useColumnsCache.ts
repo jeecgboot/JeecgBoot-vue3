@@ -1,5 +1,6 @@
 import { computed, nextTick, unref, watchEffect } from 'vue';
 import { router } from '/@/router';
+import { useRoute } from 'vue-router';
 import { createLocalStorage } from '/@/utils/cache';
 import { useTableContext } from './useTableContext';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -12,10 +13,13 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
   const table = useTableContext();
   const $ls = createLocalStorage();
   const { createMessage: $message } = useMessage();
+  const route = useRoute();
   // 列表配置缓存key
   const cacheKey = computed(() => {
-    let { fullPath } = router.currentRoute.value;
-    let key = fullPath.replace(/[\/\\]/g, '_');
+    // update-begin--author:liaozhiyang---date:20240226---for：【QQYUN-8367】online报表配置列展示保存，影响到其他页面的table字段的显示隐藏（开发环境热更新会有此问题，生产环境无问题）
+    const path = route.path;
+    let key = path.replace(/[\/\\]/g, '_');
+    // update-end--author:liaozhiyang---date:20240226---for：【QQYUN-8367】online报表配置列展示保存，影响到其他页面的table字段的显示隐藏（开发环境热更新会有此问题，生产环境无问题）
     let cacheKey = table.getBindValues.value.tableSetting?.cacheKey;
     if (cacheKey) {
       key += ':' + cacheKey;

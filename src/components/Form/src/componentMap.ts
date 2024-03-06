@@ -44,6 +44,9 @@ import JCodeEditor from './jeecg/components/JCodeEditor.vue';
 import JCategorySelect from './jeecg/components/JCategorySelect.vue';
 import JSelectMultiple from './jeecg/components/JSelectMultiple.vue';
 import JPopup from './jeecg/components/JPopup.vue';
+// update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+import JPopupDict from './jeecg/components/JPopupDict.vue';
+// update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
 import JSwitch from './jeecg/components/JSwitch.vue';
 import JTreeDict from './jeecg/components/JTreeDict.vue';
 import JInputPop from './jeecg/components/JInputPop.vue';
@@ -116,6 +119,9 @@ componentMap.set('JCodeEditor', JCodeEditor);
 componentMap.set('JCategorySelect', JCategorySelect);
 componentMap.set('JSelectMultiple', JSelectMultiple);
 componentMap.set('JPopup', JPopup);
+// update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+componentMap.set('JPopupDict', JPopupDict);
+// update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
 componentMap.set('JSwitch', JSwitch);
 componentMap.set('JTreeDict', JTreeDict);
 componentMap.set('JInputPop', JInputPop);

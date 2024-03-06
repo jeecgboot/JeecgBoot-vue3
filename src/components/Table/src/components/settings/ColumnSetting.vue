@@ -1,5 +1,5 @@
 <template>
-  <Tooltip placement="top" v-bind="getBindProps">
+  <Tooltip placement="top" v-bind="getBindProps" >
     <template #title>
       <span>{{ t('component.table.settingColumn') }}</span>
     </template>

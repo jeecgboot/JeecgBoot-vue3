@@ -689,4 +689,25 @@ export const schemas: FormSchema[] = [
     label: '选中值',
     colProps: { span: 12 },
   },
+  {
+    field: 'pop2',
+    component: 'JPopupDict',
+    label: 'JPopupDict示例',
+    colProps: {
+      span: 12,
+    },
+    componentProps:{
+      placeholder: '请选择',
+      dictCode: 'report_user,username,id',
+      multi: true,
+    },
+  },
+  {
+    field: 'pop2',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: {
+      span: 12,
+    },
+  },
 ];

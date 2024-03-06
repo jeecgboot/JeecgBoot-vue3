@@ -18,8 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList,switchVue3Menu } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
+import { getBackMenuAndPerms, switchVue3Menu } from '/@/api/sys/menu';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
@@ -124,10 +123,14 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const systemPermission = await getPermCode();
+      const systemPermission = await getBackMenuAndPerms();
       const codeList = systemPermission.codeList;
       this.setPermCodeList(codeList);
       this.setAuthData(systemPermission);
+      
+      //菜单路由
+      const routeList = systemPermission.menu;
+      return routeList;
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
@@ -207,6 +210,7 @@ export const usePermissionStore = defineStore({
         // 后台菜单构建
         case PermissionModeEnum.BACK:
           const { createMessage, createWarningModal } = useMessage();
+          console.log(" --- 构建后台路由菜单 --- ")
           // 菜单加载提示
           // createMessage.loading({
           //   content: t('sys.app.menuLoading'),
@@ -217,8 +221,8 @@ export const usePermissionStore = defineStore({
           // 这个函数可能只需要执行一次，并且实际的项目可以在正确的时间被放置
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            routeList = await this.changePermissionCode();
+            //routeList = (await getMenuList()) as AppRouteRecordRaw[];
             // update-begin----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
             let hasIndex: boolean = false;
             let hasIcon: boolean = false;

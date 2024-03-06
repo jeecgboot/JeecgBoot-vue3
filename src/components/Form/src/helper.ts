@@ -36,6 +36,12 @@ function genType() {
 }
 
 export function setComponentRuleType(rule: ValidationRule, component: ComponentType, valueFormat: string) {
+  //update-begin---author:wangshuai---date:2024-02-01---for:【QQYUN-8176】编辑表单中,校验必填时,如果组件是ApiSelect,打开编辑页面时,即使该字段有值,也会提示请选择---
+  //https://github.com/vbenjs/vue-vben-admin/pull/3082 github修复原文
+  if (Reflect.has(rule, 'type')) {
+    return;
+  }
+  //update-end---author:wangshuai---date:2024-02-01---for:【QQYUN-8176】编辑表单中,校验必填时,如果组件是ApiSelect,打开编辑页面时,即使该字段有值,也会提示请选择---
   if (['DatePicker', 'MonthPicker', 'WeekPicker', 'TimePicker'].includes(component)) {
     rule.type = valueFormat ? 'string' : 'object';
   } else if (['RangePicker', 'Upload', 'CheckboxGroup', 'TimePicker'].includes(component)) {

@@ -127,6 +127,14 @@
           // update-begin--author:sunjianlei---date:20220408---for: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
           return;
         }
+        // update-begin--author:liaozhiyang---date:20240227---for：【QQYUN-6366】内部路由也可以支持采用新浏览器tab打开
+        const findItem = getMatchingMenu(props.items, key);
+        if (findItem?.internalOrExternal == true) {
+          window.open(location.origin + key);
+          return;
+        }
+        // update-end--author:liaozhiyang---date:20240227---for：【QQYUN-6366】内部路由也可以支持采用新浏览器tab打开
+
         const { beforeClickFn } = props;
         if (beforeClickFn && isFunction(beforeClickFn)) {
           const flag = await beforeClickFn(key);
@@ -138,6 +146,26 @@
         isClickGo.value = true;
         setOpenKeys(key);
         menuState.activeName = key;
+      }
+
+      /**
+       * 2024-02-27
+       * liaozhiyang
+       * 获取菜单中匹配的path所在的项
+       */
+      const getMatchingMenu = (menus, path) => {
+        for (let i = 0, len = menus.length; i < len; i++) {
+          const item = menus[i];
+          if (item.path === path && !item.redirect && !item.paramPath) {
+            return item;
+          } else if (item.children?.length) {
+            const result = getMatchingMenu(item.children, path);
+            if (result) {
+              return result;
+            }
+          }
+        }
+        return '';
       }
 
       return {

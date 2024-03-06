@@ -24,7 +24,7 @@
     </div>
     <upload-chunk ref="uploadRef" :visible="uploadVisible" @select="selectFirstFile"></upload-chunk>
   </div>
-  <UserSelectModal labelKey="realname" rowKey="username" @register="registerModal" @getSelectResult="setValue" isRadioSelection></UserSelectModal>
+  <UserSelectModal  rowKey="username" @register="registerModal" @selected="setValue" :multi="false"></UserSelectModal>
   <a-modal v-model:open="visibleEmoji" :footer="null" wrapClassName="emoji-modal" :closable="false" :width="490">
     <template #title>
       <span></span>
@@ -49,7 +49,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { UserAddOutlined, PaperClipOutlined, SmileOutlined } from '@ant-design/icons-vue';
   import { Tooltip } from 'ant-design-vue';
-  import UserSelectModal from '/@/components/Form/src/jeecg/components/modal/UserSelectModal.vue';
+  import UserSelectModal from '/@/components/Form/src/jeecg/components/userSelect/UserSelectModal.vue';
   import { useModal } from '/@/components/Modal';
   import UploadChunk from './UploadChunk.vue';
   import 'emoji-mart-vue-fast/css/emoji-mart.css';
@@ -91,7 +91,7 @@
       const uploadVisible = ref(false);
       const uploadRef = ref();
       //注册model
-      const [registerModal, { openModal }] = useModal();
+      const [registerModal, { openModal, closeModal }] = useModal();
       const buttonLoading = ref(false);
       const myComment = ref<string>('');
       function sendComment() {
@@ -149,21 +149,27 @@
       function setValue(options) {
         console.log('setValue', options);
         if (options && options.length > 0) {
-          const { label, value } = options[0];
-          if (label && value) {
-            let str = `${label}[${value}]`;
+          const { realname, username } = options[0];
+          if (realname && username) {
+            let str = `${realname}[${username}]`;
             let temp = myComment.value;
             if (!temp) {
               myComment.value = '@' + str;
             } else {
               if (temp.endsWith('@')) {
-                myComment.value = temp + str;
+                myComment.value = temp + str +' ';
               } else {
-                myComment.value = '@' + str + ' ' + temp;
+                myComment.value = '@' + str + ' ' + temp + ' ';
               }
             }
+            //update-begin---author:wangshuai---date:2024-01-22---for:【QQYUN-8002】选完人，鼠标应该放到后面并在前面加上空格---
+            showHtml.value = false;
+            commentRef.value.focus();
+            commentActive.value = true;
+            //update-end---author:wangshuai---date:2024-01-22---for:【QQYUN-8002】选完人，鼠标应该放到后面并在前面加上空格---
           }
         }
+        closeModal();        
       }
 
       function handleCommentChange() {

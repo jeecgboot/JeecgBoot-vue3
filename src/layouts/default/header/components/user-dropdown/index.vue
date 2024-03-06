@@ -126,9 +126,13 @@
           const res = await queryAllDictItems();
           removeAuthCache(DB_DICT_DATA_KEY);
           setAuthCache(DB_DICT_DATA_KEY, res.result);
-          createMessage.success('刷新缓存完成！');
+          // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+          createMessage.success(t('layout.header.refreshCacheComplete'));
+          // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
         } else {
-          createMessage.error('刷新缓存失败！');
+          // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+          createMessage.error(t('layout.header.refreshCacheFailure'));
+          // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
         }
       }
       // 切换部门

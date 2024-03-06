@@ -115,6 +115,11 @@
    * 批量删除事件
    */
   async function batchHandleDelete() {
-    await batchDeletePosition({ ids: selectedRowKeys.value }, reload);
+    await batchDeletePosition({ ids: selectedRowKeys.value }, () => {
+      // update-begin--author:liaozhiyang---date:20240223---for：【QQYUN-8334】批量删除之后，按钮未隐藏，选中记录还在
+      selectedRowKeys.value = [];
+      reload();
+      // update-end--author:liaozhiyang---date:20240223---for：【QQYUN-8334】批量删除之后，按钮未隐藏，选中记录还在
+    });
   }
 </script>

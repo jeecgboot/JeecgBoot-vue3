@@ -199,7 +199,7 @@ export function useTreeBiz(treeRef, getList, props, realProps) {
       const options = <any[]>[];
       optionData.forEach((item) => {
         //update-begin-author:taoyan date:2022-7-4 for: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
-        options.push({ label: item[props.titleKey], value: item[props.rowKey] });
+        options.push({ label: item[props.labelKey], value: item[props.rowKey] });
         //update-end-author:taoyan date:2022-7-4 for: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
       });
       selectOptions.value = options;

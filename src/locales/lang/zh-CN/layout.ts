@@ -23,6 +23,9 @@ export default {
     lockScreenBtn: '锁定',
 
     home: '首页',
+    welcomeIn:"欢迎进入",
+    refreshCacheComplete: "刷新缓存完成！",
+    refreshCacheFailure: "刷新缓存失败！",
   },
   multipleTab: {
     reload: '重新加载',
@@ -119,5 +122,12 @@ export default {
     triggerClick: '点击',
 
     mixSidebarFixed: '固定展开菜单',
+  },
+  changePassword: {
+    changePassword: '修改密码',
+    oldPassword: '旧密码',
+    newPassword: '新密码',
+    confirmNewPassword: '确认新密码',
+    pleaseEnterNewPassword: '请输入新密码',
   },
 };

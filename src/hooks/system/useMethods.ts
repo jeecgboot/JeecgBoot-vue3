@@ -21,7 +21,9 @@ export function useMethods() {
    * @param url
    */
   async function exportXls(name, url, params, isXlsx = false) {
-    const data = await defHttp.get({ url: url, params: params, responseType: 'blob' }, { isTransformResponse: false });
+    //update-begin---author:wangshuai---date:2024-01-25---for:【QQYUN-8118】导出超时时间设置长点---
+    const data = await defHttp.get({ url: url, params: params, responseType: 'blob', timeout: 60000 }, { isTransformResponse: false });
+    //update-end---author:wangshuai---date:2024-01-25---for:【QQYUN-8118】导出超时时间设置长点---
     if (!data) {
       createMessage.warning('文件下载失败');
       return;

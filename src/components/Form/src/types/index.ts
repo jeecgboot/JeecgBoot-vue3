@@ -128,6 +128,7 @@ export type ComponentType =
   | 'JCategorySelect'
   | 'JSelectMultiple'
   | 'JPopup'
+  | 'JPopupDict'
   | 'JSwitch'
   | 'JEasyCron'
   | 'JTreeDict'

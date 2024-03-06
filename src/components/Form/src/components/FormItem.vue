@@ -183,9 +183,12 @@
             rule.required = false;
           }
           if (component) {
-            if (!Reflect.has(rule, 'type')) {
+            //update-begin---author:wangshuai---date:2024-02-01---for:【QQYUN-8176】编辑表单中,校验必填时,如果组件是ApiSelect,打开编辑页面时,即使该字段有值,也会提示请选择---
+            //https://github.com/vbenjs/vue-vben-admin/pull/3082 github修复原文
+            /*if (!Reflect.has(rule, 'type')) {
               rule.type = component === 'InputNumber' ? 'number' : 'string';
-            }
+            }*/
+            //update-end---author:wangshuai---date:2024-02-01---for:【QQYUN-8176】编辑表单中,校验必填时,如果组件是ApiSelect,打开编辑页面时,即使该字段有值,也会提示请选择---
 
             rule.message = rule.message || defaultMsg;
 

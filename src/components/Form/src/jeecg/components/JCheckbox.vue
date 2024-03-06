@@ -1,5 +1,9 @@
 <template>
-  <a-checkbox-group v-bind="attrs" v-model:value="checkboxArray" :options="checkOptions" @change="handleChange"></a-checkbox-group>
+  <a-checkbox-group v-bind="attrs" v-model:value="checkboxArray" :options="checkOptions" @change="handleChange">
+    <template #label="{label, value}">
+      <span :class="[useDicColor && getDicColor(value) ? 'colorText' : '']" :style="{ backgroundColor: `${getDicColor(value)}` }">{{ label }}</span>
+    </template>
+  </a-checkbox-group>
 </template>
 
 <script lang="ts">
@@ -13,6 +17,7 @@
     props: {
       value:propTypes.oneOfType([propTypes.string, propTypes.number]),
       dictCode: propTypes.string,
+      useDicColor: propTypes.bool.def(false),
       options: {
         type: Array,
         default: () => [],
@@ -69,6 +74,7 @@
               prev.push({
                 label: next['text'],
                 value: value,
+                color: next['color'],
               });
             }
             return prev;
@@ -84,8 +90,30 @@
         emit('update:value', $event.join(','));
         emit('change', $event.join(','));
       }
-
-      return { checkboxArray, checkOptions, attrs, handleChange };
+      const getDicColor = (value) => {
+        if (props.useDicColor) {
+          const findItem = checkOptions.value.find((item) => item.value == value);
+          if (findItem) {
+            return findItem.color;
+          }
+        }
+        return null;
+      };
+      return { checkboxArray, checkOptions, attrs, handleChange, getDicColor };
     },
   });
 </script>
+<style lang="less" scoped>
+  // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+  .colorText {
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 6px;
+    border-radius: 8px;
+    background-color: red;
+    color: #fff;
+    font-size: 12px;
+  }
+  // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+</style>

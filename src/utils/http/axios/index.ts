@@ -91,13 +91,22 @@ const transform: AxiosTransform = {
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
 
-    if (joinPrefix) {
+    //update-begin---author:scott ---date:2024-02-20  for：以http开头的请求url，不拼加前缀--
+    // http开头的请求url，不加前缀
+    let isStartWithHttp = false;
+    const requestUrl = config.url;
+    if(requestUrl!=null && (requestUrl.startsWith("http:") || requestUrl.startsWith("https:"))){
+      isStartWithHttp = true;
+    }
+    if (!isStartWithHttp && joinPrefix) {
       config.url = `${urlPrefix}${config.url}`;
     }
 
-    if (apiUrl && isString(apiUrl)) {
+    if (!isStartWithHttp && apiUrl && isString(apiUrl)) {
       config.url = `${apiUrl}${config.url}`;
     }
+    //update-end---author:scott ---date::2024-02-20  for：以http开头的请求url，不拼加前缀--
+    
     const params = config.params || {};
     const data = config.data || false;
     formatDate && data && !isString(data) && formatRequestDate(data);

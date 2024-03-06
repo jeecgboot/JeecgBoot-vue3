@@ -251,6 +251,11 @@
     &-popconfirm {
       .ant-popconfirm-buttons {
         min-width: 120px;
+        // update-begin--author:liaozhiyang---date:20240124---for：【issues/1019】popConfirm确认框待端后端返回过程中（处理中）样式错乱
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // update-end--author:liaozhiyang---date:20240124---for：【issues/1019】popConfirm确认框待端后端返回过程中（处理中）样式错乱
       }
     }
   }

@@ -222,13 +222,16 @@
         if (selectedDepart.value) {
           params['departId'] = selectedDepart.value;
         }
+
+        //update-begin---author:wangshuai---date:2024-02-02---for:【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+        if(unref(excludeUserIdList) && unref(excludeUserIdList).length>0){
+          params['excludeUserIdList'] = excludeUserIdList.value.join(",");
+        }
+        //update-end---author:wangshuai---date:2024-02-02---for:【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+        
         const data = await defHttp.get({ url, params }, { isTransformResponse: false });
         if (data.success) {
           let { records, total } = data.result;
-          //如果排除的用户id的长度不为0，那么需要改变页数
-          if(unref(excludeUserIdList) && unref(excludeUserIdList).length>0){
-             total = total - unref(excludeUserIdList).length;
-          }
           totalRecord.value = total;
           initCurrentUserData(records);
           userDataList.value = records;

@@ -126,6 +126,9 @@ export function getCaptcha(params) {
         createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
         reject();
       }
+    }).catch((res)=>{
+      createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+      reject();
     });
   });
 }

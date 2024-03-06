@@ -141,7 +141,7 @@
         const url = '/sys/user/selectUserList';
         let params = {
           pageNo: 1,
-          pageSize: 10,
+          pageSize: 99,
         };
         if (props.searchText) {
           params['keyword'] = props.searchText;
@@ -149,6 +149,11 @@
         if (selectedDepartId.value) {
           params['departId'] = selectedDepartId.value;
         }
+        //update-begin---author:wangshuai---date:2024-02-02---for:【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+        if(props.excludeUserIdList && props.excludeUserIdList.length>0){
+          params['excludeUserIdList'] = props.excludeUserIdList.join(",");
+        }
+        //update-end---author:wangshuai---date:2024-02-02---for:【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
         const data = await defHttp.get({ url, params }, { isTransformResponse: false });
         if (data.success) {
           const { records } = data.result;

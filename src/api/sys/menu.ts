@@ -24,6 +24,13 @@ export const getMenuList = () => {
 };
 
 /**
+ * @description: 获取后台菜单权限和按钮权限
+ */
+export function getBackMenuAndPerms() {
+  return defHttp.get({ url: Api.GetMenuList });
+}
+
+/**
  * 切换成vue3菜单
  */
 export const switchVue3Menu = () => {

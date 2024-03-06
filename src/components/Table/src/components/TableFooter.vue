@@ -57,7 +57,9 @@
         if (!isFunction(summaryFunc)) {
           return [];
         }
-        let dataSource = toRaw(unref(table.getDataSource()));
+        // update-begin--author:liaozhiyang---date:20230227---for：【QQYUN-8172】可编辑单元格编辑完以后不更新合计值
+        let dataSource = cloneDeep(unref(table.getDataSource()));
+        // update-end--author:liaozhiyang---date:20230227---for：【QQYUN-8172】可编辑单元格编辑完以后不更新合计值
         dataSource = summaryFunc(dataSource);
         dataSource.forEach((item, i) => {
           item[props.rowKey] = `${i}`;

@@ -38,7 +38,8 @@
     </BasicTree>
     <!--右下角按钮-->
     <template #footer>
-      <PopConfirmButton title="确定放弃编辑？" @confirm="closeDrawer" okText="确定" cancelText="取消">取消</PopConfirmButton>
+      <!-- <PopConfirmButton title="确定放弃编辑？" @confirm="closeDrawer" okText="确定" cancelText="取消"></PopConfirmButton> -->
+      <a-button @click="closeDrawer">取消</a-button>
       <a-button @click="handleSubmit(false)" type="primary" :loading="loading" ghost style="margin-right: 0.8rem">仅保存</a-button>
       <a-button @click="handleSubmit(true)" type="primary" :loading="loading">保存并关闭</a-button>
     </template>
@@ -52,6 +53,7 @@
   import { PopConfirmButton } from '/@/components/Button';
   import RoleDataRuleDrawer from './RoleDataRuleDrawer.vue';
   import { queryTreeListForRole, queryRolePermission, saveRolePermission } from '../role.api';
+  import { useI18n } from "/@/hooks/web/useI18n";
   const emit = defineEmits(['register']);
   //树的信息
   const treeData = ref<TreeItem[]>([]);
@@ -78,7 +80,9 @@
     roleId.value = data.roleId;
     //初始化数据
     const roleResult = await queryTreeListForRole();
-    treeData.value = roleResult.treeList;
+    // update-begin--author:liaozhiyang---date:20240228---for：【QQYUN-8355】角色权限配置的菜单翻译
+    treeData.value = translateTitle(roleResult.treeList);
+    // update-end--author:liaozhiyang---date:20240228---for：【QQYUN-8355】角色权限配置的菜单翻译
     allTreeKeys.value = roleResult.ids;
     expandedKeys.value = roleResult.ids;
     //初始化角色菜单数据
@@ -87,6 +91,27 @@
     defaultCheckedKeys.value = permResult;
     setDrawerProps({ loading: false });
   });
+  /**
+  * 2024-02-28
+  * liaozhiyang
+  * 翻译菜单名称
+   */
+  function translateTitle(data) {
+    if (data?.length) {
+      data.forEach((item) => {
+        if (item.slotTitle) {
+          const { t } = useI18n();
+          if (item.slotTitle.includes("t('") && t) {
+            item.slotTitle = new Function('t', `return ${item.slotTitle}`)(t);
+          }
+        }
+        if (item.children?.length) {
+          translateTitle(item.children);
+        }
+      });
+    }
+    return data;
+  }
   /**
    * 点击选中
    */

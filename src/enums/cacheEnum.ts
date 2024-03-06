@@ -38,6 +38,12 @@ export const JEECG_CHAT_UID = 'JEECG_CHAT_UID';
 // 免登录租户id，与系统分开，避免重复
 export const OAUTH2_THIRD_LOGIN_TENANT_ID = 'THIRD_LOGIN_TENANT_ID';
 
+// ai助手标识（退出需要记录一下）
+export const AIDE_FLAG = 'AIDE_FLAG';
+
+// ai助手标识（退出需要记录一下）
+export const JEECG_CHAT_KEY = 'JEECG-CHAT-KEY';
+
 export enum CacheTypeEnum {
   SESSION,
   LOCAL,

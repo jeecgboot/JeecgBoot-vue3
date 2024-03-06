@@ -5,6 +5,7 @@ import purgeIcons from 'vite-plugin-purge-icons';
 import UnoCSS from 'unocss/vite';
 import { presetTypography, presetUno } from 'unocss';
 
+// 本地调试https配置方法
 import VitePluginCertificate from 'vite-plugin-mkcert';
 //[issues/555]开发环境，vscode断点调试，文件或行数对不上
 import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus';

@@ -248,7 +248,14 @@ export function useDataSource(
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
-
+      // update-begin--author:liaozhiyang---date:20240227---for：【QQYUN-8316】table查询条件,请求剔除空字符串字段
+      for (let item of Object.entries(params)) {
+        const [key, val] = item;
+        if (val === '') {
+          delete params[key];
+        };
+      };
+      // update-end--author:liaozhiyang---date:20240227---for：【QQYUN-8316】table查询条件,请求剔除空字符串字段
       const res = await api(params);
       rawDataSourceRef.value = res;
 
