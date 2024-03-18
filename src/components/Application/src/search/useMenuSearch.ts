@@ -12,6 +12,7 @@ export interface SearchResult {
   name: string;
   path: string;
   icon?: string;
+  internalOrExternal: boolean;
 }
 
 // Translate special characters
@@ -23,7 +24,7 @@ function transform(c: string) {
 function createSearchReg(key: string) {
   const keys = [...key].map((item) => transform(item));
   const str = ['', ...keys, ''].join('.*');
-  return new RegExp(str);
+  return new RegExp(str, 'i');
 }
 
 export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, emit: EmitType) {
@@ -68,12 +69,13 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
   function handlerSearchResult(filterMenu: Menu[], reg: RegExp, parent?: Menu) {
     const ret: SearchResult[] = [];
     filterMenu.forEach((item) => {
-      const { name, path, icon, children, hideMenu, meta } = item;
+      const { name, path, icon, children, hideMenu, meta, internalOrExternal } = item;
       if (!hideMenu && reg.test(name) && (!children?.length || meta?.hideChildrenInMenu)) {
         ret.push({
           name: parent?.name ? `${parent.name} > ${name}` : name,
           path,
           icon,
+          internalOrExternal
         });
       }
       if (!meta?.hideChildrenInMenu && Array.isArray(children) && children.length) {
@@ -149,7 +151,14 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
     const to = result[index];
     handleClose();
     await nextTick();
-    go(to.path);
+
+    // update-begin--author:liaozhiyang---date:20230803---for：【QQYUN-8369】搜索区分大小写，外部链接新页打开
+    if (to.internalOrExternal) {
+      window.open(to.path, '_blank');
+    } else {
+      go(to.path);
+    }
+    // update-end--author:liaozhiyang---date:20230803---for：【QQYUN-8369】搜索区分大小写，外部链接新页打开
   }
 
   // close search modal
