@@ -18,6 +18,19 @@ export function isRegistered(type: JVxeTypes | string) {
 }
 
 /**
+ * 2024-03-08
+ * liaozhiyang
+ * 异步注册vxe自定义组件
+ * 【QQYUN-8241】
+ * @param type
+ * @param promise
+ */
+export function registerASyncComponentReal(type: JVxeTypes, component) {
+  addComponent(type, component);
+  registerOneComponent(type);
+}
+
+/**
  * 注册vxe自定义组件
  *
  * @param type

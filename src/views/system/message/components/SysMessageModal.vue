@@ -124,9 +124,10 @@
   import { FilterOutlined, CloseOutlined, BellFilled, ExclamationOutlined, PlusOutlined } from '@ant-design/icons-vue';
   import JSelectUser from '/@/components/Form/src/jeecg/components/JSelectUser.vue';
   import { ref, unref, reactive, computed } from 'vue';
-  import SysMessageList from './SysMessageList.vue'
+  // import SysMessageList from './SysMessageList.vue'
   import UserSelectModal from '/@/components/Form/src/jeecg/components/modal/UserSelectModal.vue'
   import DetailModal from '/@/views/monitor/mynews/DetailModal.vue';
+  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   
   export default {
     name: 'SysMessageModal',
@@ -137,7 +138,7 @@
       BellFilled,
       ExclamationOutlined,
       JSelectUser,
-      SysMessageList,
+      SysMessageList: createAsyncComponent(() => import('./SysMessageList.vue')),
       UserSelectModal,
       PlusOutlined,
       DetailModal
@@ -170,7 +171,9 @@
           rangeDate: searchParams.rangeDate,
         }
         if(activeKey.value == 'all'){
-          allMessageRef.value.reload(params);
+          getRefPromise(allMessageRef).then(() => {
+            allMessageRef.value.reload(params);
+          });
         }else{
           starMessageRef.value.reload(params);
         }
@@ -278,6 +281,21 @@
       function clearSearchParamsUser(){
         searchParams.fromUser = ''
         searchParams.realname = ''
+      }
+
+      function getRefPromise(componentRef) {
+        return new Promise((resolve) => {
+          (function next() {
+            let ref = componentRef.value;
+            if (ref) {
+              resolve(ref);
+            } else {
+              setTimeout(() => {
+                next();
+              }, 100);
+            }
+          })();
+        });
       }
       
       function clearAll(){

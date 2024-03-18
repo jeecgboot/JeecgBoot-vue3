@@ -1,6 +1,7 @@
-import { registerComponent, registerAsyncComponent } from '/@/components/jeecg/JVxeTable';
+import { registerComponent, registerAsyncComponent, registerASyncComponentReal } from '/@/components/jeecg/JVxeTable';
 import { JVxeTypes } from '/@/components/jeecg/JVxeTable/types';
 import { DictSearchSpanCell, DictSearchInputCell } from './src/components/JVxeSelectDictSearchCell';
+import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
 export async function registerJVxeCustom() {
   // ----------------- ⚠ 注意事项 ⚠ -----------------
@@ -23,5 +24,8 @@ export async function registerJVxeCustom() {
   // 注册【部门选择】组件
   await registerAsyncComponent(JVxeTypes.departSelect, import('./src/components/JVxeDepartSelectCell.vue'));
   // 注册【省市区选择】组件
-  await registerAsyncComponent(JVxeTypes.pca, import('./src/components/JVxePcaCell.vue'));
+  registerASyncComponentReal(
+    JVxeTypes.pca,
+    createAsyncComponent(() => import('./src/components/JVxePcaCell.vue'))
+  );
 }
