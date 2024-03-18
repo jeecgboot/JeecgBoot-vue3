@@ -10,7 +10,7 @@ export interface RequestOptions {
   isTransformResponse?: boolean;
   // 是否返回本地响应头,需要获取响应头时使用此属性
   isReturnNativeResponse?: boolean;
-  // Whether to join url
+  // 默认将prefix 添加到url
   joinPrefix?: boolean;
   // 接口地址，如果保留为空，则使用默认值
   apiUrl?: string;
