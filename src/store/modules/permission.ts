@@ -18,7 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getBackMenuAndPerms, switchVue3Menu } from '/@/api/sys/menu';
+import { getBackMenuAndPerms } from '/@/api/sys/menu';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
@@ -224,39 +224,39 @@ export const usePermissionStore = defineStore({
             routeList = await this.changePermissionCode();
             //routeList = (await getMenuList()) as AppRouteRecordRaw[];
             // update-begin----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
-            let hasIndex: boolean = false;
-            let hasIcon: boolean = false;
-            for (let menuItem of routeList) {
-              // 条件1：判断组件是否是 layouts/default/index
-              if (!hasIndex) {
-                hasIndex = menuItem.component === 'layouts/default/index';
-              }
-              // 条件2：判断图标是否带有 冒号
-              if (!hasIcon) {
-                hasIcon = !!menuItem.meta?.icon?.includes(':');
-              }
-              // 满足任何一个条件都直接跳出循环
-              if (hasIcon || hasIndex) {
-                break;
-              }
-            }
-            // 两个条件都不满足，就弹出提示框
-            if (!hasIcon && !hasIndex) {
-              // 延迟1.5秒之后再出现提示，否则提示框出不来
-              setTimeout(
-                () =>
-                  createWarningModal({
-                    title: '检测提示',
-                    content:
-                      '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
-                    onOk:function () {
-                      switchVue3Menu();
-                      location.reload();
-                    }
-                  }),
-                100
-              );
-            }
+            // let hasIndex: boolean = false;
+            // let hasIcon: boolean = false;
+            // for (let menuItem of routeList) {
+            //   // 条件1：判断组件是否是 layouts/default/index
+            //   if (!hasIndex) {
+            //     hasIndex = menuItem.component === 'layouts/default/index';
+            //   }
+            //   // 条件2：判断图标是否带有 冒号
+            //   if (!hasIcon) {
+            //     hasIcon = !!menuItem.meta?.icon?.includes(':');
+            //   }
+            //   // 满足任何一个条件都直接跳出循环
+            //   if (hasIcon || hasIndex) {
+            //     break;
+            //   }
+            // }
+            // // 两个条件都不满足，就弹出提示框
+            // if (!hasIcon && !hasIndex) {
+            //   // 延迟1.5秒之后再出现提示，否则提示框出不来
+            //   setTimeout(
+            //     () =>
+            //       createWarningModal({
+            //         title: '检测提示',
+            //         content:
+            //           '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
+            //         onOk:function () {
+            //           switchVue3Menu();
+            //           location.reload();
+            //         }
+            //       }),
+            //     100
+            //   );
+            // }
             // update-end----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
           } catch (error) {
             console.error(error);

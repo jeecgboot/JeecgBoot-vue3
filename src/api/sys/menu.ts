@@ -3,7 +3,8 @@ import { getMenuListResultModel } from './model/menuModel';
 
 enum Api {
   GetMenuList = '/sys/permission/getUserPermissionByToken',
-  SwitchVue3Menu = '/sys/switchVue3Menu',
+  // 【QQYUN-8487】
+  // SwitchVue3Menu = '/sys/switchVue3Menu',
 }
 
 /**
@@ -33,8 +34,10 @@ export function getBackMenuAndPerms() {
 /**
  * 切换成vue3菜单
  */
-export const switchVue3Menu = () => {
-  return new Promise((resolve) => {
-    defHttp.get({ url: Api.SwitchVue3Menu });
-  });
-};
+ // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
+// export const switchVue3Menu = () => {
+//   return new Promise((resolve) => {
+//     defHttp.get({ url: Api.SwitchVue3Menu });
+//   });
+// };
+// update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
