@@ -39,11 +39,13 @@
   import { columns,searchFormSchema } from './menu.data';
   import { list, deleteMenu, batchDeleteMenu } from './menu.api';
   import { useDefIndexStore } from "@/store/modules/defIndex";
+  import { useI18n } from "/@/hooks/web/useI18n";
 
   const checkedKeys = ref<Array<string | number>>([]);
   const showFooter = ref(true);
   const [registerDrawer, { openDrawer }] = useDrawer();
   const [registerDrawer1, { openDrawer: openDataRule }] = useDrawer();
+  const { t } = useI18n();
 
   // 自定义菜单名称列渲染
   columns[0].customRender = function ({text, record}) {
@@ -51,6 +53,11 @@
     if (isDefIndex) {
       text += '（默认首页）'
     }
+    // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8379】菜单管理页菜单国际化
+    if (text.includes("t('") && t) {
+      return new Function('t', `return ${text}`)(t);
+    }
+    // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8379】菜单管理页菜单国际化
     return text
   }
 
