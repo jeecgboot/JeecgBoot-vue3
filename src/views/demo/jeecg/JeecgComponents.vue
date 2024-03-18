@@ -2,8 +2,8 @@
   <BasicForm
     ref="formElRef"
     :class="'jee-select-demo-form'"
-    :labelCol="{ span: 5 }"
-    :wrapperCol="{ span: 15 }"
+    :labelCol="{ span: 6 }"
+    :wrapperCol="{ span: 14 }"
     :showResetButton="false"
     :showSubmitButton="false"
     :schemas="schemas"

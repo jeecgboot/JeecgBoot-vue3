@@ -105,6 +105,22 @@
         return disabled;
       });
 
+      // update-begin--author:liaozhiyang---date:20240308---for：【QQYUN-8377】formSchema props支持动态修改
+      const getDynamicPropsValue = computed(() => {
+        const { dynamicPropsVal, dynamicPropskey } = props.schema;
+        if (dynamicPropskey == null) {
+          return null;
+        } else {
+          const { [dynamicPropskey]: itemValue } = unref(getComponentsProps);
+          let value = itemValue;
+          if (isFunction(dynamicPropsVal)) {
+            value = dynamicPropsVal(unref(getValues));
+            return value;
+          }
+        }
+      });
+      // update-end--author:liaozhiyang---date:20240308---for：【QQYUN-8377】formSchema props支持动态修改
+
       function getShow(): { isShow: boolean; isIfShow: boolean } {
         const { show, ifShow } = props.schema;
         const { showAdvancedButton } = props.formProps;
@@ -276,6 +292,12 @@
           ...unref(getComponentsProps),
           disabled: unref(getDisable),
         };
+        // update-begin--author:liaozhiyang---date:20240308---for：【QQYUN-8377】formSchema props支持动态修改
+        const dynamicPropskey = props.schema.dynamicPropskey;
+        if (dynamicPropskey) {
+          propsData[dynamicPropskey] = unref(getDynamicPropsValue);
+        }
+        // update-end--author:liaozhiyang---date:20240308---for：【QQYUN-8377】formSchema props支持动态修改
 
         const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder;
         // RangePicker place是一个数组
@@ -315,21 +337,19 @@
         //update-begin-author:taoyan date:2022-9-7 for: VUEN-2061【样式】online表单超出4个 .. 省略显示
         //label宽度支持自定义
         const { label, helpMessage, helpComponentProps, subLabel, labelLength } = props.schema;
-        let showLabel:string = (label+'')
-        if(labelLength && showLabel.length>4){
+        let showLabel: string = label + '';
+        if (labelLength && showLabel.length > 4) {
           showLabel = showLabel.substr(0, labelLength);
         }
-        const titleObj = {title: label}
+        const titleObj = { title: label };
         const renderLabel = subLabel ? (
           <span>
             {label} <span class="text-secondary">{subLabel}</span>
           </span>
+        ) : labelLength ? (
+          <label {...titleObj}>{showLabel}</label>
         ) : (
-          labelLength ? (
-            <label {...titleObj}>{showLabel}</label>
-          ) : (
-            label
-          ) 
+          label
         );
         //update-end-author:taoyan date:2022-9-7 for: VUEN-2061【样式】online表单超出4个 .. 省略显示
         const getHelpMessage = isFunction(helpMessage) ? helpMessage(unref(getValues)) : helpMessage;
@@ -391,14 +411,14 @@
         }
 
         const { baseColProps = {} } = props.formProps;
-        // update-begin--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效 
+        // update-begin--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效
         const { getIsMobile } = useAppInject();
         let realColProps;
         realColProps = { ...baseColProps, ...colProps };
         if (colProps['span'] && !unref(getIsMobile)) {
           ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].forEach((name) => delete realColProps[name]);
         }
-        // update-end--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效 
+        // update-end--author:liaozhiyang---date:20230803---for：【issues-641】调整表格搜索表单的span配置无效
         const { isIfShow, isShow } = getShow();
         const values = unref(getValues);
 

@@ -710,4 +710,60 @@ export const schemas: FormSchema[] = [
       span: 12,
     },
   },
+  {
+    field: 'sex',
+    component: 'JDictSelectTag',
+    label: '性别(控制下方课程options)',
+    helpMessage: ['component模式','性别不同，下方课程展示选项不同'],
+    componentProps: {
+      dictCode: 'sex',
+      type: 'radioButton',
+      onChange: (value) => {
+        console.log(value);
+      },
+    },
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'sex',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
+  {
+    field: 'course',
+    component: 'Select',
+    label: '课程',
+    dynamicPropskey: 'options',
+    dynamicPropsVal: ({ model }) => {
+      let options;
+      if (model.sex == 1) {
+        return [
+          { value: '0', label: 'java - 男' },
+          { value: '1', label: 'vue - 男' },
+        ];
+      } else if (model.sex == 2) {
+        return [
+          { value: '2', label: '瑜伽 - 女' },
+          { value: '3', label: '美甲 - 女' },
+        ];
+      } else {
+        return [];
+      }
+    },
+    componentProps: {
+      disabled: false,
+    },
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'course',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
 ];
