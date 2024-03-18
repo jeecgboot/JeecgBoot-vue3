@@ -59,7 +59,9 @@
       instance && emit('register', drawerInstance, instance.uid);
 
       const getMergeProps = computed((): DrawerProps => {
-        return deepMerge(toRaw(props), unref(propsRef));
+        // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8389】vue3.4以上版本导致角色抽屉隐藏footer逻辑错误
+        return { ...deepMerge(toRaw(props), unref(propsRef)) };
+        // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8389】vue3.4以上版本导致角色抽屉隐藏footer逻辑错误
       });
 
       const getProps = computed((): DrawerProps => {
