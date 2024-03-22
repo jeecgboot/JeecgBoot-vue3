@@ -130,10 +130,11 @@
         if (!props.visible) return;
         const wrapperRefDom = unref(wrapperRef);
         if (!wrapperRefDom) return;
-
-        const bodyDom = wrapperRefDom.$el.parentElement;
+        // update-begin--author:liaozhiyang---date:20240320---for：【QQYUN-8573】BasicModal组件在非全屏的情况下最大高度获取异常，不论内容高度是否超出屏幕高度，都等于内容高度
+        const bodyDom = wrapperRefDom.$el.parentElement?.parentElement?.parentElement;
+        // update-end--author:liaozhiyang---date:20240320---for：BasicModal组件在非全屏的情况下最大高度获取异常，不论内容高度是否超出屏幕高度，都等于内容高度
         if (!bodyDom) return;
-        bodyDom.style.padding = '0';
+        // bodyDom.style.padding = '0';
         await nextTick();
 
         try {
