@@ -118,7 +118,12 @@
 
       const initOptions = computed(() => {
         const { height, options, toolbar, plugins, menubar } = props;
-        const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+        let publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+        // update-begin--author:liaozhiyang---date:20240320---for：【QQYUN-8571】发布路径不以/结尾资源会加载失败
+        if (!publicPath.endsWith('/')) {
+          publicPath += '/';
+        }
+        // update-end--author:liaozhiyang---date:20240320---for：【QQYUN-8571】发布路径不以/结尾资源会加载失败
         return {
           selector: `#${unref(tinymceId)}`,
           height,
