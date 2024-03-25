@@ -174,7 +174,11 @@ export function createPermissionGuard(router: Router) {
     //   }
     // }
     //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】刷新首页，不需要重新获获取用户信息---
-
+    // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+    if (userStore.getLastUpdateTime === 0) {
+      userStore.setAllDictItemsByLocal();
+    }
+    // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;

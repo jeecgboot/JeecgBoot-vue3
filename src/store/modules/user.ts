@@ -19,11 +19,14 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { JDragConfigEnum } from '/@/enums/jeecgEnum';
 import { useSso } from '/@/hooks/web/useSso';
 import { isOAuth2AppEnv } from "/@/views/sys/login/useLogin";
+interface dictType {
+  [key: string]: any;
+}
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
-  dictItems?: [];
+  dictItems?: dictType | null;
   sessionTimeout?: boolean;
   lastUpdateTime: number;
   tenantid?: string | number;
@@ -41,7 +44,7 @@ export const useUserStore = defineStore({
     // 角色列表
     roleList: [],
     // 字典
-    dictItems: [],
+    dictItems: null,
     // session过期时间
     sessionTimeout: false,
     // Last fetch time
@@ -109,6 +112,16 @@ export const useUserStore = defineStore({
       this.dictItems = dictItems;
       setAuthCache(DB_DICT_DATA_KEY, dictItems);
     },
+    setAllDictItemsByLocal() {
+      // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+      if (!this.dictItems) {
+        const allDictItems = getAuthCache(DB_DICT_DATA_KEY);
+        if (allDictItems) {
+          this.dictItems = allDictItems;
+        }
+      }
+      // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+    },
     setTenant(id) {
       this.tenantid = id;
       setAuthCache(TENANT_ID, id);
@@ -121,7 +134,7 @@ export const useUserStore = defineStore({
     },
     resetState() {
       this.userInfo = null;
-      this.dictItems = [];
+      this.dictItems = null;
       this.token = '';
       this.roleList = [];
       this.sessionTimeout = false;
