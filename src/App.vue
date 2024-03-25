@@ -35,6 +35,11 @@
       if (newValue === ThemeEnum.DARK) {
         appTheme.value.algorithm = theme.darkAlgorithm;
       }
+      // update-begin--author:liaozhiyang---date:20240322---for：【QQYUN-8570】生产环境暗黑模式下主题色不生效
+      if (import.meta.env.PROD) {
+        changeTheme(appStore.getProjectConfig.themeColor);
+      }
+      // update-end--author:liaozhiyang---date:20240322---for：【QQYUN-8570】生产环境暗黑模式下主题色不生效
       appTheme.value = {
         ...appTheme.value,
       };
