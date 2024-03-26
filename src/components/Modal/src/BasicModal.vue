@@ -65,6 +65,9 @@
   import { useFullScreen } from './hooks/useModalFullScreen';
   import { omit } from 'lodash-es';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useAppInject } from '/@/hooks/web/useAppInject';
+
+
   export default defineComponent({
     name: 'BasicModal',
     components: { Modal, ModalWrapper, ModalClose, ModalFooter, ModalHeader },
@@ -94,13 +97,21 @@
       if (instance) {
         emit('register', modalMethods, instance.uid);
       }
+      const { getIsMobile } = useAppInject();
 
       // Custom title component: get title
       const getMergeProps = computed((): Recordable => {
-        return {
+        const result = {
           ...props,
           ...(unref(propsRef) as any),
         };
+        // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        if (getIsMobile.value) {
+          result.canFullscreen = false;
+          result.defaultFullscreen = true;
+        }
+        // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        return result;
       });
         //update-begin-author:liusq date:2023-05-25 for:【issues/4856】Modal控件设置 :title = null 无效
         //是否未设置标题
@@ -153,6 +164,11 @@
 
       watchEffect(() => {
         fullScreenRef.value = !!props.defaultFullscreen;
+        // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        if (getIsMobile.value) {
+          fullScreenRef.value = true
+        }
+        // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
       });
 
       watchEffect(() => {
@@ -294,5 +310,10 @@
   .jeecg-modal-wrapper,
   .jeecg-modal-content {
     height: 100%;
+  }
+  html[data-theme='dark'] {
+    .jeecg-comment-outer {
+      border-left: 1px solid rgba(253, 253, 253, 0.12);
+    }
   }
 </style>
