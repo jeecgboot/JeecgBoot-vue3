@@ -106,7 +106,7 @@
 
   .@{prefix-cls} {
     position: absolute;
-    top: 4px;
+    top: 8px;
     right: 10px;
     z-index: 20;
 
@@ -114,5 +114,12 @@
       position: fixed;
       z-index: 10000;
     }
+    // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8647】online tinymce组件上传图片按遮挡了控件栏的全屏按钮
+    .ant-btn {
+      padding: 2px 4px;
+      font-size: 12px;
+      height: 24px;
+    }
+    // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8647】online tinymce组件上传图片按遮挡了控件栏的全屏按钮
   }
 </style>
