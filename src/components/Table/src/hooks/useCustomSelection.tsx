@@ -387,6 +387,9 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
+        // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        onClick={(e) => e.stopPropagation()}
+        // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
       />
     );
   }
@@ -412,6 +415,9 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
+        // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        onClick={(e) => e.stopPropagation()}
+        // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
       />
     );
   }
