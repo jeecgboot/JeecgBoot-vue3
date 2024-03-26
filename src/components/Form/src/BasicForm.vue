@@ -140,25 +140,39 @@
             }
             //update-end---author:wangshuai ---date:20230410  for：【issues/435】代码生成的日期控件赋默认值报错------------
             if (!Array.isArray(defaultValue)) {
-              //update-begin---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
-              if(valueFormat){
-                schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
-              }else{
-                schema.defaultValue = dateUtil(defaultValue);
-              }
-              //update-end---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
-            } else {
-              const def: dayjs.Dayjs[] = [];
-              defaultValue.forEach((item) => {
+              // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8696】rangepicker等时间控件报错（vue3.4以上版本有问题）
+              if (Object.prototype.toString.call(defaultValue) === '[object Date]') {
                 //update-begin---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
-                if(valueFormat){
-                  def.push(dateUtil(item).format(valueFormat));
-                }else{
-                  def.push(dateUtil(item));
+                if (valueFormat) {
+                  schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
+                } else {
+                  schema.defaultValue = dateUtil(defaultValue);
                 }
                 //update-end---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
+              }
+              // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8696】rangepicker等时间控件报错（vue3.4以上版本有问题）
+            } else {
+              // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8696】rangepicker等时间控件报错（vue3.4以上版本有问题）
+              let isAssignment = false;
+              defaultValue.forEach((item) => {
+                if (Object.prototype.toString.call(item) === '[object Date]') {
+                  isAssignment = true;
+                }
               });
-              schema.defaultValue = def;
+              if (isAssignment) {
+                const def: dayjs.Dayjs[] = [];
+                defaultValue.forEach((item) => {
+                  //update-begin---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
+                  if (valueFormat) {
+                    def.push(dateUtil(item).format(valueFormat));
+                  } else {
+                    def.push(dateUtil(item));
+                  }
+                  //update-end---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
+                });
+                schema.defaultValue = def;
+              }
+              // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8696】rangepicker等时间控件报错（vue3.4以上版本有问题）
             }
           }
         }
