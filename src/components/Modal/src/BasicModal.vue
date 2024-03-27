@@ -226,6 +226,11 @@
         }
         if (Reflect.has(props, 'defaultFullscreen')) {
           fullScreenRef.value = !!props.defaultFullscreen;
+           // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+          if (getIsMobile.value) {
+            fullScreenRef.value = true
+          }
+          // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
         }
       }
 
