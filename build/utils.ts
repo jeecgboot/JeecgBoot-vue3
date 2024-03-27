@@ -50,7 +50,9 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
  */
 function getConfFiles() {
   const script = process.env.npm_lifecycle_script;
-  const reg = new RegExp('--mode ([a-z_\\d]+)');
+  // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8690】修正获取当前环境下的文件名
+  const reg = new RegExp('NODE_ENV=([a-z_\\d]+)');
+  // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8690】修正获取当前环境下的文件名
   const result = reg.exec(script as string) as any;
   if (result) {
     const mode = result[1] as string;
