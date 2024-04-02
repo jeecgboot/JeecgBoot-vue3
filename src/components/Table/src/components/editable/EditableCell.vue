@@ -96,7 +96,11 @@
       });
 
       const getComponentProps = computed(() => {
-        const compProps = props.column?.editComponentProps ?? {};
+        let editComponentProps = props.column?.editComponentProps ?? {};
+        if (isFunction(editComponentProps)) {
+          editComponentProps = editComponentProps(props.record as Recordable);
+        }
+        const compProps = editComponentProps;
         const component = unref(getComponent);
         const apiSelectProps: Recordable = {};
         if (component === 'ApiSelect') {
@@ -122,8 +126,10 @@
       });
 
       const getValues = computed(() => {
-        const { editComponentProps, editValueMap } = props.column;
-
+        let { editComponentProps, editValueMap } = props.column;
+        if (editComponentProps && isFunction(editComponentProps)) {
+          editComponentProps = editComponentProps(props.record as Recordable);
+        }
         const value = unref(currentValueRef);
 
         if (editValueMap && isFunction(editValueMap)) {
@@ -193,7 +199,11 @@
         } else if (isString(e) || isBoolean(e) || isNumber(e) || isArray(e)) {
           currentValueRef.value = e;
         }
-        const onChange = props.column?.editComponentProps?.onChange;
+        let editComponentProps = props.column?.editComponentProps ?? {};
+        if (isFunction(editComponentProps)) {
+          editComponentProps = editComponentProps(props.record as Recordable);
+        }
+        const onChange = editComponentProps?.onChange;
         if (onChange && isFunction(onChange)) onChange(...arguments);
 
         table.emit?.('edit-change', {
@@ -316,7 +326,11 @@
 
       // only ApiSelect or TreeSelect
       function handleOptionsChange(options: LabelValueOptions) {
-        const { replaceFields } = props.column?.editComponentProps ?? {};
+        let editComponentProps = props.column?.editComponentProps ?? {};
+        if (isFunction(editComponentProps)) {
+          editComponentProps = editComponentProps(props.record as Recordable);
+        }
+        const { replaceFields } = editComponentProps;
         const component = unref(getComponent);
         if (component === 'ApiTreeSelect') {
           const { title = 'title', value = 'value', children = 'children' } = replaceFields || {};
