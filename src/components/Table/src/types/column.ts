@@ -131,6 +131,8 @@ export interface ColumnProps<T> {
    */
   customRender?: CustomRenderFunction<T> | VNodeChild | JSX.Element;
 
+  customSummaryRender?: CustomRenderFunction<T> | VNodeChild | JSX.Element;
+
   /**
    * Sort function for local sort, see Array.sort's compareFunction. If you need sort buttons only, set to true
    * @type boolean | Function

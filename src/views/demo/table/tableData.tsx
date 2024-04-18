@@ -8,6 +8,7 @@ export function getBasicColumns(): BasicColumn[] {
       dataIndex: 'id',
       fixed: 'left',
       width: 200,
+      resizable: true
     },
     {
       title: '姓名',
@@ -17,6 +18,23 @@ export function getBasicColumns(): BasicColumn[] {
         { text: 'Male', value: 'male' },
         { text: 'Female', value: 'female' },
       ],
+    },
+    {
+      title: '年龄',
+      dataIndex: 'age',
+      width: 100,
+      resizable: true,
+      customSummaryRender: ({text}) => {
+        return (
+          <span style="color: red;">{text}</span>
+        )
+      }
+    },
+    {
+      title: '得分',
+      dataIndex: 'score',
+      width: 100,
+      resizable: true
     },
     {
       title: '地址',
