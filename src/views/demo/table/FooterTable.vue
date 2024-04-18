@@ -18,16 +18,28 @@
           prev += next.no;
           return prev;
         }, 0);
+        const totalAge = tableData.reduce((prev, next) => {
+          prev += next.age;
+          return prev;
+        }, 0);
+        const totalScore = tableData.reduce((prev, next) => {
+          prev += next.score;
+          return prev;
+        }, 0);
         return [
           {
             _row: '合计',
             _index: '平均值',
             no: totalNo,
+            age: Math.round(totalAge / tableData.length),
+            score: Math.round(totalScore / tableData.length)
           },
           {
             _row: '合计',
             _index: '平均值',
             no: totalNo,
+            age: Math.round(totalAge / tableData.length),
+            score: Math.round(totalScore / tableData.length)
           },
         ];
       }

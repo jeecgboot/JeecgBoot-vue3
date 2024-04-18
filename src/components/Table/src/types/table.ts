@@ -453,6 +453,14 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   //compType-用于记录类型
   compType?: string;
+  customSummaryRender?: (opt: {
+    value: any;
+    text: any;
+    record: Recordable;
+    index: number;
+    renderIndex?: number;
+    column: BasicColumn;
+}) => any | VNodeChild | JSX.Element;
 }
 
 export type ColumnChangeParam = {

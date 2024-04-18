@@ -41,6 +41,11 @@
           </template>
           <!-- update-begin--author:liaozhiyang---date:22030717---for：【issues-179】antd3 一些警告以及报错(针对表格) -->
         </template>
+        <template v-if="showSummaryRef" #summary="data">
+          <slot name="summary" v-bind="data || {}">
+            <TableSummary v-bind="getSummaryProps" />
+          </slot>
+        </template>
       </Table>
     </a-form-item-rest>
   </div>
@@ -55,6 +60,7 @@
   import CustomSelectHeader from './components/CustomSelectHeader.vue'
   import expandIcon from './components/ExpandIcon';
   import HeaderCell from './components/HeaderCell.vue';
+  import TableSummary from './components/TableSummary';
   import { InnerHandlers } from './types/table';
   import { usePagination } from './hooks/usePagination';
   import { useColumns } from './hooks/useColumns';
@@ -67,12 +73,12 @@
   import { useTableHeader } from './hooks/useTableHeader';
   import { useTableExpand } from './hooks/useTableExpand';
   import { createTableContext } from './hooks/useTableContext';
-  import { useTableFooter } from './hooks/useTableFooter';
+  // import { useTableFooter } from './hooks/useTableFooter';
   import { useTableForm } from './hooks/useTableForm';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useCustomSelection } from "./hooks/useCustomSelection";
 
-  import { omit } from 'lodash-es';
+  import { omit, pick } from 'lodash-es';
   import { basicProps } from './props';
   import { isFunction } from '/@/utils/is';
   import { warn } from '/@/utils/log';
@@ -82,6 +88,7 @@
       Table,
       BasicForm,
       HeaderCell,
+      TableSummary,
       CustomSelectHeader,
     },
     props: basicProps,
@@ -227,7 +234,20 @@
 
       const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
 
-      const { getFooterProps } = useTableFooter(getProps, slots, getScrollRef, tableElRef, getDataSourceRef);
+      const getSummaryProps = computed(() => {
+        return pick(unref(getProps), ['summaryFunc', 'summaryData', 'hasExpandedRow', 'rowKey']);
+      });
+
+      const getIsEmptyData = computed(() => {
+        return (unref(getDataSourceRef) || []).length === 0;
+      });
+
+      const showSummaryRef = computed(() => {
+        const summaryProps = unref(getSummaryProps);
+        return (summaryProps.summaryFunc || summaryProps.summaryData) && !unref(getIsEmptyData);
+      });
+
+      // const { getFooterProps } = useTableFooter(getProps, slots, getScrollRef, tableElRef, getDataSourceRef);
 
       const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(getProps, slots, fetch, getLoading);
 
@@ -249,7 +269,7 @@
           columns: toRaw(unref(getViewColumns)),
           pagination: toRaw(unref(getPaginationInfo)),
           dataSource,
-          footer: unref(getFooterProps),
+          // footer: unref(getFooterProps),
           ...unref(getExpandOption),
           // 【QQYUN-5837】动态计算 expandIconColumnIndex
           expandIconColumnIndex: getExpandIconColumnIndex.value,
@@ -407,6 +427,9 @@
         isCustomSelection,
         // update-end--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
         slotNamesGroup,
+        getSummaryProps,
+        getIsEmptyData,
+        showSummaryRef,
       };
     },
   });
