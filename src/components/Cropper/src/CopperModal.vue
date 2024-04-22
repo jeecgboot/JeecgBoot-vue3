@@ -78,7 +78,7 @@
 
   import { defineComponent, ref } from 'vue';
   import CropperImage from './Cropper.vue';
-  import { Space, Upload, Avatar, Tooltip } from 'ant-design-vue';
+  import { Space, Upload, Avatar, Tooltip, message } from 'ant-design-vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { dataURLtoBlob } from '/@/utils/file/base64Conver';
@@ -149,11 +149,15 @@
           try {
             setModalProps({ confirmLoading: true });
             const result = await uploadApi({ name: 'file', file: blob, filename });
-            emit('uploadSuccess', {
+            if(result && result.success) {
+              emit('uploadSuccess', {
               source: previewSource.value,
-              data: result.data || result.message,
-            });
-            closeModal();
+                data: result.data || result.message,
+              });
+              closeModal();
+            } else {
+              message.error(result.message)
+            }
           } finally {
             setModalProps({ confirmLoading: false });
           }
