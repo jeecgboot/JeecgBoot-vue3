@@ -19,6 +19,7 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { JDragConfigEnum } from '/@/enums/jeecgEnum';
 import { useSso } from '/@/hooks/web/useSso';
 import { isOAuth2AppEnv } from "/@/views/sys/login/useLogin";
+import { getUrlParam } from "@/utils";
 interface dictType {
   [key: string]: any;
 }
@@ -220,7 +221,14 @@ export const useUserStore = defineStore({
         }
         // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
 
-        goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        //update-begin---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
+        let ticket = getUrlParam('ticket');
+        if(ticket){
+          goHome && (window.location.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        }else{
+          goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        }
+        //update-end---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
       }
       return data;
     },
