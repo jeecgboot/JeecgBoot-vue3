@@ -23,12 +23,16 @@ export default defineComponent({
     rowKey: propTypes.string.def('key'),
     // 是否有展开列
     hasExpandedRow: propTypes.bool,
+    data: {
+      type: Object as PropType<Recordable>,
+      default: () => {}
+    }
   },
   setup(props) {
     const table = useTableContext();
 
     const getDataSource = computed((): Recordable[] => {
-      const { summaryFunc, summaryData } = props;
+      const { summaryFunc, summaryData, data: { pageData } } = props;
       if (summaryData?.length) {
         summaryData.forEach((item, i) => (item[props.rowKey] = `${i}`));
         return summaryData;
@@ -36,7 +40,7 @@ export default defineComponent({
       if (!isFunction(summaryFunc)) {
         return [];
       }
-      let dataSource = cloneDeep(unref(table.getDataSource()));
+      let dataSource = cloneDeep(unref(pageData));
       dataSource = summaryFunc(dataSource);
       dataSource.forEach((item, i) => {
         item[props.rowKey] = `${i}`;

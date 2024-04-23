@@ -43,7 +43,7 @@
         </template>
         <template v-if="showSummaryRef" #summary="data">
           <slot name="summary" v-bind="data || {}">
-            <TableSummary v-bind="getSummaryProps" />
+            <TableSummary :data="data || {}" v-bind="getSummaryProps" />
           </slot>
         </template>
       </Table>
