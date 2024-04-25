@@ -7,6 +7,7 @@ import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
 import { useModalContext } from '/@/components/Modal';
 import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
 import { useDebounceFn } from '@vueuse/core';
+import componentSetting from '/@/settings/componentSetting';
 
 export function useTableScroll(
   propsRef: ComputedRef<BasicTableProps>,
@@ -118,14 +119,13 @@ export function useTableScroll(
     }
 
     let footerHeight = 0;
-    if (!isBoolean(pagination)) {
-      if (!footerEl) {
-        footerEl = tableEl.querySelector('.ant-table-footer') as HTMLElement;
-      } else {
-        const offsetHeight = footerEl.offsetHeight;
-        footerHeight += offsetHeight || 0;
-      }
+    // update-begin--author:liaozhiyang---date:20240424---for：【issues/1137】BasicTable自适应高度计算没有减去尾部高度
+    footerEl = tableEl.querySelector('.ant-table-footer');
+    if (footerEl) {
+      const offsetHeight = footerEl.offsetHeight;
+      footerHeight = offsetHeight || 0;
     }
+    // update-end--author:liaozhiyang---date:20240424---for：【issues/1137】BasicTable自适应高度计算没有减去尾部高度
 
     let headerHeight = 0;
     if (headEl) {
@@ -180,10 +180,13 @@ export function useTableScroll(
   const getScrollRef = computed(() => {
     const tableHeight = unref(tableHeightRef);
     const { canResize, scroll } = unref(propsRef);
+    const { table } = componentSetting;
     return {
       x: unref(getScrollX),
       y: canResize ? tableHeight : null,
-      scrollToFirstRowOnChange: false,
+      // update-begin--author:liaozhiyang---date:20240424---for：【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+      scrollToFirstRowOnChange: table.scrollToFirstRowOnChange,
+      // update-end--author:liaozhiyang---date:20240424---for：【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
       ...scroll,
     };
   });
