@@ -20,7 +20,13 @@
       <Table ref="tableElRef" v-bind="getBindValues" :rowClassName="getRowClassName" v-show="getEmptyDataIsShowTable" @resizeColumn="handleResizeColumn" @change="handleTableChange">
         <!-- antd的原生插槽直接传递 -->
         <template #[item]="data" v-for="item in slotNamesGroup.native" :key="item">
-          <slot :name="item" v-bind="data || {}"></slot>
+          <!-- update-begin--author:liaozhiyang---date:20240424---for：【issues/1146】BasicTable使用headerCell全选框出不来 -->
+          <template v-if="item === 'headerCell'">
+            <CustomSelectHeader v-if="isCustomSelection(data.column)" v-bind="selectHeaderProps" />
+            <slot v-else :name="item" v-bind="data || {}"></slot>
+          </template>
+          <slot v-else :name="item" v-bind="data || {}"></slot>
+          <!-- update-begin--author:liaozhiyang---date:20240424---for：【issues/1146】BasicTable使用headerCell全选框出不来 -->
         </template>
         <template #headerCell="{ column }">
           <!-- update-begin--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题 -->
@@ -260,7 +266,7 @@
         /*if (slots.expandedRowRender) {
           propsData = omit(propsData, 'scroll');
         }*/
-        //update-end---author:wangshuai ---date:20230214  for：[QQYUN-4237]代码生成 内嵌子表模式 没有滚动条------------ 
+        //update-end---author:wangshuai ---date:20230214  for：[QQYUN-4237]代码生成 内嵌子表模式 没有滚动条------------
 
         // update-begin--author:sunjianlei---date:220230630---for：【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
         // 自定义选择列，需要去掉原生的
@@ -393,6 +399,7 @@
         tableAction,
         redoHeight,
         handleResizeColumn: (w, col) => {
+        console.log('col',col);
           col.width = w;
         },
         getFormProps: getFormProps as any,
