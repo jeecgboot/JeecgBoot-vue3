@@ -152,6 +152,7 @@ export interface BasicTableProps<T = any> {
   inset?: boolean;
   // 显示表格设置
   showTableSetting?: boolean;
+  // 表格上方操作按钮设置
   tableSetting?: TableSetting;
   // 斑马纹
   striped?: boolean;
@@ -205,7 +206,6 @@ export interface BasicTableProps<T = any> {
   canResize?: boolean;
   // 自适应高度偏移， 计算结果-偏移量
   resizeHeightOffset?: number;
-
   // 在分页改变的时候清空选项
   clearSelectOnPageChange?: boolean;
   //
@@ -319,7 +319,9 @@ export interface BasicTableProps<T = any> {
    * you need to add style .ant-table td { white-space: nowrap; }.
    * @type object
    */
-  scroll?: { x?: number | true | 'max-content'; y?: number };
+  // update-begin--author:liaozhiyang---date:20240424---for：【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+  scroll?: { x?: number | true | 'max-content'; y?: number; scrollToFirstRowOnChange?: boolean };
+  // update-end--author:liaozhiyang---date:20240424---for：【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
 
   /**
    * Whether to show table header
