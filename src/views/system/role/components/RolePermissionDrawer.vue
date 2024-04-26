@@ -25,8 +25,8 @@
       :checkedKeys="checkedKeys"
       :expandedKeys="expandedKeys"
       :selectedKeys="selectedKeys"
-      :checkStrictly="checkStrictly"
       :clickRowToExpand="false"
+      :checkStrictly="true"
       title="所拥有的的权限"
       @check="onCheck"
       @select="onTreeNodeSelect"
@@ -48,8 +48,8 @@
 </template>
 <script lang="ts" setup>
   import { ref, computed, unref, onMounted } from 'vue';
-  import { BasicDrawer, useDrawer, useDrawerInner } from '/src/components/Drawer';
-  import { BasicTree, TreeItem } from '/src/components/Tree';
+  import { BasicDrawer, useDrawer, useDrawerInner } from '/@/components/Drawer';
+  import { BasicTree, TreeItem } from '/@/components/Tree';
   import { PopConfirmButton } from '/@/components/Button';
   import RoleDataRuleDrawer from './RoleDataRuleDrawer.vue';
   import { queryTreeListForRole, queryRolePermission, saveRolePermission } from '../role.api';
@@ -60,7 +60,7 @@
   //树的全部节点信息
   const allTreeKeys = ref([]);
   //树的选择节点信息
-  const checkedKeys = ref([]);
+  const checkedKeys = ref<any>([]);
   const defaultCheckedKeys = ref([]);
   //树的选中的节点信息
   const selectedKeys = ref([]);
@@ -71,8 +71,8 @@
 
   //展开折叠的key
   const expandedKeys = ref<any>([]);
-  //父子节点选中状态是否关联
-  const checkStrictly = ref<boolean>(true);
+  //父子节点选中状态是否关联 true不关联，false关联
+  const checkStrictly = ref<boolean>(false);
   const [registerDrawer1, { openDrawer: openDataRuleDrawer }] = useDrawer();
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     await reset();
@@ -114,10 +114,58 @@
   }
   /**
    * 点击选中
+   * 2024-04-26
+   * liaozhiyang
    */
-  function onCheck(o) {
-    checkedKeys.value = o.checked ? o.checked : o;
+  function onCheck(o, e) {
+    // checkStrictly: true=>层级独立，false=>层级关联.
+    if (checkStrictly.value) {
+      checkedKeys.value = o.checked ? o.checked : o;
+    } else {
+      const keys = getNodeAllKey(e.node, 'children', 'key');
+      if (e.checked) {
+        // 反复操作下可能会有重复的keys，得用new Set去重下
+        checkedKeys.value = [...new Set([...checkedKeys.value, ...keys])];
+      } else {
+        const result = removeMatchingItems(checkedKeys.value, keys);
+        checkedKeys.value = result;
+      }
+    }
   }
+  /**
+   * 2024-04-26
+   * liaozhiyang
+   * 删除相匹配数组的项
+   */
+  function removeMatchingItems(arr1, arr2) {
+    // 使用哈希表记录 arr2 中的元素
+    const hashTable = {};
+    for (const item of arr2) {
+      hashTable[item] = true;
+    }
+    // 使用 filter 方法遍历第一个数组，过滤出不在哈希表中存在的项
+    return arr1.filter((item) => !hashTable[item]);
+  }
+  /**
+   * 2024-04-26
+   * liaozhiyang
+   * 获取当前节点及以下所有子孙级的key
+   */
+  function getNodeAllKey(node: any, children: any, key: string) {
+    const result: any = [];
+    result.push(node[key]);
+    const recursion = (data) => {
+      data.forEach((item: any) => {
+        result.push(item[key]);
+        if (item[children]?.length) {
+          recursion(item[children]);
+        }
+      });
+    };
+    node[children]?.length && recursion(node[children]);
+    return result;
+  }
+
   /**
    * 选中节点，打开数据权限抽屉
    */
