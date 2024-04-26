@@ -2,7 +2,7 @@ import type { BasicColumn } from '/@/components/Table';
 import type { Ref, ComputedRef } from 'vue';
 import type { BasicTableProps, PaginationProps, TableRowSelection } from '/@/components/Table';
 import { computed, nextTick, onUnmounted, ref, toRaw, unref, watch, watchEffect } from 'vue';
-import { omit } from 'lodash-es';
+import { omit, isEqual } from 'lodash-es';
 import { throttle } from 'lodash-es';
 import { Checkbox, Radio } from 'ant-design-vue';
 import { isFunction } from '/@/utils/is';
@@ -128,17 +128,44 @@ export function useCustomSelection(
   });
 
   // 监听传入的selectedRowKeys
+  // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8390】部门人员组件点击重置未清空（selectedRowKeys.value=[]，watch没监听到加deep）
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRowKeys,
     (val: string[]) => {
       // 解决selectedRowKeys在页面调用处使用ref失效
       const value = unref(val);
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && !sameArray(value, selectedKeys.value)) {
         setSelectedRowKeys(value);
       }
     },
-    { immediate: true }
+    {
+      immediate: true,
+      deep: true
+    }
   );
+  // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8390】部门人员组件点击重置未清空（selectedRowKeys.value=[]，watch没监听到加deep）
+
+  /**
+  * 2024-03-06
+  * liaozhiyang
+  * 判断是否同一个数组 (引用地址，长度，元素位置信息相同才是同一个数组。数组元素只有字符串)
+  */
+  function sameArray(a, b) {
+    if (a === b) {
+      if (a.length === b.length) {
+        return a.toString() === b.toString();
+      } else {
+        return false;
+      }
+    } else {
+      // update-begin--author:liaozhiyang---date:20240425---for：【QQYUN-9123】popupdict打开弹窗打开程序运行
+      if (isEqual(a, b)) {
+        return true;
+      }
+      // update-end--author:liaozhiyang---date:20240425---for：【QQYUN-9123】popupdict打开弹窗打开程序运行
+      return false;
+    }
+  }
 
   // 当任意一个变化时，触发同步检测
   watch([selectedKeys, selectedRows], () => {
