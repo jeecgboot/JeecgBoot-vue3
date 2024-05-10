@@ -101,10 +101,9 @@
           return prev;
         }, [] as OptionsItem[]);
       });
-
-      watchEffect(() => {
-        props.immediate && fetch();
-      });
+      // update-begin--author:liaozhiyang---date:20240509---for：【issues/6191】apiSelect多次请求
+      props.immediate && fetch();
+      // update-end--author:liaozhiyang---date:20240509---for：【issues/6191】apiSelect多次请求
 
       watch(
         () => props.params,
