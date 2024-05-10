@@ -210,11 +210,15 @@ export const useUserStore = defineStore({
         if (redirect && goHome) {
         //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
           // update-begin--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
-          const publicPath = import.meta.env.VITE_PUBLIC_PATH;
+          let publicPath = import.meta.env.VITE_PUBLIC_PATH;
           if (publicPath && publicPath != '/') {
+            // update-begin--author:liaozhiyang---date:20240509---for：【issues/1147】登录跳转时去掉发布路径的最后一个/以解决404问题
+            if (publicPath.endsWith('/')) {
+              publicPath = publicPath.slice(0, -1);
+            }
             redirect = publicPath + redirect;
           }
-          // update-end--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
+          // update-end--author:liaozhiyang---date:20240509---for：【issues/1147】登录跳转时去掉发布路径的最后一个/以解决404问题
           // 当前页面打开
           window.open(redirect, '_self')
           return data;
