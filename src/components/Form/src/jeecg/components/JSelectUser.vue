@@ -1,8 +1,18 @@
 <!--用户选择组件-->
 <template>
-  <div>
+  <div class="JselectUser">
     <JSelectBiz @change="handleChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
-    <UserSelectModal :rowKey="rowKey" @register="regModal" @getSelectResult="setValue" v-bind="getBindValue" :excludeUserIdList="excludeUserIdList"></UserSelectModal>
+    <!-- update-begin--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
+    <a-form-item>
+      <UserSelectModal
+        :rowKey="rowKey"
+        @register="regModal"
+        @getSelectResult="setValue"
+        v-bind="getBindValue"
+        :excludeUserIdList="excludeUserIdList"
+      />
+    </a-form-item>
+    <!-- update-end--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
   </div>
 </template>
 <script lang="ts">
@@ -145,6 +155,9 @@
        */
       function handleChange(values) {
         emit('update:value', values);
+        // update-begin--author:liaozhiyang---date:20240417---for:【QQYUN-8933】选择用户组件触发必填校验之后再填入值校验没触发
+        emit('change', values);
+        // update-end--author:liaozhiyang---date:20240417---for:【QQYUN-8933】选择用户组件触发必填校验之后再填入值校验没触发
       }
       //update-end---author:wangshuai ---date:20230711  for：换成异步组件加载，否则会影响到其他页面描述------------
       
@@ -166,6 +179,13 @@
   });
 </script>
 <style lang="less" scoped>
+  // update-begin--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  .JselectUser {
+    > .ant-form-item {
+      display: none;
+    }
+  }
+  // update-end--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
   .j-select-row {
     @width: 82px;
 
