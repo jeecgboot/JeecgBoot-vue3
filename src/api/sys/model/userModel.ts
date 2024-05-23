@@ -23,7 +23,7 @@ export interface RoleInfo {
  */
 export interface LoginResultModel {
   userId: string | number;
-  access_token: string;
+  token: string;
   role: RoleInfo;
   userInfo?: any
 }

@@ -11,7 +11,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 
 const { createErrorModal } = useMessage();
 enum Api {
-  Login = '/oauth2/token',
+  Login = '/sys/login',
   phoneLogin = '/oauth2/token',
   Logout = '/sys/logout',
   GetUserInfo = '/sys/user/getUserInfo',
@@ -58,7 +58,6 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
       },
     },
     {
-      isTransformResponse: false,
       errorMessageMode: mode,
     }
   );
