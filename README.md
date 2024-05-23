@@ -86,7 +86,7 @@ VITE_GLOB_DOMAIN_URL=http://localhost:8080/jeecg-boot
 - run
 
 ```bash
-pnpm serve
+pnpm dev
 ```
 
 
