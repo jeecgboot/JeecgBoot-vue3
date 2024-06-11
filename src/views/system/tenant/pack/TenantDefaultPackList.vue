@@ -24,7 +24,7 @@
   import { ref, unref } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
-  import { deletePackPermissions, packList } from '../tenant.api';
+  import { deleteTenantPack, packList } from '../tenant.api';
   import { packColumns, packFormSchema } from '../tenant.data';
   import TenantPackMenuModal from './TenantPackMenuModal.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -89,7 +89,7 @@
    * 删除默认产品包
    */ 
   async function handleDelete(id) {
-    await deletePackPermissions({ ids: id }, handleSuccess);
+    await deleteTenantPack({ ids: id }, handleSuccess);
   }
   /**
    * 编辑
@@ -133,7 +133,7 @@
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
-        await deletePackPermissions({ ids: selectedRowKeys.value.join(',')}, handleSuccess);
+        await deleteTenantPack({ ids: selectedRowKeys.value.join(',')}, handleSuccess);
       }
     })
   }

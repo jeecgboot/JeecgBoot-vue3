@@ -11,7 +11,7 @@ export const getDictItemsByCode = (code) => {
   // update-begin--author:liaozhiyang---date:20230908---for：【QQYUN-6417】生产环境字典慢的问题
   const userStore = useUserStore();
   const dictItems = userStore.getAllDictItems;
-  if (typeof dictItems === 'object' && dictItems[code]) {
+  if (null != dictItems && typeof dictItems === 'object' && dictItems[code]) {
     return dictItems[code];
   }
   //update-begin-author:liusq---date:2023-10-13--for: 【issues/777】列表 分类字典不显示

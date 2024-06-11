@@ -36,6 +36,10 @@ export function connectWebSocket(url: string) {
     if(ws!=null){
       ws.onerror = onError;
       ws.onmessage = onMessage;
+      //update-begin---author:wangshuai---date:2024-04-30---for:【issues/1217】发送测试消息后，铃铛数字没有变化---
+      ws.onopen = onOpen;
+      ws.onclose = onClose;
+      //update-end---author:wangshuai---date:2024-04-30---for:【issues/1217】发送测试消息后，铃铛数字没有变化---
     }
   }
 }
@@ -55,6 +59,11 @@ function onError(e) {
 function onMessage(e) {
   console.debug('[WebSocket] -----接收消息-------', e.data);
   try {
+    //update-begin---author:wangshuai---date:2024-05-07---for:【issues/1161】前端websocket因心跳导致监听不起作用---
+    if(e==='ping'){
+      return;
+    }
+    //update-end---author:wangshuai---date:2024-05-07---for:【issues/1161】前端websocket因心跳导致监听不起作用---
     const data = JSON.parse(e.data);
     for (const callback of listeners.keys()) {
       try {

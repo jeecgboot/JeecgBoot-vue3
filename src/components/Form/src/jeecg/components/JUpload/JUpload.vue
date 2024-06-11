@@ -408,7 +408,9 @@
         }
         /* update-end-author:taoyan date:2022-5-24 for:VUEN-1093详情界面 图片下载按钮显示不全*/
       }
-
+      .ant-upload-text-icon {
+        color: @primary-color;
+      }
       .ant-upload-list-item {
         .upload-actions-container {
           position: absolute;

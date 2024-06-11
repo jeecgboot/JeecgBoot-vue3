@@ -5,7 +5,7 @@ enum Api {
   getUserData='/sys/user/login/setting/getUserData',
   queryNameByCodes='/sys/position/queryByCodes',
   updateMobile='/sys/user/updateMobile',
-  updateUserPassword='/sys/user/updatePassword',
+  updateUserPassword='/sys/user/passwordChange',
   getTenantListByUserId = '/sys/tenant/getTenantListByUserId',
   cancelApplyTenant = '/sys/tenant/cancelApplyTenant',
   exitUserTenant = '/sys/tenant/exitUserTenant',
@@ -14,6 +14,8 @@ enum Api {
   bindThirdAppAccount = '/sys/thirdApp/bindThirdAppAccount',
   deleteThirdAccount = '/sys/thirdApp/deleteThirdAccount',
   agreeOrRefuseJoinTenant = '/sys/tenant/agreeOrRefuseJoinTenant',
+  //更改手机号
+  changePhone = '/sys/user/changePhone',
 }
 
 /**
@@ -53,7 +55,7 @@ export const updateMobile = (params) => {
  * @param params
  */
 export const updateUserPassword = (params) => {
-  return defHttp.put({ url: Api.updateUserPassword, params },{isTransformResponse:false});
+  return defHttp.get({ url: Api.updateUserPassword, params },{isTransformResponse:false});
 }
 
 /**
@@ -118,4 +120,12 @@ export const deleteThirdAccount = (params) => {
  */
 export const agreeOrRefuseJoinTenant = (params) => {
   return defHttp.put({ url: Api.agreeOrRefuseJoinTenant, params },{ joinParamsToUrl: true });
+};
+
+/**
+ * 更改手机号
+ * @param params
+ */
+export const changePhone = (params) => {
+  return defHttp.put({ url: Api.changePhone, params },{ joinParamsToUrl: true, isTransformResponse: false });
 };

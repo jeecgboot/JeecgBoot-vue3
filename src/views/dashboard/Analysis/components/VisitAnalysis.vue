@@ -2,24 +2,25 @@
   <div ref="chartRef" :style="{ height, width }"></div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref, Ref } from 'vue';
+  import { onMounted, ref, Ref, watchEffect } from 'vue';
   import { useECharts } from '/@/hooks/web/useECharts';
   import { basicProps } from './props';
-
+  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   defineProps({
     ...basicProps,
   });
   const chartRef = ref<HTMLDivElement | null>(null);
   const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
 
-  onMounted(() => {
+  const { getThemeColor } = useRootSetting();
+  const init = () => {
     setOptions({
       tooltip: {
         trigger: 'axis',
         axisPointer: {
           lineStyle: {
             width: 1,
-            color: '#019680',
+            color: getThemeColor.value,
           },
         },
       },
@@ -91,10 +92,13 @@
           type: 'line',
           areaStyle: {},
           itemStyle: {
-            color: '#019680',
+            color: getThemeColor.value,
           },
         },
       ],
     });
+  };
+  watchEffect(() => {
+    init();
   });
 </script>

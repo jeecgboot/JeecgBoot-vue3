@@ -28,27 +28,23 @@ export function useMethods() {
       createMessage.warning('文件下载失败');
       return;
     }
-    if (!name || typeof name != 'string') {
-      name = '导出文件';
-    }
-    let blobOptions = { type: 'application/vnd.ms-excel' };
-    let fileSuffix = '.xls';
-    if (isXlsx === true) {
-      blobOptions['type'] = XLSX_MIME_TYPE;
-      fileSuffix = XLSX_FILE_SUFFIX;
-    }
-    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-      window.navigator.msSaveBlob(new Blob([data], blobOptions), name + fileSuffix);
-    } else {
-      let url = window.URL.createObjectURL(new Blob([data], blobOptions));
-      let link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = url;
-      link.setAttribute('download', name + fileSuffix);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link); //下载完成移除元素
-      window.URL.revokeObjectURL(url); //释放掉blob对象
+    //update-begin---author:wangshuai---date:2024-04-18---for: 导出excel失败提示，不进行导出---
+    let reader = new FileReader()
+    reader.readAsText(data, 'utf-8')
+    reader.onload = async () => {
+      if(reader.result){
+        if(reader.result.toString().indexOf("success") !=-1){
+          const { success, message } = JSON.parse(reader.result.toString());
+          if (!success) {
+            createMessage.warning("导出失败，失败原因："+ message);
+          }else{
+            exportExcel(name, isXlsx, data);
+          }
+          return;
+        }
+      }
+      exportExcel(name, isXlsx, data);
+      //update-end---author:wangshuai---date:2024-04-18---for: 导出excel失败提示，不进行导出---
     }
   }
 
@@ -96,4 +92,35 @@ export function useMethods() {
     handleImportXls: (data, url, success) => importXls(data, url, success),
     handleExportXlsx: (name: string, url: string, params?: object) => exportXls(name, url, params, true),
   };
+
+  /**
+   * 导出excel
+   * @param name
+   * @param isXlsx
+   * @param data
+   */
+  function exportExcel(name, isXlsx, data) {
+    if (!name || typeof name != 'string') {
+      name = '导出文件';
+    }
+    let blobOptions = { type: 'application/vnd.ms-excel' };
+    let fileSuffix = '.xls';
+    if (isXlsx) {
+      blobOptions['type'] = XLSX_MIME_TYPE;
+      fileSuffix = XLSX_FILE_SUFFIX;
+    }
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(new Blob([data], blobOptions), name + fileSuffix);
+    } else {
+      let url = window.URL.createObjectURL(new Blob([data], blobOptions));
+      let link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', name + fileSuffix);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); //下载完成移除元素
+      window.URL.revokeObjectURL(url); //释放掉blob对象
+    }
+  }
 }

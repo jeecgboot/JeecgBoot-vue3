@@ -587,12 +587,19 @@ export function usePopBiz(ob, tableRef?) {
     params['onlRepUrlParamStr'] = getUrlParamString();
     console.log('params', params);
     loading.value = true;
-    let url = `${configUrl.getData}${unref(cgRpConfigId)}`;
+    // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
+    let url = `${configUrl.getColumnsAndData}${unref(cgRpConfigId)}`;
+    // update-end--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
     //缓存key
     let groupIdKey = props.groupId ? `${props.groupId}${url}${JSON.stringify(params)}` : '';
     httpGroupRequest(() => defHttp.get({ url, params }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
+      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
+      res.result.dictOptions && initDictOptionData(res.result.dictOptions);
+      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
       loading.value = false;
-      let data = res.result;
+      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
+      let data = res.result.data;
+      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-578】online报表SQL翻译，第二页不翻页数据
       console.log('表格信息:', data);
       setDataSource(data);
     });

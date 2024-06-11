@@ -690,6 +690,20 @@ export const schemas: FormSchema[] = [
     colProps: { span: 12 },
   },
   {
+    field: 'superQuery1',
+    component: 'Input',
+    label: '高级查询',
+    helpMessage: ['插槽模式-自己保存查询条件'],
+    slot: 'superQuery1',
+    colProps: { span: 12 },
+  },
+  {
+    field: 'superQuery1',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
+  {
     field: 'pop2',
     component: 'JPopupDict',
     label: 'JPopupDict示例',
@@ -766,4 +780,85 @@ export const schemas: FormSchema[] = [
     label: '选中值',
     colProps: { span: 12 },
   },
+  {
+    field: 'field100',
+    component: 'JInputSelect',
+    label: 'JInputSelect',
+    helpMessage: ['component模式'],
+    componentProps: {
+      selectPlaceholder: '可选择系统变量',
+      inputPlaceholder: '请输入',
+      options: [
+        {
+          label: '登录用户账号',
+          value: '${sys_user_code}',
+        },
+        {
+          label: '登录用户名称',
+          value: '${sys_user_name}',
+        },
+        {
+          label: '当前日期',
+          value: '${sys_date}',
+        },
+        {
+          label: '当前时间',
+          value: '${sys_date}',
+        },
+        {
+          label: '登录用户部门',
+          value: '${sys_org_code}',
+        },
+        {
+          label: '用户拥有部门',
+          value: '${sys_multi_org_code}',
+        },
+        {
+          label: '登录用户租户',
+          value: '${tenant_id}',
+        },
+      ],
+    },
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'field100',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
+  {
+    field: 'JAreaLinkage',
+    component: 'JAreaLinkage',
+    label: '省市区选择',
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'JAreaLinkage',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
+
+  {
+    field: 'orderAuth',
+    component: 'Input',
+    label: '指令权限',
+    helpMessage: ['有权限右侧的"选中值"可见，否则不可见'],
+    colProps: {
+      span: 12,
+    },
+  },
+  {
+    field: 'orderAuth',
+    auth: 'demo:order:auth',
+    component: 'JEllipsis',
+    label: '选中值',
+    colProps: { span: 12 },
+  },
+  
 ];

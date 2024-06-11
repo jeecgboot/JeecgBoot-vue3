@@ -23,9 +23,10 @@
   import defaultAvatar from '../assets/avatar.jpg';
   import { useUserStore } from '/@/store/modules/user';
   const props = defineProps(['dateTime', 'text', 'inversion', 'error', 'loading']);
+  import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
   const { userInfo } = useUserStore();
   const avatar = () => {
-    return userInfo?.avatar || defaultAvatar;
+    return getFileAccessHttpUrl(userInfo?.avatar)|| defaultAvatar;
   };
 </script>
 

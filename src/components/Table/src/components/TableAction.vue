@@ -19,7 +19,13 @@
 
       <Divider type="vertical" class="action-divider" v-if="divider && index < getActions.length - 1" />
     </template>
-    <Dropdown :trigger="['hover']" :dropMenuList="getDropdownList" popconfirm v-if="dropDownActions && getDropdownList.length > 0">
+    <Dropdown
+      :overlayClassName="dropdownCls"
+      :trigger="['hover']"
+      :dropMenuList="getDropdownList"
+      popconfirm
+      v-if="dropDownActions && getDropdownList.length > 0"
+    >
       <slot name="more"></slot>
       <!--  设置插槽   -->
       <template v-slot:[item.slot] v-for="(item, index) in getDropdownSlotList" :key="`${index}-${item.label}`">
@@ -63,6 +69,7 @@
     },
     setup(props) {
       const { prefixCls } = useDesign('basic-table-action');
+      const dropdownCls = `${prefixCls}-dropdown`;
       let table: Partial<TableActionType> = {};
       if (!props.outside) {
         table = useTableContext();
@@ -189,8 +196,8 @@
         });
         isInButton && e.stopPropagation();
       }
-
-      return { prefixCls, getActions, getDropdownList, getDropdownSlotList, getAlign, onCellClick, getTooltip };
+     
+      return { prefixCls, getActions, getDropdownList, getDropdownSlotList, getAlign, onCellClick, getTooltip, dropdownCls };
     },
   });
 </script>
@@ -258,5 +265,19 @@
         // update-end--author:liaozhiyang---date:20240124---for：【issues/1019】popConfirm确认框待端后端返回过程中（处理中）样式错乱
       }
     }
+    // update-begin--author:liaozhiyang---date:20240407---for：【QQYUN-8762】调整table操作栏ant-dropdown样式
+    &-dropdown {
+      .ant-dropdown-menu .ant-dropdown-menu-item-divider {
+        margin: 2px 0;
+      }
+      .ant-dropdown-menu .ant-dropdown-menu-item {
+        padding: 3px 8px;
+        font-size: 13.6px;
+      }
+      .dropdown-event-area {
+        padding: 0 !important;
+      }
+    }
+    // update-end--author:liaozhiyang---date:20240407---for：【QQYUN-8762】调整table操作栏ant-dropdown样式
   }
 </style>

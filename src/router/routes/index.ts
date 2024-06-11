@@ -64,6 +64,5 @@ export const TokenLoginRoute: AppRouteRecordRaw = {
     ignoreAuth: true,
   },
 };
-
 // Basic routing without permission
 export const basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE, TokenLoginRoute, Oauth2LoginRoute];

@@ -3,7 +3,7 @@
     <div class="my-account">账户</div>
     <div class="account-row-item clearfix">
       <div class="account-label gray-75">手机</div>
-      <span class="gray" v-if="userDetail.phone">{{ userDetail.phone}}</span>
+      <span class="gray" v-if="userDetail.phoneText">{{ userDetail.phoneText}}</span>
       <span class="pointer blue-e5 phone-margin" @click="updatePhone" v-if="userDetail.phone">修改</span>
       <span class="pointer blue-e5 phone-margin" @click="bindPhone" v-else>绑定</span>
       <!--      <span class="pointer blue-e5" @click="unbindPhone" v-if="userDetail.phone">解绑?</span>-->
@@ -66,6 +66,9 @@
     getUserData().then((res) => {
       if (res.success) {
         userDetail.value = res.result;
+        if(res.result.phone){
+          userDetail.value.phoneText = res.result.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+        }
       }
     });
   }
@@ -75,7 +78,7 @@
    */
   function updatePhone() {
     openModal(true, {
-      record: { phone: userDetail.value.phone, username: userDetail.value.username, id: userDetail.value.id },
+      record: { phone: userDetail.value.phone, username: userDetail.value.username, id: userDetail.value.id, phoneText: userDetail.value.phoneText },
     });
   }
   

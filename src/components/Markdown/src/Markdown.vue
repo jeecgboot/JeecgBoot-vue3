@@ -112,8 +112,46 @@
         const insEditor = new Vditor(wrapEl, {
           theme: getDarkMode.value === 'dark' ? 'dark' : 'classic',
           lang: unref(getCurrentLang),
+          // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-146】Markdown组件去掉录音选项
+          toolbar: [
+            'emoji',
+            'headings',
+            'bold',
+            'italic',
+            'strike',
+            'link',
+            '|',
+            'list',
+            'ordered-list',
+            'check',
+            'outdent',
+            'indent',
+            '|',
+            'quote',
+            'line',
+            'code',
+            'inline-code',
+            'insert-before',
+            'insert-after',
+            '|',
+            'upload',
+            // 'record',
+            'table',
+            '|',
+            'undo',
+            'redo',
+            '|',
+            'fullscreen',
+            'edit-mode',
+            {
+              name: 'more',
+              toolbar: ['both', 'code-theme', 'content-theme', 'export', 'outline', 'preview', 'devtools', 'info', 'help'],
+            },
+          ],
+          // update-end--author:liaozhiyang---date:20240520---for：【TV360X-146】Markdown组件去掉录音选项
           mode: 'sv',
-          cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6',
+          // cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6',
+          cdn: 'https://unpkg.com/vditor@3.10.1',
           fullscreen: {
             index: 520,
           },
@@ -186,3 +224,10 @@
     },
   });
 </script>
+<style lang="less" scoped>
+  // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-318】解决markdown控件禁用状态放大按钮还可以点击
+  :deep(.vditor-menu--disabled) {
+    pointer-events: none;
+  }
+  // update-end--author:liaozhiyang---date:20240527---for：【TV360X-318】解决markdown控件禁用状态放大按钮还可以点击
+</style>

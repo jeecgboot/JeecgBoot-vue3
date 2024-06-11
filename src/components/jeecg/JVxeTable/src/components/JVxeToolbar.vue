@@ -1,6 +1,6 @@
 <template>
   <div :class="boxClass">
-    <vxe-toolbar ref="xToolbarRef" custom>
+    <vxe-toolbar ref="xToolbarRef" :custom="custom">
       <!-- 工具按钮 -->
       <template #buttons>
         <div :class="`${prefixCls}-button div`" :size="btnSize">
@@ -41,6 +41,7 @@
   const props = defineProps({
     size: propTypes.string,
     disabled: propTypes.bool.def(false),
+    custom: propTypes.bool.def(false),
     toolbarConfig: propTypes.object,
     disabledRows: propTypes.object,
     hasBtnAuth: propTypes.func,

@@ -311,7 +311,11 @@ export const useUserStore = defineStore({
       this.setUserInfo(null);
       this.setLoginInfo(null);
       this.setTenant(null);
-      this.setAllDictItems(null);
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-23】退出登录后会提示「Token时效，请重新登录」
+      setTimeout(() => {
+        this.setAllDictItems(null);
+      }, 1e3);
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-23】退出登录后会提示「Token时效，请重新登录」
       //update-begin-author:liusq date:2022-5-5 for:退出登录后清除拖拽模块的接口前缀
       localStorage.removeItem(JDragConfigEnum.DRAG_BASE_URL);
       //update-end-author:liusq date:2022-5-5 for: 退出登录后清除拖拽模块的接口前缀

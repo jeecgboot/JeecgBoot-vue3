@@ -16,7 +16,7 @@ enum Api {
   packList = '/sys/tenant/packList',
   addPackPermission = '/sys/tenant/addPackPermission',
   editPackPermission = '/sys/tenant/editPackPermission',
-  deletePackPermissions = '/sys/tenant/deletePackPermissions',
+  deleteTenantPack = '/sys/tenant/deleteTenantPack',
   recycleBinPageList = '/sys/tenant/recycleBinPageList',
   deleteLogicDeleted = '/sys/tenant/deleteLogicDeleted',
   revertTenantLogic = '/sys/tenant/revertTenantLogic',
@@ -150,8 +150,8 @@ export const editPackPermission = (params) => {
  * 删除菜单
  * @param params
  */
-export const deletePackPermissions = (params, handleSuccess) => {
-  return defHttp.delete({ url: Api.deletePackPermissions, data: params }, { joinParamsToUrl: true }).then(() => {
+export const deleteTenantPack = (params, handleSuccess) => {
+  return defHttp.delete({ url: Api.deleteTenantPack, data: params }, { joinParamsToUrl: true }).then(() => {
     handleSuccess();
   });
 };

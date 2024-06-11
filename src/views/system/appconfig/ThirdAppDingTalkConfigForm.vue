@@ -237,6 +237,7 @@
     justify-content: space-between;
     font-weight: 700;
     font-size: 18px;
+    color: @text-color;
   }
 
   .flex-flow {
@@ -246,6 +247,7 @@
 
   .sync-padding {
     padding: 12px 0 16px;
+    color: @text-color;
   }
 
   .base-collapse {

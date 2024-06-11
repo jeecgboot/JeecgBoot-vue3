@@ -63,7 +63,7 @@
       // update-end--author:liaozhiyang---date:20231220---for：【QQYUN-7678】部门组件内容过多没有滚动条（给一个默认最大高）
       value: propTypes.oneOfType([propTypes.string, propTypes.array])
     },
-    emits: ['register', 'getSelectResult'],
+    emits: ['register', 'getSelectResult', 'close'],
     setup(props, { emit, refs }) {
       //注册弹框
       const [register, { closeModal }] = useModalInner();

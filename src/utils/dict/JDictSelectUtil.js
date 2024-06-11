@@ -52,6 +52,9 @@ export function filterDictText(dictOptions, text) {
     for (let txt of splitText) {
       let dictText = txt;
       for (let dictItem of dictOptions) {
+        // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-469】兼容数据null值防止报错
+        if (dictItem == null) break;
+        // update-end--author:liaozhiyang---date:20240524---for：【TV360X-469】兼容数据null值防止报错
         if (txt.toString() === dictItem.value.toString()) {
           dictText = dictItem.text || dictItem.title || dictItem.label;
           break;

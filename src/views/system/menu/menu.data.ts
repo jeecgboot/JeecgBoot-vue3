@@ -382,7 +382,8 @@ export const dataRuleFormSchema: FormSchema[] = [
     label: '规则字段',
     component: 'Input',
     ifShow: ({ values }) => {
-      return values.ruleConditions !== 'USE_SQL_RULES';
+      const ruleConditions = Array.isArray(values.ruleConditions) ? values.ruleConditions[0] : values.ruleConditions;
+      return ruleConditions !== 'USE_SQL_RULES';
     },
   },
   {

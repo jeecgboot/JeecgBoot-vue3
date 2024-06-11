@@ -30,6 +30,8 @@ const demoList = (() => {
       avatar: Random.image('400x400', Random.color(), Random.color(), Random.first()),
       imgArr: getRandomPics(Math.ceil(Math.random() * 3) + 1),
       imgs: getRandomPics(Math.ceil(Math.random() * 3) + 1),
+      age: Math.ceil(Math.random() * 30) + 1,
+      score: Math.ceil(Math.random() * 80) + 1,
       date: `@date('yyyy-MM-dd')`,
       time: `@time('HH:mm')`,
       'no|100000-10000000': 100000,

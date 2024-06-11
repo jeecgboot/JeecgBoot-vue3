@@ -105,6 +105,7 @@ export type ComponentType =
   | 'RangePicker'
   | 'WeekPicker'
   | 'TimePicker'
+  | 'DatePickerInFilter'
   | 'Switch'
   | 'StrengthMeter'
   | 'Upload'
@@ -147,10 +148,13 @@ export type ComponentType =
   | 'LinkTableSelect'
   | 'LinkTableForQuery'
   | 'CascaderPcaForQuery'
+  | 'CascaderPcaInFilter'
   | 'UserSelect'
   | 'RoleSelect'
   | 'RangeDate'
   | 'RangeNumber'
   | 'linkRecordSelect'
   | 'RangeTime'
-  | 'JRangeNumber';
+  | 'JRangeNumber'
+  | 'JInputSelect';
+  

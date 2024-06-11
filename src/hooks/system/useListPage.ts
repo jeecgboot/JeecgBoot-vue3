@@ -16,7 +16,7 @@ interface ListPageOptions {
   designScope?: string;
   // 【必填】表格参数配置
   tableProps: TableProps;
-  // 分页
+  // 是否分页
   pagination?: boolean;
   // 导出配置
   exportConfig?: {
@@ -247,7 +247,9 @@ export function useListTable(tableProps: TableProps): [
     // 是否可以自适应高度
     canResize: true,
     // 表格最小高度
-    minHeight: 500,
+    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
+    minHeight: 300,
+    // update-end--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
     // 点击行选中
     clickToRowSelect: false,
     // 是否显示边框
@@ -274,6 +276,11 @@ export function useListTable(tableProps: TableProps): [
   };
   // 合并用户个性化配置
   if (tableProps) {
+    //update-begin---author:wangshuai---date:2024-04-28---for:【issues/6180】前端代码配置表变查询条件显示列不生效---
+    if(tableProps.formConfig){
+      setTableProps(tableProps.formConfig);
+    }
+    //update-end---author:wangshuai---date:2024-04-28---for:【issues/6180】前端代码配置表变查询条件显示列不生效---
     // merge 方法可深度合并对象
     merge(defaultTableProps, tableProps);
   }
@@ -318,6 +325,24 @@ export function useListTable(tableProps: TableProps): [
     },
   });
   delete defaultTableProps.rowSelection;
+
+  /**
+   * 设置表格参数
+   *
+   * @param formConfig
+   */
+  function setTableProps(formConfig: any) {
+    const replaceAttributeArray: string[] = ['baseColProps','labelCol'];
+    for (let item of replaceAttributeArray) {
+      if(formConfig && formConfig[item]){
+        if(defaultTableProps.formConfig){
+          let defaultFormConfig:any = defaultTableProps.formConfig;
+          defaultFormConfig[item] = formConfig[item];
+        }
+        formConfig[item] = {};
+      }
+    }
+  }
 
   return [
     ...useTable(defaultTableProps),

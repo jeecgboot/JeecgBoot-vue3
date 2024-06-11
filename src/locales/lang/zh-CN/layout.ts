@@ -28,7 +28,7 @@ export default {
     refreshCacheFailure: "刷新缓存失败！",
   },
   multipleTab: {
-    reload: '重新加载',
+    reload: '刷 新',
     close: '关闭当前',
     closeLeft: '关闭左侧',
     closeRight: '关闭右侧',
@@ -48,10 +48,10 @@ export default {
     menuTriggerBottom: '底部',
     menuTriggerTop: '顶部',
     // menu type
-    menuTypeSidebar: '左侧菜单模式',
-    menuTypeMixSidebar: '左侧菜单混合模式',
-    menuTypeMix: '顶部菜单混合模式',
-    menuTypeTopMenu: '顶部菜单模式',
+    menuTypeSidebar: '侧边栏导航',
+    menuTypeMixSidebar: '侧边折叠导航',
+    menuTypeMix: '顶部混合导航',
+    menuTypeTopMenu: '顶部栏导航',
 
     on: '开',
     off: '关',
@@ -62,7 +62,7 @@ export default {
     resetSuccess: '重置成功！',
 
     copyBtn: '拷贝',
-    clearBtn: '清空缓存并返回登录页',
+    clearBtn: '清空并返回登录',
 
     drawerTitle: '项目配置',
 
@@ -71,7 +71,7 @@ export default {
     interfaceFunction: '界面设置',
     interfaceDisplay: '界面显示',
     animation: '动画',
-    splitMenu: '分割菜单',
+    splitMenu: '顶部左侧组合菜单',
     closeMixSidebarOnChange: '切换页面关闭菜单',
 
     sysTheme: '系统主题',

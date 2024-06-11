@@ -65,7 +65,7 @@ const setting: ProjectConfig = {
   // 头部配置
   headerSetting: {
     // 背景色
-    bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
+    bgColor: HEADER_PRESET_BG_COLOR_LIST[4],
     // 固定头部
     fixed: true,
     // 是否显示顶部
@@ -73,11 +73,11 @@ const setting: ProjectConfig = {
     // 主题
     theme: ThemeEnum.LIGHT,
     // 开启锁屏功能
-    useLockPage: true,
+    useLockPage: false,
     // 显示全屏按钮
-    showFullScreen: true,
-    // 显示文档按钮
-    showDoc: true,
+    showFullScreen: false,
+    // 显示官网按钮
+    showDoc: false,
     // 显示消息中心按钮
     showNotice: true,
     // 显示菜单搜索按钮

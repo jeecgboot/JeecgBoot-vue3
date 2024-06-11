@@ -7,7 +7,7 @@
     :placement="position"
   >
     <template #title>
-      <span>{{ title }}</span>
+      <span :class="title ? 'title' : 'emptyTitle'">{{ title }}</span>
       <span style="float: right" title="关闭">
         <Icon icon="ant-design:close-outlined" @click="visible = false" />
       </span>
@@ -100,6 +100,11 @@
 
   .@{prefix-cls} {
     &-popover {
+      // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-144】jVxetable中的多行文本组件当title没有时去掉多余的线
+      .ant-popover-title:has(.emptyTitle) {
+        border-bottom: none;
+      }
+      // update-end--author:liaozhiyang---date:20240520---for：【TV360X-144】jVxetable中的多行文本组件当title没有时去掉多余的线
     }
 
     &-input {

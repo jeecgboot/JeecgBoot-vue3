@@ -73,7 +73,7 @@
     components: { Modal, ModalWrapper, ModalClose, ModalFooter, ModalHeader },
     inheritAttrs: false,
     props: basicProps,
-    emits: ['visible-change', 'open-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'update:open', 'fullScreen'],
+    emits: ['visible-change', 'open-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'update:open', 'fullScreen','comment-open'],
     setup(props, { emit, attrs , slots}) {
       const visibleRef = ref(false);
       const propsRef = ref<Partial<ModalProps> | null>(null);
@@ -183,6 +183,7 @@
         () => unref(visibleRef),
         (v) => {
           emit('visible-change', v);
+          emit('open-change', v);
           emit('update:visible', v);
           emit('update:open', v);
           instance && modalMethods.emitVisible?.(v, instance.uid);
@@ -263,6 +264,9 @@
         }else{
           commentSpan.value = 0
         }
+        // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+        emit('comment-open', commentSpan.value === 0, commentSpan.value);
+        // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
       }
       //update-end-author:taoyan date:2022-7-18 for: modal支持评论 slot
 

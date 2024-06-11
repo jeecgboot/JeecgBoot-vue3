@@ -1,7 +1,7 @@
 <!--用户选择组件-->
 <template>
   <div class="JselectUser">
-    <JSelectBiz @change="handleChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
+    <JSelectBiz @change="handleSelectChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
     <!-- update-begin--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
     <a-form-item>
       <UserSelectModal
@@ -10,6 +10,7 @@
         @getSelectResult="setValue"
         v-bind="getBindValue"
         :excludeUserIdList="excludeUserIdList"
+        @close="handleClose"
       />
     </a-form-item>
     <!-- update-end--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
@@ -25,7 +26,7 @@
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { SelectValue } from 'ant-design-vue/es/select';
-
+  import { cloneDeep } from 'lodash-es';
   export default defineComponent({
     name: 'JSelectUser',
     components: {
@@ -61,7 +62,7 @@
       //注册model
       const [regModal, { openModal }] = useModal();
       //表单值
-      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
+      // const [state] = useRuleFormItem(props, 'value', 'change', emitData);
       //下拉框选项值
       const selectOptions = ref<SelectValue>([]);
       //下拉框选中值
@@ -69,6 +70,7 @@
         value: [],
         change: false,
       });
+      let tempSave: any = [];
       // 是否正在加载回显数据
       const loadingEcho = ref<boolean>(false);
       //下发 selectOptions,xxxBiz组件接收
@@ -95,11 +97,11 @@
       /**
        * 监听selectValues变化
        */
-      watch(selectValues, () => {
-        if (selectValues) {
-          state.value = selectValues.value;
-        }
-      });
+      // watch(selectValues, () => {
+      //   if (selectValues) {
+      //     state.value = selectValues.value;
+      //   }
+      // });
 
       //update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】5、离职人员可以选自己------------
       const excludeUserIdList = ref<any>([]);
@@ -117,6 +119,9 @@
        */
       function handleOpen() {
         tag.value = true;
+        //update-begin-author:liusq---date:2024-06-03--for: [TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
+        tempSave = [];
+        //update-end-author:liusq---date:2024-06-03--for:[TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
         openModal(true, {
           isUpdate: false,
         });
@@ -128,11 +133,13 @@
       function initValue() {
         let value = props.value ? props.value : [];
         if (value && typeof value === 'string' && value != 'null' && value != 'undefined') {
-          state.value = value.split(',');
+          // state.value = value.split(',');
           selectValues.value = value.split(',');
+          tempSave = value.split(',');
         } else {
           // 【VUEN-857】兼容数组（行编辑的用法问题）
           selectValues.value = value;
+          tempSave = cloneDeep(value);
         }
       }
 
@@ -142,27 +149,31 @@
       function setValue(options, values) {
         selectOptions.value = options;
         //emitData.value = values.join(",");
-        state.value = values;
+        // state.value = values;
         selectValues.value = values;
-        emit('update:value', values.join(','));
+        send(values);
       }
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
-
-      //update-begin---author:wangshuai ---date:20230711  for：换成异步组件加载，否则会影响到其他页面描述------------
-      /**
-       * 下拉框值改变回调事件
-       * @param values
-       */
-      function handleChange(values) {
-        emit('update:value', values);
-        // update-begin--author:liaozhiyang---date:20240417---for:【QQYUN-8933】选择用户组件触发必填校验之后再填入值校验没触发
-        emit('change', values);
-        // update-end--author:liaozhiyang---date:20240417---for:【QQYUN-8933】选择用户组件触发必填校验之后再填入值校验没触发
-      }
-      //update-end---author:wangshuai ---date:20230711  for：换成异步组件加载，否则会影响到其他页面描述------------
-      
+      // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9366】用户选择组件取消和关闭会把选择数据带入
+      const handleClose = () => {
+        if (tempSave.length) {
+          selectValues.value = cloneDeep(tempSave);
+        } else {
+          send(tempSave);
+        }
+      };
+      const handleSelectChange = (values) => {
+        tempSave = cloneDeep(values);
+        send(tempSave);
+      };
+      const send = (values) => {
+        let result = typeof props.value == "string" ? values.join(',') : values;
+        emit('update:value', result);
+        emit('change', result);
+      };
+      // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9366】用户选择组件取消和关闭会把选择数据带入
       return {
-        state,
+        // state,
         attrs,
         selectOptions,
         getBindValue,
@@ -173,7 +184,8 @@
         setValue,
         handleOpen,
         excludeUserIdList,
-        handleChange,
+        handleClose,
+        handleSelectChange,
       };
     },
   });

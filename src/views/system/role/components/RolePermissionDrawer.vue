@@ -54,6 +54,7 @@
   import RoleDataRuleDrawer from './RoleDataRuleDrawer.vue';
   import { queryTreeListForRole, queryRolePermission, saveRolePermission } from '../role.api';
   import { useI18n } from "/@/hooks/web/useI18n";
+  import { ROLE_AUTH_CONFIG_KEY } from '/@/enums/cacheEnum';
   const emit = defineEmits(['register']);
   //树的信息
   const treeData = ref<TreeItem[]>([]);
@@ -84,7 +85,16 @@
     treeData.value = translateTitle(roleResult.treeList);
     // update-end--author:liaozhiyang---date:20240228---for：【QQYUN-8355】角色权限配置的菜单翻译
     allTreeKeys.value = roleResult.ids;
-    expandedKeys.value = roleResult.ids;
+    // update-begin--author:liaozhiyang---date:20240531---for：【TV360X-590】角色授权弹窗操作缓存
+    const localData = localStorage.getItem(ROLE_AUTH_CONFIG_KEY);
+    if (localData) {
+      const obj = JSON.parse(localData);
+      obj.level && treeMenuClick({ key: obj.level });
+      obj.expand && treeMenuClick({ key: obj.expand });
+    } else {
+      expandedKeys.value = roleResult.ids;
+    }
+    // update-end--author:liaozhiyang---date:20240531---for：【TV360X-590】角色授权弹窗操作缓存
     //初始化角色菜单数据
     const permResult = await queryRolePermission({ roleId: unref(roleId) });
     checkedKeys.value = permResult;
@@ -242,14 +252,29 @@
       checkedKeys.value = [];
     } else if (key === 'openAll') {
       expandedKeys.value = allTreeKeys.value;
+      saveLocalOperation('expand', 'openAll');
     } else if (key === 'closeAll') {
       expandedKeys.value = [];
+      saveLocalOperation('expand', 'closeAll');
     } else if (key === 'relation') {
       checkStrictly.value = false;
+      saveLocalOperation('level', 'relation');
     } else {
       checkStrictly.value = true;
+      saveLocalOperation('level', 'standAlone');
     }
   }
+  /**
+   * 2024-05-31
+   * liaozhiyang
+   * 【TV360X-590】角色授权弹窗操作缓存
+   * */
+  const saveLocalOperation = (key, value) => {
+    const localData = localStorage.getItem(ROLE_AUTH_CONFIG_KEY);
+    const obj = localData ? JSON.parse(localData) : {};
+    obj[key] = value;
+    localStorage.setItem(ROLE_AUTH_CONFIG_KEY, JSON.stringify(obj))
+  };
 </script>
 
 <style lang="less" scoped>
@@ -272,7 +297,7 @@
     margin-right: 2px;
     cursor: pointer;
   }
-  :deep(.jeecg-tree-header){
+  :deep(.jeecg-tree-header) {
     border-bottom: none;
   }
   //update-end---author:wangshuai ---date:20230202  for：抽屉弹窗标题图标下拉样式------------

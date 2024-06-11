@@ -16,7 +16,8 @@
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useAppInject } from '/@/hooks/web/useAppInject';
-
+  import { usePermission } from '/@/hooks/web/usePermission';
+  import Middleware from './Middleware.vue';
   export default defineComponent({
     name: 'BasicFormItem',
     inheritAttrs: false,
@@ -51,6 +52,12 @@
       formActionType: {
         type: Object as PropType<FormActionType>,
       },
+      // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857】解决禁用状态下触发校验
+      clearValidate: {
+        type: Function,
+        default: null,
+      },
+      // update-end-author:liaozhiyang---date:20240605---for：【TV360X-857】解决禁用状态下触发校验
     },
     setup(props, { slots }) {
       const { t } = useI18n();
@@ -93,6 +100,11 @@
 
       const getDisable = computed(() => {
         const { disabled: globDisabled } = props.formProps;
+        // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-594】表单全局禁用则dynamicDisabled不生效
+        if (!!globDisabled) {
+          return globDisabled;
+        }
+        // update-end--author:liaozhiyang---date:20240530---for：【TV360X-594】表单全局禁用则dynamicDisabled不生效
         const { dynamicDisabled } = props.schema;
         const { disabled: itemDisabled = false } = unref(getComponentsProps);
         let disabled = !!globDisabled || itemDisabled;
@@ -144,12 +156,62 @@
         isShow = isShow && itemIsAdvanced;
         return { isShow, isIfShow };
       }
-
+      // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
+      let vSwitchArr: any = [],
+        prevValidatorArr: any = [];
+      const hijackValidator = (rules) => {
+        vSwitchArr = [];
+        prevValidatorArr = [];
+        rules.forEach((item, index) => {
+          const fn = item.validator;
+          vSwitchArr.push(true);
+          prevValidatorArr.push(null);
+          if (isFunction(fn)) {
+            item.validator = (rule, value, callback) => {
+              if (vSwitchArr[index]) {
+                vSwitchArr[index] = false;
+                setTimeout(() => {
+                  vSwitchArr[index] = true;
+                }, 100);
+                const result = fn(rule, value, callback);
+                prevValidatorArr[index] = result;
+                return result;
+              } else {
+                return prevValidatorArr[index];
+              }
+            };
+          }
+        });
+      };
+      // update-end--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
       function handleRules(): ValidationRule[] {
-        const { rules: defRules = [], component, rulesMessageJoinLabel, label, dynamicRules, required } = props.schema;
-
+        const { rules: defRules = [], component, rulesMessageJoinLabel, label, dynamicRules, required, auth, field } = props.schema;
+        // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857】解决禁用状态下触发校验
+        const { disabled: globDisabled } = props.formProps;
+        const { disabled: itemDisabled = false } = unref(getComponentsProps);
+        if (!!globDisabled || !!itemDisabled) {
+          props.clearValidate(field);
+          return [];
+        }
+        // update-end--author:liaozhiyang---date:20240605---for：【TV360X-857】解决禁用状态下触发校验
+        // update-begin--author:liaozhiyang---date:20240531---for：【TV360X-842】必填项v-auth、show隐藏的情况下表单无法提交
+        const { hasPermission } = usePermission();
+        const { isShow } = getShow();
+        if ((auth && !hasPermission(auth)) || !isShow) {
+          return [];
+        }
+        // update-end--author:liaozhiyang---date:20240531---for：【TV360X-842】必填项v-auth、show隐藏的情况下表单无法提交
         if (isFunction(dynamicRules)) {
-          return dynamicRules(unref(getValues)) as ValidationRule[];
+          // update-begin--author:liaozhiyang---date:20240514---for：【issues/1244】标识了必填，但是必填标识没显示
+          const ruleArr = dynamicRules(unref(getValues)) as ValidationRule[];
+          if (required) {
+            ruleArr.unshift({ required: true });
+          }
+          // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
+          hijackValidator(ruleArr);
+          // update-end--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
+          return ruleArr;
+          // update-end--author:liaozhiyang---date:20240514---for：【issues/1244】标识了必填，但是必填标识没显示
         }
 
         let rules: ValidationRule[] = cloneDeep(defRules) as ValidationRule[];
@@ -237,11 +299,14 @@
           }
         });
         // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7495】pattern由字符串改成正则传递给antd（因使用InputNumber时发现正则无效）
+        // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
+        hijackValidator(rules);
+        // update-end--author:liaozhiyang---date:20240530---for：【TV360X-434】validator校验执行两次
         return rules;
       }
 
       function renderComponent() {
-        const { renderComponentContent, component, field, changeEvent = 'change', valueField, componentProps } = props.schema;
+        const { renderComponentContent, component, field, changeEvent = 'change', valueField, componentProps, dynamicRules } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
         // update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
@@ -272,7 +337,9 @@
             }
             // update-end--author:liaozhiyang---date:20231013---for：【QQYUN-6679】input去空格
             props.setFormModel(field, value);
-            //props.validateFields([field], { triggerName: 'change' }).catch((_) => {});
+            // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-341】有值之后必填校验不消失
+            props.validateFields([field]).catch((_) => {});
+            // update-end--author:liaozhiyang---date:20240522--for：【TV360X-341】有值之后必填校验不消失
           },
           // onBlur: () => {
           //   props.validateFields([field], { triggerName: 'blur' }).catch((_) => {});
@@ -338,9 +405,11 @@
         //label宽度支持自定义
         const { label, helpMessage, helpComponentProps, subLabel, labelLength } = props.schema;
         let showLabel: string = label + '';
-        if (labelLength && showLabel.length > 4) {
+        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-98】label展示的文字必须和labelLength配置一致
+        if (labelLength) {
           showLabel = showLabel.substr(0, labelLength);
         }
+        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-98】label展示的文字必须和labelLength配置一致
         const titleObj = { title: label };
         const renderLabel = subLabel ? (
           <span>
@@ -391,12 +460,17 @@
               {...(itemProps as Recordable)}
               label={renderLabelHelpMessage()}
               rules={handleRules()}
+              // update-begin--author:liaozhiyang---date:20240514---for：【issues/1244】标识了必填，但是必填标识没显示
+              validateFirst = { true }
+              // update-end--author:liaozhiyang---date:20240514---for：【issues/1244】标识了必填，但是必填标识没显示
               labelCol={labelCol}
               wrapperCol={wrapperCol}
             >
               <div style="display:flex">
                 {/* author: sunjianlei for: 【VUEN-744】此处加上 width: 100%; 因为要防止组件宽度超出 FormItem */}
-                <div style="flex:1; width: 100%;">{getContent()}</div>
+                {/* update-begin--author:liaozhiyang---date:20240510---for：【TV360X-719】表单校验不通过项滚动到可视区内 */}
+                <Middleware>{getContent()}</Middleware>
+                {/* update-end--author:liaozhiyang---date:20240510---for：【TV360X-719】表单校验不通过项滚动到可视区内 */}
                 {showSuffix && <span class="suffix">{getSuffix}</span>}
               </div>
             </Form.Item>

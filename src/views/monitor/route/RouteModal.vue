@@ -92,7 +92,7 @@
           </template>
         </div>
         <p class="btn" style="padding-top: 10px">
-          <a-dropdown>
+          <a-dropdown trigger="click">
             <template #overlay>
               <a-menu>
                 <a-menu-item :key="item.name" v-for="item in tagArray" @click="predicatesHandleMenuClick(item)">{{ item.name }}</a-menu-item>
@@ -126,7 +126,7 @@
           </a-button>
         </div>
         <p class="btn" style="padding-top: 10px">
-          <a-dropdown>
+          <a-dropdown trigger="click">
             <template #overlay>
               <a-menu @click="filterHandleMenuClick">
                 <a-menu-item :key="item.key" :name="item.name" v-for="item in filterArray">{{ item.name }}</a-menu-item>

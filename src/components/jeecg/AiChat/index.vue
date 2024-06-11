@@ -33,8 +33,8 @@
   import { JEECG_CHAT_KEY } from '/@/enums/cacheEnum';
   import { defHttp } from '/@/utils/http/axios';
   const configUrl = {
-    get: '/ai/chat/history/get',
-    save: '/ai/chat/history/save',
+    get: '/test/ai/chat/history/get',
+    save: '/test/ai/chat/history/save',
   };
   const userId = useUserStore().getUserInfo?.id;
   const localKey = JEECG_CHAT_KEY + userId;
@@ -199,5 +199,6 @@
       margin-left: 0;
     }
     flex: 1;
+    min-width: 0;
   }
 </style>

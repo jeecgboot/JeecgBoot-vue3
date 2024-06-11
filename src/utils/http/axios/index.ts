@@ -18,6 +18,7 @@ import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { useUserStoreWithOut } from '/@/store/modules/user';
+import { cloneDeep } from "lodash-es";
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
 const { createMessage, createErrorModal } = useMessage();
@@ -149,19 +150,27 @@ const transform: AxiosTransform = {
     // 请求之前处理config
     const token = getToken();
     let tenantId: string | number = getTenantId();
+    
+    //update-begin---author:wangshuai---date:2024-04-16---for:【QQYUN-9005】发送短信加签。解决没有token无法加签---
+    // 将签名和时间戳，添加在请求接口 Header
+    config.headers[ConfigEnum.TIMESTAMP] = signMd5Utils.getTimestamp();
+    //update-begin---author:wangshuai---date:2024-04-25---for: 生成签名的时候复制一份，避免影响原来的参数---
+    config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, cloneDeep(config.params), cloneDeep(config.data));
+    //update-end---author:wangshuai---date:2024-04-25---for: 生成签名的时候复制一份，避免影响原来的参数---
+    //update-end---author:wangshuai---date:2024-04-16---for:【QQYUN-9005】发送短信加签。解决没有token无法加签---
+    // update-begin--author:liaozhiyang---date:20240509---for：【issues/1220】登录时，vue3版本不加载字典数据设置无效
+    //--update-begin--author:liusq---date:20220325---for: 增加vue3标记
+    config.headers[ConfigEnum.VERSION] = 'v3';
+    //--update-end--author:liusq---date:20220325---for:增加vue3标记
+    // update-end--author:liaozhiyang---date:20240509---for：【issues/1220】登录时，vue3版本不加载字典数据设置无效
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
       config.headers[ConfigEnum.TOKEN] = token;
-      //--update-begin--author:liusq---date:20210831---for:将签名和时间戳，添加在请求接口 Header
-
-      // update-begin--author:taoyan---date:20220421--for: VUEN-410【签名改造】 X-TIMESTAMP牵扯
-      config.headers[ConfigEnum.TIMESTAMP] = signMd5Utils.getTimestamp();
-      // update-end--author:taoyan---date:20220421--for: VUEN-410【签名改造】 X-TIMESTAMP牵扯
-
-      config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, config.params);
-      //--update-end--author:liusq---date:20210831---for:将签名和时间戳，添加在请求接口 Header
-      //--update-begin--author:liusq---date:20211105---for: for:将多租户id，添加在请求接口 Header
+      
+      // 将签名和时间戳，添加在请求接口 Header
+      //config.headers[ConfigEnum.TIMESTAMP] = signMd5Utils.getTimestamp();
+      //config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, config.params);
       if (!tenantId) {
         tenantId = 0;
       }
@@ -176,9 +185,6 @@ const transform: AxiosTransform = {
       // update-end--author:sunjianlei---date:220230428---for：【QQYUN-5279】修复分享的应用租户和当前登录租户不一致时，提示404的问题
 
       config.headers[ConfigEnum.TENANT_ID] = tenantId;
-      //--update-begin--author:liusq---date:20220325---for: 增加vue3标记
-      config.headers[ConfigEnum.VERSION] = 'v3';
-      //--update-end--author:liusq---date:20220325---for:增加vue3标记
       //--update-end--author:liusq---date:20211105---for:将多租户id，添加在请求接口 Header
 
       // ========================================================================================

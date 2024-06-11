@@ -202,7 +202,10 @@ export interface FormSchema {
   buss?: any;
   
   //label字数控制（label宽度）
-  labelLength?: number
+  labelLength?: number;
+  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
+  auth?: string;
+  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
 }
 export interface HelpComponentProps {
   maxWidth: string;

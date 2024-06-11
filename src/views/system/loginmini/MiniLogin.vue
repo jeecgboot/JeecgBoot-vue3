@@ -144,6 +144,9 @@
     </div>
     <!-- 第三方登录相关弹框 -->
     <ThirdModal ref="thirdModalRef"></ThirdModal>
+    
+    <!-- 图片验证码弹窗 -->
+    <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
   </div>
 </template>
 <script lang="ts" setup name="login-mini">
@@ -166,6 +169,9 @@
   import { useDesign } from "/@/hooks/web/useDesign";
   import { useAppInject } from "/@/hooks/web/useAppInject";
   import { GithubFilled, WechatFilled, DingtalkCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
+  import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
+  import { useModal } from "@/components/Modal";
+  import { ExceptionEnum } from "@/enums/exceptionEnum";
 
   const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
@@ -213,7 +219,7 @@
   const registerRef = ref();
   const loginLoading = ref<boolean>(false);
   const { getIsMobile } = useAppInject();
-
+  const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
   defineProps({
     sessionTimeout: {
       type: Boolean,
@@ -336,7 +342,13 @@
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    const result = await getCaptcha({ mobile: phoneFormData.mobile, smsmode: SmsEnum.FORGET_PASSWORD });
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    const result = await getCaptcha({ mobile: phoneFormData.mobile, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) =>{
+      if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
+        openCaptchaModal(true, {});
+      }
+    });
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {

@@ -1,6 +1,6 @@
 <!--popup组件-->
 <template>
-  <div class="components-input-demo-presuffix" v-if="avalid">
+  <div class="JPopup components-input-demo-presuffix" v-if="avalid">
     <!--输入框-->
     <a-input @click="handleOpen" v-model:value="showText" :placeholder="placeholder" readOnly v-bind="attrs">
       <template #prefix>
@@ -12,17 +12,22 @@
             </template>-->
       <!-- update-begin-author:taoyan date:2022-5-31 for: VUEN-1157 popup 选中后，有两个清除图标；后边这个清除，只是把输入框中数据清除，实际值并没有清除 -->
     </a-input>
-    <!--popup弹窗-->
-    <JPopupOnlReportModal
-      @register="regModal"
-      :code="code"
-      :multi="multi"
-      :sorter="sorter"
-      :groupId="uniqGroupId"
-      :param="param"
-      @ok="callBack"
-      :getContainer="getContainer"
-    ></JPopupOnlReportModal>
+    <!-- update-begin--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
+    <a-form-item>
+      <!--popup弹窗-->
+      <JPopupOnlReportModal
+        @register="regModal"
+        :code="code"
+        :multi="multi"
+        :sorter="sorter"
+        :groupId="uniqGroupId"
+        :param="param"
+        :showAdvancedButton="showAdvancedButton"
+        @ok="callBack"
+        :getContainer="getContainer"
+      ></JPopupOnlReportModal>
+    </a-form-item>
+    <!-- update-end--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式 -->
   </div>
 </template>
 <script lang="ts">
@@ -56,6 +61,7 @@
         type: Array,
         default: () => [],
       },
+      showAdvancedButton: propTypes.bool.def(true),
     },
     emits: ['update:value', 'register', 'popUpChange', 'focus'],
     setup(props, { emit, refs }) {
@@ -97,7 +103,9 @@
        */
       function handleOpen() {
         emit('focus');
-        !props.disabled && openModal(true);
+        // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-317】禁用后JPopup和JPopupdic还可以点击出弹窗
+        !attrs.value.disabled && openModal(true);
+        // update-end--author:liaozhiyang---date:20240528---for：【TV360X-317】禁用后JPopup和JPopupdic还可以点击出弹窗
       }
 
       /**
@@ -148,6 +156,13 @@
   });
 </script>
 <style lang="less" scoped>
+  // update-begin--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  .JPopup {
+    > .ant-form-item {
+      display: none;
+    }
+  }
+  // update-end--author:liaozhiyang---date:20240515---for：【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
   .components-input-demo-presuffix .anticon-close-circle {
     cursor: pointer;
     color: #ccc;

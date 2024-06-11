@@ -8,6 +8,7 @@ import { useUserStoreWithOut } from "/@/store/modules/user";
 
 import { Modal } from "ant-design-vue";
 import { defHttp } from "@/utils/http/axios";
+import { useI18n } from "@/hooks/web/useI18n";
 
 const globSetting = useGlobSetting();
 const baseApiUrl = globSetting.domainUrl;
@@ -521,4 +522,56 @@ export function tenantSaasMessage(title){
       cancelButtonProps: { style: { display: 'none' } },
     })
   }
+}
+
+/**
+ * 判断日期和当前时间是否为同一天
+ * @param dateStr
+ */
+export function sameDay(dateStr) {
+  if (!dateStr) {
+    return false;
+  }
+  // 获取当前日期
+  let currentDate = new Date();
+  let currentDay = currentDate.getDate();
+  let currentMonth = currentDate.getMonth();
+  let currentYear = currentDate.getFullYear();
+
+  //创建另一个日期进行比较
+  let otherDate = new Date(dateStr);
+  let otherDay = otherDate.getDate();
+  let otherMonth = otherDate.getMonth();
+  let otherYear = otherDate.getFullYear();
+
+  //比较日期
+  if (currentDay === otherDay && currentMonth === otherMonth && currentYear === otherYear) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+/**
+ * 翻译菜单名称
+ * 2024-02-28
+ * liaozhiyang
+ * @param data
+ */
+export function translateTitle(data) {
+  if (data?.length) {
+    const { t } = useI18n();
+    data.forEach((item) => {
+      if (item.slotTitle) {
+        if (item.slotTitle.includes("t('") && t) {
+          item.slotTitle = new Function('t', `return ${item.slotTitle}`)(t);
+        }
+      }
+      if (item.children?.length) {
+        translateTitle(item.children);
+      }
+    });
+  }
+  return data;
 }

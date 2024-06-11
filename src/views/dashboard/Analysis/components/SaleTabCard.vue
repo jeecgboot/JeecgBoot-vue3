@@ -16,7 +16,7 @@
         <a-tab-pane loading="true" tab="销售额" key="1">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-              <Bar :chartData="barData" :option="{ title: { text: '销售额排行', textStyle: { fontWeight: 'lighter' } } }" height="40vh" />
+              <Bar :chartData="barData" :option="{ title: { text: '', textStyle: { fontWeight: 'lighter' } } }" height="40vh" :seriesColor="seriesColor"  />
             </a-col>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <RankList title="门店销售排行榜" :list="rankList" />
@@ -26,7 +26,7 @@
         <a-tab-pane tab="销售趋势" key="2">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-              <Bar :chartData="barData.reverse()" :option="{ title: { text: '销售额排行', textStyle: { fontWeight: 'lighter' } } }" height="40vh" />
+              <Bar :chartData="barData.reverse()" :option="{ title: { text: '', textStyle: { fontWeight: 'lighter' } } }" height="40vh" :seriesColor="seriesColor" />
             </a-col>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <RankList title="门店销售排行榜" :list="rankList" />
@@ -38,15 +38,18 @@
   </a-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import Bar from '/@/components/chart/Bar.vue';
   import RankList from '/@/components/chart/RankList.vue';
+  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+    
 
   defineProps({
     loading: {
       type: Boolean,
     },
   });
+  const { getThemeColor } = useRootSetting();
   const rankList = [];
   for (let i = 0; i < 7; i++) {
     rankList.push({
@@ -62,6 +65,9 @@
       value: Math.floor(Math.random() * 1000) + 200,
     });
   }
+  const seriesColor = computed(() => {
+    return getThemeColor.value
+  })
 </script>
 
 <style lang="less" scoped>

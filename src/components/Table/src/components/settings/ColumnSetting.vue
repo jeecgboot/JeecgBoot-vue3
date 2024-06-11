@@ -142,9 +142,9 @@
     setup(props, { emit, attrs }) {
       const { t } = useI18n();
       const table = useTableContext();
-      const popoverVisible = ref(true);
+      const popoverVisible = ref(false);
       // update-begin--author:sunjianlei---date:20221101---for: 修复第一次进入时列表配置不能拖拽
-      nextTick(() => popoverVisible.value = false);
+      // nextTick(() => popoverVisible.value = false);
       // update-end--author:sunjianlei---date:20221101---for: 修复第一次进入时列表配置不能拖拽
       const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
       let inited = false;
@@ -311,7 +311,9 @@
       // Open the pop-up window for drag and drop initialization
       function handleVisibleChange() {
         if (inited) return;
-        nextTick(() => {
+        // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-254】列设置闪现及苹果浏览器弹窗过长
+        setTimeout(() => {
+          // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-254】列设置闪现及苹果浏览器弹窗过长
           const columnListEl = unref(columnListRef);
           if (!columnListEl) return;
           const el = columnListEl.$el as any;
@@ -340,14 +342,14 @@
 
               plainSortOptions.value = columns;
               // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6424】table字段列表设置不显示后，再拖拽字段顺序，原本不显示的，又显示了
-              if(state.checkedList.length != columns.length){
-                const cols = columns.map(item => item.value);
-                const arr = cols.filter((cItem) => state.checkedList.find((lItem) => lItem === cItem));
-                setColumns(arr);
-              } else {
-                setColumns(columns);
-              }
-              // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6424】table字段列表设置不显示后，再拖拽字段顺序，原本不显示的，又显示了
+              // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-108】刷新后勾选之前未勾选的字段拖拽之后该字段对应的表格列消失了
+              const cols = columns.map((item) => item.value);
+              const arr = cols.filter((cItem) => state.checkedList.find((lItem) => lItem === cItem));
+              setColumns(arr);
+              // 最开始的代码
+              // setColumns(columns);
+              // update-end--author:liaozhiyang---date:20240522---for：【TV360X-108】刷新后勾选之前未勾选的字段拖拽之后该字段对应的表格列消失了
+              // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6424】table字段列表设置不显示后，再拖拽字段顺序，原本不显示的，又显示了
             },
           });
           // 记录原始 order 序列
@@ -355,7 +357,7 @@
             sortableOrder.value = sortable.toArray();
           }
           inited = true;
-        });
+        }, 2000);
       }
 
       // Control whether the serial number column is displayed
@@ -516,6 +518,16 @@
         // flex-wrap: wrap;
       }
 
+      // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-254】列设置闪现及苹果浏览器弹窗过长
+      &.ant-popover,
+      .ant-popover-content,
+      .ant-popover-inner,
+      .ant-popover-inner-content,
+      .scroll-container,
+      .scrollbar__wrap {
+        max-width: min-content;
+      }
+      // update-end--author:liaozhiyang---date:20240529---for：【TV360X-254】列设置闪现及苹果浏览器弹窗过长
       .scrollbar {
         height: 220px;
       }

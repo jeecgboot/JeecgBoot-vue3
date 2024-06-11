@@ -34,6 +34,7 @@
       </a-input>
     </template>
     <a-upload
+      v-if="cellProps.allDisable"
       v-show="!hasFile"
       name="file"
       :data="{ isup: 1 }"

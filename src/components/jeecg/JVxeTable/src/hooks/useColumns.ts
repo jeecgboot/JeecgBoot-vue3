@@ -91,8 +91,42 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
       handleInnerColumn(args, selectionColumn, handleSelectionColumn);
       handleInnerColumn(args, expandColumn, handleExpandColumn);
       handleInnerColumn(args, dragSortColumn, handleDragSortColumn, true);
+      // update-begin--author:liaozhiyang---date:2024-05-30---for【TV360X-371】不可编辑组件必填缺少*号
+      customComponentAddStar(columns);
+      // update-end--author:liaozhiyang---date:2024-05-30---for：【TV360X-371】不可编辑组件必填缺少*号
     }
     return columns;
+  });
+}
+
+/**
+ * 2024-05-30
+ * liaozhiyang
+ * 不可编辑组件必填通过title人为加*号
+ */
+function customComponentAddStar(columns) {
+  columns.forEach((column) => {
+    const { params } = column;
+    if (params) {
+      const { validateRules, type } = params;
+      if (
+        validateRules?.length &&
+        [
+          JVxeTypes.checkbox,
+          JVxeTypes.radio,
+          JVxeTypes.upload,
+          JVxeTypes.progress,
+          JVxeTypes.departSelect,
+          JVxeTypes.userSelect,
+          JVxeTypes.image,
+          JVxeTypes.file,
+        ].includes(type)
+      ) {
+        if (validateRules.find((item) => item.required)) {
+          column.title = ` * ${column.title}`;
+        }
+      }
+    }
   });
 }
 
@@ -112,7 +146,7 @@ function handleInnerColumn(args: HandleArgs, col: JVxeColumn, handler: (args: Ha
 function handleHiddenColumn({ col, columns }: HandleArgs) {
   col!.params = cloneDeep(col);
   delete col!.type;
-  col!.field = col!.key
+  col!.field = col!.key;
   col!.visible = false;
   columns.push(col!);
 }
@@ -127,9 +161,15 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
       type: 'seq',
       title: '#',
       width: 60,
-      fixed: 'left',
+      // 【QQYUN-8405】
+      fixed: props.rowNumberFixed,
       align: 'center',
     };
+    // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8405】vxetable支持序号是否固定（移动端需要）
+    if (props.rowNumberFixed === 'none') {
+      delete column.fixed;
+    }
+    // update-end--author:liaozhiyang---date:20240306---for：QQYUN-8405】vxetable支持序号是否固定（移动端需要）
     if (col) {
       Object.assign(col, column);
     } else {
@@ -148,12 +188,17 @@ function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
     if (data.statistics.has && !props.rowExpand && !props.dragSort) {
       width = 60;
     }
-    let column = {
+    let column: any = {
       type: props.rowSelectionType,
       width: width,
       fixed: 'left',
       align: 'center',
     };
+    // update-begin--author:liaozhiyang---date:20240509---for：【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
+    if (props.rowSelectionFixed === 'none') {
+      delete column.fixed;
+    }
+    // update-end--author:liaozhiyang---date:20240509---for：【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
     if (col) {
       Object.assign(col, column);
     } else {
@@ -201,7 +246,18 @@ function handleDragSortColumn({ props, data, col, columns, renderOptions }: Hand
       width: width,
       fixed: 'left',
       align: 'center',
+      // update-begin--author:liaozhiyang---date:20240417---for:【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
+      params: {
+        notAllowDrag: props.notAllowDrag,
+        ...col?.params,
+      },
+      // update-end--author:liaozhiyang---date:20240417---for:【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
     };
+    // update-begin--author:liaozhiyang---date:20240506---for：【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
+    if (props.dragSortFixed === 'none') {
+      delete column.fixed;
+    }
+    // update-end--author:liaozhiyang---date:20240506---for：【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
     let cellRender = {
       name: JVxeTypePrefix + JVxeTypes.rowDragSort,
       sortKey: props.sortKey,
@@ -236,8 +292,9 @@ function handlerCol(args: HandleArgs) {
     // $renderOptions.type = (enhanced.switches.visible || props.alwaysEdit) ? 'visible' : 'default'
   }
   col[renderName] = $renderOptions;
-
-  handleDict(args);
+  // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-5806】js增强改变下拉搜索options（添加customOptions为true不读字典，走自己的options）
+  !col.params.customOptions && handleDict(args);
+  // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-5806】js增强改变下拉搜索options（添加customOptions为true不读字典，走自己的options）
   handleRules(args);
   handleStatistics(args);
   handleSlots(args);

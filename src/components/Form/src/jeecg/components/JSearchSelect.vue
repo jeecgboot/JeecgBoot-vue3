@@ -11,6 +11,7 @@
     :placeholder="placeholder"
     :filterOption="isDictTable ? false : filterOption"
     :notFoundContent="loading ? undefined : null"
+    @focus="handleAsyncFocus"
     @search="loadData"
     @change="handleAsyncChange"
   >
@@ -46,6 +47,8 @@
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { initDictOptions } from '/@/utils/dict/index';
   import { defHttp } from '/@/utils/http/axios';
+  import { debounce } from 'lodash-es';
+  import { setPopContainer } from '/@/utils';
 
   export default defineComponent({
     name: 'JSearchSelect',
@@ -144,7 +147,7 @@
       /**
        * 异步查询数据
        */
-      async function loadData(value) {
+      const loadData = debounce(async function loadData(value) {
         if (!isDictTable.value) {
           return;
         }
@@ -153,6 +156,9 @@
         options.value = [];
         loading.value = true;
         let keywordInfo = getKeywordParam(value);
+        //update-begin---author:chenrui ---date:2024/4/7  for：[QQYUN-8800]JSearchSelect的search事件在中文输入还没拼字成功时会触发，导致后端SQL注入 #6049------------
+        keywordInfo = keywordInfo.replaceAll("'", '');
+        //update-end---author:chenrui ---date:2024/4/7  for：[QQYUN-8800]JSearchSelect的search事件在中文输入还没拼字成功时会触发，导致后端SQL注入 #6049------------
         // 字典code格式：table,text,code
         defHttp
           .get({
@@ -168,7 +174,7 @@
               options.value = res;
             }
           });
-      }
+      }, 300);
       /**
        * 初始化value
        */
@@ -282,6 +288,10 @@
           loadData('');
         }
         callback();
+        // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-426】下拉搜索设置了默认值，把查询条件删掉，再点击重置，没附上值
+        // 点x清空时需要把loadSelectText设置true
+        selectedObj ?? (loadSelectText.value = true);
+        // update-end--author:liaozhiyang---date:20240524---for：【TV360X-426】下拉搜索设置了默认值，把查询条件删掉，再点击重置，没附上值
       }
       /**
        *回调方法
@@ -311,7 +321,9 @@
       function getParentContainer(node) {
         // update-begin-author:taoyan date:20220407 for: getPopupContainer一直有值 导致popContainer的逻辑永远走不进去，把它挪到前面判断
         if (props.popContainer) {
-          return document.querySelector(props.popContainer);
+          // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9339】有多个modal弹窗内都有下拉字典多选和下拉搜索组件时，打开另一个modal时组件的options不展示
+          return setPopContainer(node, props.popContainer);
+          // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9339】有多个modal弹窗内都有下拉字典多选和下拉搜索组件时，打开另一个modal时组件的options不展示
         } else {
           if (typeof props.getPopupContainer === 'function') {
             return props.getPopupContainer(node);
@@ -339,7 +351,12 @@
         }
       }
       //update-end-author:taoyan date:2022-8-15 for: VUEN-1971 【online 专项测试】关联记录和他表字段 1
-      
+      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-26】下拉搜索控件选中选项后再次点击下拉应该显示初始的下拉选项，而不是只展示选中结果
+      const handleAsyncFocus = () => {
+        options.value.length && initDictCodeData();
+        attrs.onFocus?.();
+      };
+      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-26】下拉搜索控件选中选项后再次点击下拉应该显示初始的下拉选项，而不是只展示选中结果
       return {
         attrs,
         options,
@@ -352,6 +369,7 @@
         filterOption,
         handleChange,
         handleAsyncChange,
+        handleAsyncFocus,
       };
     },
   });

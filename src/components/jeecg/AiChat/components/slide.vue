@@ -67,6 +67,7 @@
                 width="1em"
                 height="1em"
                 viewBox="0 0 24 24"
+                @click.stop=""
               >
                 <path
                   fill="currentColor"
@@ -210,6 +211,11 @@
       &::-webkit-scrollbar {
         width: 8px;
         height: 8px;
+      }
+    }
+    .historyArea ul li:hover{
+      .del{
+        display: block;
       }
     }
     .createArea {

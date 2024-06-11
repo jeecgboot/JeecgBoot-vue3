@@ -133,6 +133,10 @@ export function useTableScroll(
     }
 
     let height = bottomIncludeBody - (resizeHeightOffset || 0) - paddingHeight - paginationHeight - footerHeight - headerHeight;
+    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
+    // 10+6(外层边距padding:10 + 内层padding-bottom:6)
+    height -= 16;
+    // update-end--author:liaozhiyang---date:20240603---for：【TV360X-861】列表查询区域不可往上滚动
 
     height = (height < minHeight! ? (minHeight as number) : height) ?? height;
     height = (height > maxHeight! ? (maxHeight as number) : height) ?? height;

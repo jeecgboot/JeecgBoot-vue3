@@ -4,6 +4,7 @@ enum Api {
   keysSize = '/sys/actuator/redis/keysSize',
   memoryInfo = '/sys/actuator/redis/memoryInfo',
   info = '/sys/actuator/redis/info',
+  metricsHistory = '/sys/actuator/redis/metrics/history',
 }
 
 /**
@@ -25,6 +26,13 @@ export const getMemoryInfo = () => {
  */
 export const getInfo = () => {
   return defHttp.get({ url: Api.info });
+};
+
+/**
+ * 历史监控记录
+ */
+export const getMetricsHistory = () => {
+  return defHttp.get({ url: Api.metricsHistory });
 };
 
 export const getRedisInfo = () => {

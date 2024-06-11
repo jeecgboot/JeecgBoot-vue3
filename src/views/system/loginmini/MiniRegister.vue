@@ -81,6 +81,8 @@
       </div>
     </div>
   </div>
+  <!-- 图片验证码弹窗 -->
+  <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 
 <script lang="ts" setup name="mini-register">
@@ -93,6 +95,9 @@
   import eyeKImg from '/@/assets/loginmini/icon/icon-eye-k.png';
   import eyeGImg from '/@/assets/loginmini/icon/icon-eye-g.png';
   import { useI18n } from "/@/hooks/web/useI18n";
+  import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
+  import { useModal } from "@/components/Modal";
+  import { ExceptionEnum } from "@/enums/exceptionEnum";
 
   const { t } = useI18n();
   const { notification, createErrorModal, createMessage } = useMessage();
@@ -116,6 +121,7 @@
   const pwdIndex = ref<string>('close');
   //确认密码眼睛打开关闭
   const confirmPwdIndex = ref<string>('close');
+  const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
 
   /**
    * 返回
@@ -133,7 +139,13 @@
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.REGISTER });
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.REGISTER }).catch((res) =>{
+      if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
+        openCaptchaModal(true, {});
+      }
+    });
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {

@@ -39,7 +39,7 @@
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
       <!-- ai助手 -->
-      <Aide></Aide>
+      <!--<Aide></Aide>-->
     </div>
   </Header>
   <LoginSelect ref="loginSelectRef" @success="loginSelectOk"></LoginSelect>
@@ -229,7 +229,9 @@
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
-    height: 48px;
+    // update-begin--author:liaozhiyang---date:20240407---for：【QQYUN-8762】顶栏高度
+    height: @header-height;
+    // update-end--author:liaozhiyang---date:20240407---for：【QQYUN-8762】顶栏高度
     align-items: center;
     
     .headerIntroductionClass {
@@ -241,16 +243,16 @@
     
     &--light {
       .headerIntroductionClass {
-        color: @breadcrumb-item-normal-color;
+        color: #000;
       }
     }
 
     &--dark {
       .headerIntroductionClass {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 1);
       }
       .anticon, .truncate {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 1);
       }
     }
     //update-end---author:scott ---date::2022-09-30  for：默认隐藏顶部菜单面包屑--------------

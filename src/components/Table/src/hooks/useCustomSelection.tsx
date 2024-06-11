@@ -120,7 +120,10 @@ export function useCustomSelection(
       onSelectAll,
       isRadio: isRadio.value,
       selectedLength: flattedData.value.filter((data) => selectedKeys.value.includes(getRecordKey(data))).length,
-      pageSize: currentPageSize.value,
+      // update-begin--author:liaozhiyang---date:20240511---for：【QQYUN-9289】解决表格条数不足pageSize数量时行数全部勾选但是全选框不勾选
+      // 【TV360X-53】为空时会报错，加强判断
+      pageSize: tableData.value?.length ?? 0,
+      // update-end--author:liaozhiyang---date:20240511---for：【QQYUN-9289】解决表格条数不足pageSize数量时行数全部勾选但是全选框不勾选
       // 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
       disabled: flattedData.value.length == 0,
       hideSelectAll: unref(propsRef)?.rowSelection?.hideSelectAll,
@@ -225,9 +228,14 @@ export function useCustomSelection(
     // update-end--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
     // 取消全选
     if (!checked) {
-      selectedKeys.value = [];
-      selectedRows.value = [];
-      emitChange('all');
+      // update-begin--author:liaozhiyang---date:20240510---for：【issues/1173】取消全选只是当前页面取消
+      // selectedKeys.value = [];
+      // selectedRows.value = [];
+      // emitChange('all');
+      flattedData.value.forEach((item) => {
+        updateSelected(item, false);
+      });
+      // update-end--author:liaozhiyang---date:20240510---for：【issues/1173】取消全选只是当前页面取消
       return;
     }
     let modal: Nullable<ReturnType<ModalFunc>> = null;
@@ -625,3 +633,4 @@ function flattenData<RecordType>(data: RecordType[] | undefined, childrenColumnN
 
   return list;
 }
+

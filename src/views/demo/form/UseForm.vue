@@ -92,6 +92,7 @@
       field: 'fieldTime',
       component: 'RangePicker',
       label: '时间字段',
+      defaultValue: [new Date("2024-03-21"), new Date("2024-03-27")],
       componentProps: {
         valueType: 'Date',
       },

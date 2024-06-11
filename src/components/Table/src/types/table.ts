@@ -81,7 +81,7 @@ export interface GetColumnsParams {
   sort?: boolean;
 }
 
-export type SizeType = 'default' | 'middle' | 'small' | 'large';
+export type SizeType = 'middle' | 'small' | 'large';
 
 export interface TableActionType {
   reload: (opt?: FetchParams) => Promise<void>;
@@ -455,6 +455,16 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   //compType-用于记录类型
   compType?: string;
+  // update-begin--author:liaozhiyang---date:20240425---for：【pull/1201】添加antd的TableSummary功能兼容老的summary（表尾合计）
+  customSummaryRender?: (opt: {
+    value: any;
+    text: any;
+    record: Recordable;
+    index: number;
+    renderIndex?: number;
+    column: BasicColumn;
+  }) => any | VNodeChild | JSX.Element;
+  // update-end--author:liaozhiyang---date:20240425---for：【pull/1201】添加antd的TableSummary功能兼容老的summary（表尾合计）
 }
 
 export type ColumnChangeParam = {

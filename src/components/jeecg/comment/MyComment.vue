@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'comment-active': commentActive}" style="border: 1px solid #eee; margin: 0; position: relative" @click="handleClickBlank">
+  <div :class="{'comment-active': commentActive}" class="comment-main" @click="handleClickBlank">
     <textarea ref="commentRef" v-model="myComment" @keyup.enter="sendComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="请输入你的评论，可以@成员" />
     <div class="comment-content comment-html-shower" :class="{'no-content':noConent, 'top-div': showHtml, 'bottom-div': showHtml == false }" v-html="commentHtml" @click="handleClickHtmlShower"></div>
     <div class="comment-buttons" v-if="commentActive">
@@ -199,7 +199,13 @@
         if (str.indexOf('::') > 0) {
           str = str.substring(0, str.indexOf(':') + 1);
         }
-        myComment.value = temp + str;
+        // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-931】评论表情插入光标位置
+        const index = commentRef.value?.selectionStart ?? temp.length;
+        // myComment.value = temp + str;
+        const startStr = temp.substring(0, index);
+        const endStr = temp.substring(index);
+        myComment.value = startStr + str + endStr;
+        // update-end--author:liaozhiyang---date:20240603---for：【TV360X-931】评论表情插入光标位置
         visibleEmoji.value = false;
         handleBlur();
       }
@@ -307,6 +313,13 @@
 </script>
 
 <style lang="less">
+  // update-begin--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
+  .comment-main {
+    border: 1px solid #eee;
+    margin: 0;
+    position: relative;
+  }
+  // update-end--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
   .comment-content {
     box-sizing: border-box;
     margin: 0;
@@ -375,8 +388,8 @@
   }
   
   .comment-active{
-    border-color: #1e88e5 !important;
-    box-shadow: 0 1px 1px 0 #90caf9, 0 1px 6px 0 #90caf9;
+    border-color: @primary-color !important;
+    // box-shadow: 0 1px 1px 0 #90caf9, 0 1px 6px 0 #90caf9;
   }
   .no-content{
     color: #a1a1a1
@@ -386,4 +399,22 @@
   .emoji-type-image.emoji-set-apple {
     background-image: url("./image/emoji.png");
   }
+  // update-begin--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
+  html[data-theme='dark'] {
+    .emoji-type-image.emoji-set-apple {
+      background-image: url("./image/emoji_native.png");
+    }
+    .comment-main {
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+    .comment-content {
+      background-color: #141414;
+      color: rgba(255, 255, 255, 0.85);
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+    .comment-buttons{
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+  }
+  // update-end--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
 </style>

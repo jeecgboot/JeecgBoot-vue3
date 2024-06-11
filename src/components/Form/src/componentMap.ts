@@ -45,7 +45,7 @@ import JImageUpload from './jeecg/components/JImageUpload.vue';
 import JDictSelectTag from './jeecg/components/JDictSelectTag.vue';
 import JSelectDept from './jeecg/components/JSelectDept.vue';
 import JAreaSelect from './jeecg/components/JAreaSelect.vue';
-// import JEditor from './jeecg/components/JEditor.vue';
+import JEditor from './jeecg/components/JEditor.vue';
 // import JMarkdownEditor from './jeecg/components/JMarkdownEditor.vue';
 import JSelectInput from './jeecg/components/JSelectInput.vue';
 // import JCodeEditor from './jeecg/components/JCodeEditor.vue';
@@ -72,7 +72,9 @@ import JRangeNumber from './jeecg/components/JRangeNumber.vue';
 import UserSelect from './jeecg/components/userSelect/index.vue';
 import JRangeDate from './jeecg/components/JRangeDate.vue'
 import JRangeTime from './jeecg/components/JRangeTime.vue'
+import JInputSelect from './jeecg/components/JInputSelect.vue'
 import RoleSelectInput from './jeecg/components/roleSelect/RoleSelectInput.vue';
+import {DatePickerInFilter, CascaderPcaInFilter} from "@/components/InFilter";
 
 const componentMap = new Map<ComponentType, Component>();
 
@@ -104,6 +106,7 @@ componentMap.set('MonthPicker', DatePicker.MonthPicker);
 componentMap.set('RangePicker', DatePicker.RangePicker);
 componentMap.set('WeekPicker', DatePicker.WeekPicker);
 componentMap.set('TimePicker', TimePicker);
+componentMap.set('DatePickerInFilter', DatePickerInFilter);
 componentMap.set('StrengthMeter', StrengthMeter);
 componentMap.set('IconPicker', IconPicker);
 componentMap.set('InputCountDown', CountdownInput);
@@ -112,6 +115,7 @@ componentMap.set('Upload', BasicUpload);
 componentMap.set('Divider', Divider);
 
 //注册自定义组件
+
 componentMap.set(
   'JAreaLinkage',
   createAsyncComponent(() => import('./jeecg/components/JAreaLinkage.vue'))
@@ -123,10 +127,11 @@ componentMap.set('JImageUpload', JImageUpload);
 componentMap.set('JDictSelectTag', JDictSelectTag);
 componentMap.set('JSelectDept', JSelectDept);
 componentMap.set('JAreaSelect', JAreaSelect);
-componentMap.set(
-  'JEditor',
-  createAsyncComponent(() => import('./jeecg/components/JEditor.vue'))
-);
+// componentMap.set(
+//   'JEditor',
+//   createAsyncComponent(() => import('./jeecg/components/JEditor.vue'))
+// );
+componentMap.set('JEditor', JEditor);
 componentMap.set(
   'JMarkdownEditor',
   createAsyncComponent(() => import('./jeecg/components/JMarkdownEditor.vue'))
@@ -158,10 +163,12 @@ componentMap.set('JUpload', JUpload);
 componentMap.set('JSearchSelect', JSearchSelect);
 componentMap.set('JAddInput', JAddInput);
 componentMap.set('JRangeNumber', JRangeNumber);
+componentMap.set('CascaderPcaInFilter', CascaderPcaInFilter);
 componentMap.set('UserSelect', UserSelect);
 componentMap.set('RangeDate', JRangeDate);
 componentMap.set('RangeTime', JRangeTime);
 componentMap.set('RoleSelect', RoleSelectInput);
+componentMap.set('JInputSelect', JInputSelect);
 
 
 
