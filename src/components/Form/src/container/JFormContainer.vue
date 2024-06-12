@@ -94,13 +94,13 @@
       :deep(.ant-input-affix-wrapper),
       :deep(.ant-picker),
       :deep(.ant-input-number) {
-        color: rgba(51, 51, 51, 0.25) !important;
+        color: #606266 !important;
       }
       :deep(.ant-select) {
-        color: rgba(51, 51, 51, 0.25) !important;
+        color: #606266 !important;
       }
       :deep(.ant-select-selection-item-content),:deep(.ant-select-selection-item),:deep(input) {
-        color: rgba(51, 51, 51, 0.25) !important;
+        color: #606266 !important;
       }
 
       :deep(.ant-radio-wrapper),
@@ -110,7 +110,7 @@
       }
       :deep(.ant-radio-wrapper .ant-radio-inner:after),
       :deep(.ant-checkbox-checked .ant-checkbox-inner) {
-        background-color: rgba(51, 51, 51, 0.25);
+        color: #606266 !important;
       }
       :deep(.ant-radio-inner),
       :deep(.ant-checkbox-inner) {
@@ -142,7 +142,7 @@
       :deep(.ant-picker),
       :deep(.ant-input-number) {
         color: rgba(255, 255, 255, 0.25) !important;
-        background-color: rgba(255, 255, 255, 0.08) !important;
+        //background-color: rgba(255, 255, 255, 0.08) !important;
       }
       :deep(.ant-select) {
         color: rgba(255, 255, 255, 0.25) !important;

@@ -134,6 +134,12 @@ img, video {
 
 html[data-theme='light'] {
   .jeecg-form-detail-effect {
+    *:not(.ant-select-selection-placeholder){
+      color: #606266!important;
+    }
+    .ant-row label {
+      color: #797c81 !important;
+    }
     .ant-select-selector,
     .ant-btn,
     .ant-input,
@@ -142,6 +148,7 @@ html[data-theme='light'] {
     .ant-input-number {
       // border: none !important;
       // color: rgba(51, 51, 51, 0.25) !important;
+      color: #606266!important;
       background-color: #f9f9fa !important;
     }
 
@@ -149,12 +156,22 @@ html[data-theme='light'] {
     .anticon {
       pointer-events: none;
       cursor: text;
-      color: rgba(51, 51, 51, 0.25);
+      color: #606266!important;
       &:hover {
         background: transparent;
       }
     }
 
+    .ant-select.ant-select-disabled .ant-select-selection-item .ant-select-selection-item-content {
+      color: #606266!important;
+    }
+    .ant-select-selection-item {
+      color: #606266!important;
+    }
+
+    :where(.css-dev-only-do-not-override-dvamda).ant-picker .ant-picker-input >input-disabled, :where(.css-dev-only-do-not-override-dvamda).ant-picker .ant-picker-input >input[disabled] {
+      color: #606266!important;
+    }
     .ant-select-selection-item {
       border-color: #eee !important;
       background-color: transparent !important;
@@ -163,11 +180,31 @@ html[data-theme='light'] {
 }
 html[data-theme='dark'] {
   .jeecg-form-detail-effect {
+    * {
+      color: #606266;
+    }
     .ant-upload-text-icon, a {
       color:rgba(255, 255, 255, 0.25) ;
     }
   }
 
+  .ant-select-selector,
+  .ant-btn,
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-picker,
+  .ant-input-number {
+    background-color: transparent !important;
+  }
+
+  .ant-select-selection-item {
+    background-color: transparent !important;
+  }
+  // 暗黑模式下输入框等icon隐藏
+  .ant-picker-suffix,.ant-select-arrow {
+    content:" ";
+    display: none;
+  }
 }
 .jeecg-form-detail-effect {
   .ant-select-selector,
@@ -195,8 +232,13 @@ html[data-theme='dark'] {
   input {
     border: none !important;
   }
+  input, textarea {
+    user-select: auto;
+    cursor: text !important;
+  }
   .JSelectDept,
-  .JselectUser {
+  .JselectUser,
+  .JSelectPosition {
     > div {
       > .ant-row {
         .left {

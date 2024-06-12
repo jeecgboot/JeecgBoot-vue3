@@ -39,7 +39,7 @@
     </template>
 
     <a-upload
-      v-if="cellProps.allDisable"
+      v-if="!cellProps.disabledTable"
       v-show="!hasFile"
       name="file"
       :data="{ isup: 1 }"

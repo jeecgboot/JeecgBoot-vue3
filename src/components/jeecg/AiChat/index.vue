@@ -53,23 +53,33 @@
   };
   // 初始查询历史
   const init = () => {
+    const priming = () => {
+      dataSource.value = {
+        active: 1002,
+        usingContext: true,
+        history: [{ uuid: 1002, title: '新建聊天', isEdit: false }],
+        chat: [{ uuid: 1002, data: [] }],
+      };
+    };
     defHttp
       .get({ url: configUrl.get })
       .then((res) => {
         const { content } = res;
         if (content) {
-          dataSource.value = JSON.parse(content);
+          const json = JSON.parse(content);
+          if (json.history?.length) {
+            dataSource.value = json;
+          } else {
+            priming();
+          }
         } else {
-          dataSource.value = {
-            active: 1002,
-            usingContext: true,
-            history: [{ uuid: 1002, title: '新建聊天', isEdit: false }],
-            chat: [{ uuid: 1002, data: [] }],
-          };
+          priming();
         }
         !unwatch01 && execute();
       })
-      .catch(() => {});
+      .catch(() => {
+        priming();
+      });
   };
   const save = (content) => {
     defHttp.post({ url: configUrl.save, params: { content: JSON.stringify(content) } }, { isTransformResponse: false });

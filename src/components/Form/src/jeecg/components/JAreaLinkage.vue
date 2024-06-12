@@ -25,7 +25,7 @@
       // 存储数据 
       saveCode: propTypes.oneOf(['province', 'city', 'region', 'all']).def('all'),
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();
@@ -49,7 +49,13 @@
        * 监听value变化
        */
       watchEffect(() => {
-        props.value && initValue();
+        // update-begin--author:liaozhiyang---date:20240612--for：【TV360X-1223】省市区换新组件
+        if (props.value) {
+          initValue();
+        } else {
+          cascaderValue.value = [];
+        }
+        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1223】省市区换新组件
       });
 
       /**
@@ -62,7 +68,11 @@
           const arr = value.split(',');
           cascaderValue.value = transform(arr);
         } else if (isArray(value)) {
-          cascaderValue.value = transform(value);
+          if (value.length) {
+            cascaderValue.value = transform(value);
+          } else {
+            cascaderValue.value = [];
+          }
         }
         // update-end--author:liaozhiyang---date:20240607---for：【TV360X-501】省市区换新组件
       }
@@ -89,18 +99,24 @@
       }
       function handleChange(arr, ...args) {
         // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-501】省市区换新组件
-        let result: any = [];
-        if (props.saveCode === 'region') {
-          // 可能只有两位（选择香港时，只有省区）
-          result = [arr[arr.length - 1]];
-        } else if (props.saveCode === 'city') {
-          result = [arr[1]];
-        } else if (props.saveCode === 'province') {
-          result = [arr[0]];
+        if (arr?.length) {
+          let result: any = [];
+          if (props.saveCode === 'region') {
+            // 可能只有两位（选择香港时，只有省区）
+            result = [arr[arr.length - 1]];
+          } else if (props.saveCode === 'city') {
+            result = [arr[1]];
+          } else if (props.saveCode === 'province') {
+            result = [arr[0]];
+          } else {
+            result = arr;
+          }
+          emit('change', result);
+          emit('update:value', result);
         } else {
-          result = arr;
+          emit('change', arr);
+          emit('update:value', arr);
         }
-        emit('change', result);
         // update-end--author:liaozhiyang---date:20240607---for：【TV360X-501】省市区换新组件
         // emitData.value = args;
         //update-begin-author:taoyan date:2022-6-27 for: VUEN-1424【vue3】树表、单表、jvxe、erp 、内嵌子表省市县 选择不上

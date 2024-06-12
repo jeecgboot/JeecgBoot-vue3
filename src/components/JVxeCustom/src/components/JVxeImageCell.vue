@@ -17,7 +17,7 @@
         </a-tooltip>
       </div>
     </template>
-    <div class="j-vxe-image-upload" v-if="cellProps.allDisable">
+    <div class="j-vxe-image-upload" v-if="!cellProps.disabledTable">
       <a-upload
         :accept="acceptFileType"
         name="file"

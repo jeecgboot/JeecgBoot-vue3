@@ -63,6 +63,11 @@
        * 监听组件值
        */
       watchEffect(() => {
+        // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-576】已选中了数据，再次选择打开弹窗点击取消，数据清空了（同步JSelectDept改法）
+        //update-begin-author:liusq---date:2024-06-03--for: [TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
+        tempSave = [];
+        //update-end-author:liusq---date:2024-06-03--for:[TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
+        // update-end--author:liaozhiyang---date:20240611---for：【TV360X-576】已选中了数据，再次选择打开弹窗点击取消，数据清空了（同步JSelectDept改法）
         props.value && initValue();
       });
 
