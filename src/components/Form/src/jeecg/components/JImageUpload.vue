@@ -108,11 +108,14 @@
 
       //计算是否开启多图上传
       const multiple = computed(() => {
-        return props['fileMax'] > 1;
+        return props['fileMax'] > 1 || props['fileMax'] === 0;
       });
 
       //计算是否可以继续上传
       const uploadVisible = computed(() => {
+        if (props['fileMax'] === 0) {
+          return true;
+        }
         return uploadFileList.value.length < props['fileMax'];
       });
 
