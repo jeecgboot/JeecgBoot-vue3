@@ -22,7 +22,7 @@ JeecgBoot-Vue3采用 Vue3.0、Vite、 Ant-Design-Vue4、TypeScript 等新技术�
 
 ##### 源码下载
 
-- JAVA后台源码：https://github.com/jeecgboot/jeecg-boot
+- JAVA后台源码：https://github.com/jeecgboot/JeecgBoot
 
 
 ##### 项目说明
