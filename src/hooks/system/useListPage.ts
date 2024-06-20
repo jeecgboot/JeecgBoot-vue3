@@ -24,7 +24,7 @@ interface ListPageOptions {
     // 导出文件名
     name?: string | (() => string);
     //导出参数
-    params?: object;
+    params?: object | (() => string);
   };
   // 导入配置
   importConfig?: {
@@ -64,10 +64,11 @@ export function useListPage(options: ListPageOptions) {
   // 导出 excel
   async function onExportXls() {
     //update-begin---author:wangshuai ---date:20220411  for：导出新增自定义参数------------
-    let { url, name, params } = options?.exportConfig ?? {};
-    let realUrl = typeof url === 'function' ? url() : url;
+    const { url, name, params } = options?.exportConfig ?? {};
+    const realParams = typeof params === 'function' ? params() : params;
+    const realUrl = typeof url === 'function' ? url() : url;
     if (realUrl) {
-      let title = typeof name === 'function' ? name() : name;
+      const title = typeof name === 'function' ? name() : name;
       //update-begin-author:taoyan date:20220507 for: erp代码生成 子表 导出报错，原因未知-
       let paramsForm:any = {};
       try {
@@ -85,10 +86,10 @@ export function useListPage(options: ListPageOptions) {
       
       //如果参数不为空，则整合到一起
       //update-begin-author:taoyan date:20220507 for: erp代码生成 子表 导出动态设置mainId
-      if (params) {
-        Object.keys(params).map((k) => {
-          let temp = (params as object)[k];
-          if (temp) {
+      if (realParams !== undefined && realParams !== null) {
+        Object.keys(realParams).map((k) => {
+          const temp = (realParams as object)[k];
+          if (temp !== undefined && temp !== null && temp !== '') {
             paramsForm[k] = unref(temp);
           }
         });
