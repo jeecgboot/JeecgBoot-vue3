@@ -1,9 +1,10 @@
 <template>
   <div ref="wrapRef" :class="getWrapperClass">
     <BasicForm
+      :class="{ 'table-search-area-hidden': !getBindValues.formConfig?.schemas?.length }"
       submitOnReset
       v-bind="getFormProps"
-      v-if="getBindValues.useSearchForm && getBindValues.formConfig?.schemas?.length"
+      v-if="getBindValues.useSearchForm"
       :tableAction="tableAction"
       @register="registerForm"
       @submit="handleSearchInfoChange"
@@ -474,7 +475,11 @@
         background-color: @app-content-background;
       }
     }
-
+    // update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1232】查询区域隐藏后点击刷新不走请求了(采用css隐藏)
+    > .table-search-area-hidden {
+      display: none;
+    }
+    // update-end--author:liaozhiyang---date:20240613---for：【TV360X-1232】查询区域隐藏后点击刷新不走请求了(采用css隐藏)
     &-form-container {
       padding: 10px;
 
