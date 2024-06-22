@@ -8,6 +8,7 @@
         <a-tab-pane key="4" tab="磁盘监控">
           <DiskInfo v-if="activeKey == 4" style="height: 100%"></DiskInfo>
         </a-tab-pane>
+        <a-tab-pane key="5" tab="内存信息" />
       </a-tabs>
       <!--  update-begin---author:wangshuai ---date: 20230829 for：性能监控切换到磁盘监控再切回来报错列为空，不能用if判断------------>
       <BasicTable @register="registerTable" :searchInfo="searchInfo" :dataSource="dataSource" v-show="activeKey != 4">
@@ -72,17 +73,25 @@
       textInfo.value = getTextInfo(infoType);
       moreInfo.value = getMoreInfo(infoType);
       let info = [];
-      res.forEach((value, id) => {
-        let more = unref(moreInfo)[value.name];
-        if (!(more instanceof Array)) {
-          more = [''];
+      if (infoType === '5') {
+        for (let param in res[0].result) {
+          let data = res[0].result[param];
+          let val = convert(data, unref(textInfo)[param].valueType);
+          info.push({ id: param, param, text: 'false value', value: val });
         }
-        more.forEach((item, idx) => {
-          let param = value.name + item;
-          let val = convert(value.measurements[idx].value, unref(textInfo)[param].valueType);
-          info.push({ id: param + id, param, text: 'false value', value: val });
+      } else {
+        res.forEach((value, id) => {
+          let more = unref(moreInfo)[value.name];
+          if (!(more instanceof Array)) {
+            more = [''];
+          }
+          more.forEach((item, idx) => {
+            let param = value.name + item;
+            let val = convert(value.measurements[idx].value, unref(textInfo)[param].valueType);
+            info.push({ id: param + id, param, text: 'false value', value: val });
+          });
         });
-      });
+      }
       dataSource.value = info;
     });
   }

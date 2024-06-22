@@ -162,29 +162,35 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    // get userinfo while last fetch time is empty
+    //update-begin---author:scott ---date:2024-02-21  for：【QQYUN-8326】刷新首页，不需要重新获取用户信息---
+    // // get userinfo while last fetch time is empty
+    // if (userStore.getLastUpdateTime === 0) {
+    //   try {
+    //     console.log("--LastUpdateTime---getUserInfoAction-----")
+    //     await userStore.getUserInfoAction();
+    //   } catch (err) {
+    //     console.info(err);
+    //     next();
+    //   }
+    // }
+    //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】刷新首页，不需要重新获获取用户信息---
+    // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
     if (userStore.getLastUpdateTime === 0) {
-      try {
-        await userStore.getUserInfoAction();
-      } catch (err) {
-        console.info(err);
-        next();
-      }
+      userStore.setAllDictItemsByLocal();
     }
-
+    // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;
     }
 
+    // 构建后台菜单路由
     const routes = await permissionStore.buildRoutesAction();
-
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw);
     });
 
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
-
     permissionStore.setDynamicAddedRoute(true);
 
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {

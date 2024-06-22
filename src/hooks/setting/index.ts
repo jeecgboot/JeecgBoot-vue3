@@ -15,18 +15,21 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     VITE_GLOB_ONLINE_VIEW_URL,
   } = getAppEnvConfig();
 
-  if (!/[a-zA-Z\_]*/.test(VITE_GLOB_APP_SHORT_NAME)) {
-    // warn(
-    //   `VITE_GLOB_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`
-    // );
-  }
+  // if (!/[a-zA-Z\_]*/.test(VITE_GLOB_APP_SHORT_NAME)) {
+  //   warn(
+  //     `VITE_GLOB_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`
+  //   );
+  // }
 
+  // 短标题：替换shortName的下划线为空格
+  const shortTitle = VITE_GLOB_APP_SHORT_NAME.replace(/_/g, " ");
   // Take global configuration
   const glob: Readonly<GlobConfig> = {
     title: VITE_GLOB_APP_TITLE,
     domainUrl: VITE_GLOB_DOMAIN_URL,
     apiUrl: VITE_GLOB_API_URL,
     shortName: VITE_GLOB_APP_SHORT_NAME,
+    shortTitle: shortTitle,
     openSso: VITE_GLOB_APP_OPEN_SSO,
     openQianKun: VITE_GLOB_APP_OPEN_QIANKUN,
     casBaseUrl: VITE_GLOB_APP_CAS_BASE_URL,

@@ -1,5 +1,6 @@
 <template>
   <a-tree-select
+    v-if="show"
     allowClear
     labelInValue
     style="width: 100%"
@@ -22,7 +23,7 @@
    * 异步树加载组件 通过传入表名 显示字段 存储字段 加载一个树控件
    * <j-tree-select dict="aa_tree_test,aad,id" pid-field="pid" ></j-tree-select>
    * */
-  import { ref, watch, unref } from 'vue';
+  import { ref, watch, unref, nextTick } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import { propTypes } from '/@/utils/propTypes';
   import { useAttrs } from '/@/hooks/core/useAttrs';
@@ -57,6 +58,7 @@
     //默认没有选择框
     treeCheckAble: propTypes.bool.def(false),
     //update-end---author:wangshuai date: 20230202 for: 新增是否有复选框
+    hiddenNodeKey: propTypes.string.def(''),
   });
   const attrs = useAttrs();
   const emit = defineEmits(['change', 'update:value']);
@@ -68,6 +70,7 @@
   const tableName = ref<any>('');
   const text = ref<any>('');
   const code = ref<any>('');
+  const show = ref<boolean>(true);
   /**
    * 监听value数据并初始化
    */
@@ -87,12 +90,29 @@
     },
     { deep: true, immediate: true }
   );
+  // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+  watch(
+    () => props.hiddenNodeKey,
+    () => {
+      if (treeData.value?.length && props.hiddenNodeKey) {
+        handleHiddenNode(treeData.value);
+        treeData.value = [...treeData.value];
+      }
+    }
+  );
+  // update-end--author:liaozhiyang---date:20240529---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
 
   //update-begin-author:taoyan date:2022-5-25 for: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
   watch(
     () => props.reload,
     async () => {
       treeData.value = [];
+      // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-88】online树表重复新增时父节点数据加载不全且已开的子节点不重新加载
+      show.value = false;
+      nextTick(() => {
+        show.value = true;
+      });
+      // update-end--author:liaozhiyang---date:20240524---for：【TV360X-88】online树表重复新增时父节点数据加载不全且已开的子节点不重新加载
       await loadRoot();
     },
     {
@@ -175,6 +195,9 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
+      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      handleHiddenNode(res.result);
+      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
       treeData.value = [...res.result];
     } else {
       console.log('数根节点查询结果异常', res);
@@ -208,6 +231,9 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
+      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      handleHiddenNode(res.result);
+      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
       //添加子节点
       addChildren(pid, res.result, treeData.value);
       treeData.value = [...treeData.value];
@@ -305,6 +331,9 @@
         i.key = i.value;
         i.isLeaf = !!i.leaf;
       }
+      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      handleHiddenNode(res.result);
+      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
       treeData.value = [...res.result];
     } else {
       console.log('数根节点查询结果异常', res);
@@ -347,6 +376,24 @@
   }
   //update-end-author:taoyan date:2022-11-8 for: issues/4173 Online JTreeSelect控件changeOptions方法未生效
 
+  /**
+   * 2024-05-23
+   * liaozhiyang
+   * 过滤掉指定节点(包含其子孙节点)
+   */
+  function handleHiddenNode(data) {
+    if (props.hiddenNodeKey && data?.length) {
+      for (let i = 0, len = data.length; i < len; i++) {
+        const item = data[i];
+        if (item.key == props.hiddenNodeKey) {
+          data.splice(i, 1);
+          i--;
+          len--;
+          return;
+        }
+      }
+    }
+  }
   // onCreated
   validateProp().then(() => {
     initDictInfo();

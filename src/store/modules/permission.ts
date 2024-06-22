@@ -15,11 +15,11 @@ import { PermissionModeEnum } from '/@/enums/appEnum';
 
 import { asyncRoutes } from '/@/router/routes';
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { staticRoutesList } from '../../router/routes/staticRouter';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList,switchVue3Menu } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
+import { getBackMenuAndPerms } from '/@/api/sys/menu';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
@@ -124,10 +124,14 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const systemPermission = await getPermCode();
+      const systemPermission = await getBackMenuAndPerms();
       const codeList = systemPermission.codeList;
       this.setPermCodeList(codeList);
       this.setAuthData(systemPermission);
+      
+      //菜单路由
+      const routeList = systemPermission.menu;
+      return routeList;
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
@@ -207,6 +211,7 @@ export const usePermissionStore = defineStore({
         // 后台菜单构建
         case PermissionModeEnum.BACK:
           const { createMessage, createWarningModal } = useMessage();
+          console.log(" --- 构建后台路由菜单 --- ")
           // 菜单加载提示
           // createMessage.loading({
           //   content: t('sys.app.menuLoading'),
@@ -217,43 +222,45 @@ export const usePermissionStore = defineStore({
           // 这个函数可能只需要执行一次，并且实际的项目可以在正确的时间被放置
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            routeList = await this.changePermissionCode();
+            //routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
             // update-begin----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
-            let hasIndex: boolean = false;
-            let hasIcon: boolean = false;
-            for (let menuItem of routeList) {
-              // 条件1：判断组件是否是 layouts/default/index
-              if (!hasIndex) {
-                hasIndex = menuItem.component === 'layouts/default/index';
-              }
-              // 条件2：判断图标是否带有 冒号
-              if (!hasIcon) {
-                hasIcon = !!menuItem.meta?.icon?.includes(':');
-              }
-              // 满足任何一个条件都直接跳出循环
-              if (hasIcon || hasIndex) {
-                break;
-              }
-            }
-            // 两个条件都不满足，就弹出提示框
-            if (!hasIcon && !hasIndex) {
-              // 延迟1.5秒之后再出现提示，否则提示框出不来
-              setTimeout(
-                () =>
-                  createWarningModal({
-                    title: '检测提示',
-                    content:
-                      '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
-                    onOk:function () {
-                      switchVue3Menu();
-                      location.reload();
-                    }
-                  }),
-                100
-              );
-            }
+            // let hasIndex: boolean = false;
+            // let hasIcon: boolean = false;
+            // for (let menuItem of routeList) {
+            //   // 条件1：判断组件是否是 layouts/default/index
+            //   if (!hasIndex) {
+            //     hasIndex = menuItem.component === 'layouts/default/index';
+            //   }
+            //   // 条件2：判断图标是否带有 冒号
+            //   if (!hasIcon) {
+            //     hasIcon = !!menuItem.meta?.icon?.includes(':');
+            //   }
+            //   // 满足任何一个条件都直接跳出循环
+            //   if (hasIcon || hasIndex) {
+            //     break;
+            //   }
+            // }
+            // // 两个条件都不满足，就弹出提示框
+            // if (!hasIcon && !hasIndex) {
+            //   // 延迟1.5秒之后再出现提示，否则提示框出不来
+            //   setTimeout(
+            //     () =>
+            //       createWarningModal({
+            //         title: '检测提示',
+            //         content:
+            //           '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
+            //         onOk:function () {
+            //           switchVue3Menu();
+            //           location.reload();
+            //         }
+            //       }),
+            //     100
+            //   );
+            // }
             // update-end----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
+            // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
           } catch (error) {
             console.error(error);
           }
@@ -271,7 +278,9 @@ export const usePermissionStore = defineStore({
           routeList = routeList.filter(routeRemoveIgnoreFilter);
 
           routeList = flatMultiLevelRoutes(routeList);
-          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
+          // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-522】ai助手路由写死在前端
+          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList, ...staticRoutesList];
+          // update-end--author:liaozhiyang---date:20240529---for：【TV360X-522】ai助手路由写死在前端
           break;
       }
 

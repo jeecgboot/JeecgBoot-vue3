@@ -12,6 +12,8 @@
           :formModel="formModel"
           :setFormModel="setFormModel"
           :validateFields="validateFields"
+          :clearValidate="clearValidate"
+          v-auth="schema.auth"
         >
           <template #[item]="data" v-for="item in Object.keys($slots)">
             <slot :name="item" v-bind="data || {}"></slot>
@@ -109,6 +111,7 @@
           prefixCls,
           {
             [`${prefixCls}--compact`]: unref(getProps).compact,
+            'jeecg-form-detail-effect': unref(getProps).disabled
           },
         ];
       });
@@ -142,7 +145,10 @@
             if (!Array.isArray(defaultValue)) {
               //update-begin---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
               if(valueFormat){
-                schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
+                // schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
+                // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-346 】时间组件填写默认值有问题
+                schema.defaultValue = dateUtil(defaultValue, valueFormat).format(valueFormat);
+                // update-end--author:liaozhiyang---date:20240529---for：【TV360X-346 】时间组件填写默认值有问题
               }else{
                 schema.defaultValue = dateUtil(defaultValue);
               }
@@ -152,13 +158,19 @@
               defaultValue.forEach((item) => {
                 //update-begin---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
                 if(valueFormat){
-                  def.push(dateUtil(item).format(valueFormat));
+                  // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-346 】时间组件填写默认值有问题
+                  def.push(dateUtil(item, valueFormat).format(valueFormat));
+                  // update-end--author:liaozhiyang---date:20240529---for：【TV360X-346 】时间组件填写默认值有问题
                 }else{
                   def.push(dateUtil(item));
                 }
                 //update-end---author:wangshuai ---date:20221124  for：[issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
               });
-              schema.defaultValue = def;
+              // update-begin--author:liaozhiyang---date:20240328---for：【issues/1114】rangepicker等时间控件报错（vue3.4以上版本有问题）
+              def.forEach((item, index) => {
+                defaultValue[index] = item;
+              });
+              // update-end--author:liaozhiyang---date:20240328---for：【issues/1114】rangepicker等时间控件报错（vue3.4以上版本有问题）
             }
           }
         }
@@ -342,11 +354,16 @@
       &-with-help {
         margin-bottom: 0;
       }
-
-      &:not(.ant-form-item-with-help) {
-        margin-bottom: 20px;
+      // update-begin--author:liaozhiyang---date:20240514---for：【QQYUN-9241】form表单上下间距大点
+      //&:not(.ant-form-item-with-help) {
+      //  margin-bottom: 24px;
+      //}
+      // update-begin--author:liaozhiyang---date:20240514---for：【QQYUN-9241】form表单上下间距大点
+      // update-begin--author:liaozhiyang---date:20240620---for：【TV360X-1420】校验时闪动
+      &-has-error {
+        margin-bottom: 24px;
       }
-
+      // update-end--author:liaozhiyang---date:20240620---for：【TV360X-1420】校验时闪动
       &.suffix-item {
         .ant-form-item-children {
           display: flex;
@@ -366,7 +383,7 @@
       }
     }
     /*【美化表单】form的字体改小一号*/
-    .ant-form-item-label > label{
+/*    .ant-form-item-label > label{
       font-size: 13px;
     }
     .ant-form-item .ant-select {
@@ -380,7 +397,7 @@
     }
     .ant-input {
       font-size: 13px;
-    }
+    }*/
     /*【美化表单】form的字体改小一号*/
     
     .ant-form-explain {

@@ -38,11 +38,29 @@
   import DataRuleList from './DataRuleList.vue';
   import { columns,searchFormSchema } from './menu.data';
   import { list, deleteMenu, batchDeleteMenu } from './menu.api';
+  import { useDefIndexStore } from "@/store/modules/defIndex";
+  import { useI18n } from "/@/hooks/web/useI18n";
 
   const checkedKeys = ref<Array<string | number>>([]);
   const showFooter = ref(true);
   const [registerDrawer, { openDrawer }] = useDrawer();
   const [registerDrawer1, { openDrawer: openDataRule }] = useDrawer();
+  const { t } = useI18n();
+
+  // 自定义菜单名称列渲染
+  columns[0].customRender = function ({text, record}) {
+    const isDefIndex = checkDefIndex(record)
+    if (isDefIndex) {
+      text += '（默认首页）'
+    }
+    // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8379】菜单管理页菜单国际化
+    if (text.includes("t('") && t) {
+      return new Function('t', `return ${text}`)(t);
+    }
+    // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8379】菜单管理页菜单国际化
+    return text
+  }
+
   // 列表页面公共参数、方法
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
@@ -156,12 +174,43 @@
    */
   function handleSuccess() {
     reload();
+    reloadDefIndex();
   }
 
   function onFetchSuccess() {
     // 演示默认展开所有表项
     nextTick(expandAll);
   }
+
+  // --------------- begin 默认首页配置 ------------
+
+  const defIndexStore = useDefIndexStore()
+
+  // 设置默认主页
+  async function handleSetDefIndex(record: Recordable) {
+    defIndexStore.update(record.url, record.component, record.route)
+  }
+
+  /**
+   * 检查是否为默认主页
+   * @param record
+   */
+  function checkDefIndex(record: Recordable) {
+    return defIndexStore.check(record.url)
+  }
+
+  // 重新加载默认首页配置
+  function reloadDefIndex() {
+    try {
+      defIndexStore.query();
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  reloadDefIndex()
+
+  // --------------- end 默认首页配置 ------------
 
   /**
    * 操作栏
@@ -191,6 +240,11 @@
       {
         label: '数据规则',
         onClick: handleDataRule.bind(null, record),
+      },
+      {
+        label: '设为默认首页',
+        onClick: handleSetDefIndex.bind(null, record),
+        ifShow: () => !record.internalOrExternal && record.component && !checkDefIndex(record),
       },
       {
         label: '删除',

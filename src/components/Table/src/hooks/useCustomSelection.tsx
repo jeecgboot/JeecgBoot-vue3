@@ -2,7 +2,7 @@ import type { BasicColumn } from '/@/components/Table';
 import type { Ref, ComputedRef } from 'vue';
 import type { BasicTableProps, PaginationProps, TableRowSelection } from '/@/components/Table';
 import { computed, nextTick, onUnmounted, ref, toRaw, unref, watch, watchEffect } from 'vue';
-import { omit } from 'lodash-es';
+import { omit, isEqual } from 'lodash-es';
 import { throttle } from 'lodash-es';
 import { Checkbox, Radio } from 'ant-design-vue';
 import { isFunction } from '/@/utils/is';
@@ -120,7 +120,10 @@ export function useCustomSelection(
       onSelectAll,
       isRadio: isRadio.value,
       selectedLength: flattedData.value.filter((data) => selectedKeys.value.includes(getRecordKey(data))).length,
-      pageSize: currentPageSize.value,
+      // update-begin--author:liaozhiyang---date:20240511---for：【QQYUN-9289】解决表格条数不足pageSize数量时行数全部勾选但是全选框不勾选
+      // 【TV360X-53】为空时会报错，加强判断
+      pageSize: tableData.value?.length ?? 0,
+      // update-end--author:liaozhiyang---date:20240511---for：【QQYUN-9289】解决表格条数不足pageSize数量时行数全部勾选但是全选框不勾选
       // 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
       disabled: flattedData.value.length == 0,
       hideSelectAll: unref(propsRef)?.rowSelection?.hideSelectAll,
@@ -128,17 +131,44 @@ export function useCustomSelection(
   });
 
   // 监听传入的selectedRowKeys
+  // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8390】部门人员组件点击重置未清空（selectedRowKeys.value=[]，watch没监听到加deep）
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRowKeys,
     (val: string[]) => {
       // 解决selectedRowKeys在页面调用处使用ref失效
       const value = unref(val);
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && !sameArray(value, selectedKeys.value)) {
         setSelectedRowKeys(value);
       }
     },
-    { immediate: true }
+    {
+      immediate: true,
+      deep: true
+    }
   );
+  // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8390】部门人员组件点击重置未清空（selectedRowKeys.value=[]，watch没监听到加deep）
+
+  /**
+  * 2024-03-06
+  * liaozhiyang
+  * 判断是否同一个数组 (引用地址，长度，元素位置信息相同才是同一个数组。数组元素只有字符串)
+  */
+  function sameArray(a, b) {
+    if (a === b) {
+      if (a.length === b.length) {
+        return a.toString() === b.toString();
+      } else {
+        return false;
+      }
+    } else {
+      // update-begin--author:liaozhiyang---date:20240425---for：【QQYUN-9123】popupdict打开弹窗打开程序运行
+      if (isEqual(a, b)) {
+        return true;
+      }
+      // update-end--author:liaozhiyang---date:20240425---for：【QQYUN-9123】popupdict打开弹窗打开程序运行
+      return false;
+    }
+  }
 
   // 当任意一个变化时，触发同步检测
   watch([selectedKeys, selectedRows], () => {
@@ -198,9 +228,14 @@ export function useCustomSelection(
     // update-end--author:liaozhiyang---date:20231122---for：【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
     // 取消全选
     if (!checked) {
-      selectedKeys.value = [];
-      selectedRows.value = [];
-      emitChange('all');
+      // update-begin--author:liaozhiyang---date:20240510---for：【issues/1173】取消全选只是当前页面取消
+      // selectedKeys.value = [];
+      // selectedRows.value = [];
+      // emitChange('all');
+      flattedData.value.forEach((item) => {
+        updateSelected(item, false);
+      });
+      // update-end--author:liaozhiyang---date:20240510---for：【issues/1173】取消全选只是当前页面取消
       return;
     }
     let modal: Nullable<ReturnType<ModalFunc>> = null;
@@ -387,6 +422,9 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
+        // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        onClick={(e) => e.stopPropagation()}
+        // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
       />
     );
   }
@@ -412,6 +450,9 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
+        // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        onClick={(e) => e.stopPropagation()}
+        // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
       />
     );
   }
@@ -592,3 +633,4 @@ function flattenData<RecordType>(data: RecordType[] | undefined, childrenColumnN
 
   return list;
 }
+

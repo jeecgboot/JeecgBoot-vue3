@@ -276,10 +276,10 @@
 <style lang="less" scoped>
   .we-bind {
     overflow-y: auto;
-    border: 1px rgb(240, 240, 240) solid;
+    border: 1px @border-color-base solid;
     border-bottom: none;
     .we-title-background {
-      background: rgb(252, 252, 252);
+      background: @component-background;
       height: 40px;
       line-height: 40px;
       padding: 0 10px;
@@ -304,10 +304,10 @@
       cursor: pointer;
     }
     .border-right {
-      border-right: 1px rgb(240, 240, 240) solid;
+      border-right: 1px @border-color-base solid;
     }
     .border-bottom {
-      border-bottom: 1px rgb(240, 240, 240) solid;
+      border-bottom: 1px @border-color-base solid;
     }
     .padding-left {
       padding-left: 10px;

@@ -40,6 +40,7 @@
             labelField="name"
             valueField="id"
             @search="onSearch"
+            :params="searchParams"
           />
         </template>
       </BasicForm>

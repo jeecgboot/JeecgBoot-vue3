@@ -80,5 +80,6 @@ export const columns: BasicColumn[] = [
       }
       return h(Tag, { color }, () => `${value} ms`);
     },
+    sorter: true,
   },
 ];

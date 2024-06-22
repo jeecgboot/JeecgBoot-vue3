@@ -69,6 +69,10 @@ export default defineComponent({
         key: layer + effectIdx.value + randomString(6),
         class: ['j-vxe-reload-effect-span', `layer-${layer}`],
         style: {},
+        // update-begin--author:liaozhiyang---date:20240424---for：【issues/1175】解决vxetable鼠标hover之后title显示不对的问题
+        title: vNode,
+        // update-end--author:liaozhiyang---date:20240424---for：【issues/1175】解决vxetable鼠标hover之后title显示不对的问题
+
       };
       if (layer === 'top') {
         // 最新渲染的在下面

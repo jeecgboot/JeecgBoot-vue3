@@ -10,6 +10,7 @@ import { useLinkage } from './useLinkage';
 import { useWebSocket } from './useWebSocket';
 import { getPrefix, getJVxeAuths } from '../utils/authUtils';
 import { excludeKeywords } from '../componentMap';
+import { useColumnsCache } from './useColumnsCache';
 
 export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps, refs: JVxeRefs, instanceRef: Ref) {
   let xTableTemp: VxeTableInstance & VxeTablePrivateMethods;
@@ -400,6 +401,12 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     if(options && options!.emitChange==true){
       trigger('valueChange', {column: 'all', row: result.row})
     }
+    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-279】行编辑添加新字段滚动对应位置
+    let xTable = getXTable();
+    setTimeout(() => {
+      xTable.scrollToRow(result.row);
+    }, 0);
+    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-279】行编辑添加新字段滚动对应位置
     return result;
     //update-end-author:taoyan date:2022-8-12 for: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
   }
@@ -837,6 +844,19 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
     return records;
   }
+  /**
+   *  2024-03-21
+   *  liaozhiyang
+   *  VXETable列设置保存缓存字段名
+   * */
+  function handleCustom({ type, $grid }) {
+    const { saveSetting, resetSetting } = useColumnsCache({ cacheColumnsKey: props.cacheColumnsKey });
+    if (type === 'confirm') {
+      saveSetting($grid);
+    } else if (type == 'reset') {
+      resetSetting($grid);
+    }
+  }
 
   return {
     methods: {
@@ -858,6 +878,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       handleExpandToggleMethod,
       getColAuth,
       hasBtnAuth,
+      handleCustom,
     },
     publicMethods,
     created,

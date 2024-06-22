@@ -1,6 +1,8 @@
 @import './pagination.less';
 @import './input.less';
-//@import './btn.less';
+// update-begin--author:liaozhiyang---date:20240130---for：【issues/5857】Button color类型颜色失效
+@import './btn.less';
+// update-end--author:liaozhiyang---date:20240130---for：【issues/5857】Button color类型颜色失效
 // @import './table.less';
 
 // TODO beta.11 fix
@@ -160,3 +162,48 @@ html[data-theme='dark'] .ant-input-affix-wrapper-textarea-with-clear-btn {
   }
 }
 // update-end--author:liaozhiyang---date:20230108---for：【QQYUN-7855】table页码同步3.x页面效果
+
+//update-begin--author:wangshuai---date:20240429---for：修改tinymce段落下拉框的字体和样式
+.tox .tox-tbtn__select-label{
+  font-size: 14px;
+}
+
+.tox .tox-tbtn--select{
+  width: 80px !important;
+}
+
+.tox .tox-collection__item-label {
+  font-size: 14px !important;
+}
+//update-end--author:wangshuai---date:20240429---for：修改tinymce段落下拉框的字体和样式
+
+// update-begin--author:liaozhiyang---date:20240605---for：【TV360X-189】统一只读样式
+html[data-theme='light'] {
+  .ant-form:not(.jeecg-form-detail-effect) {
+    .ant-select.ant-select-disabled {
+      .ant-select-selection-item {
+        color: rgba(51, 51, 51, 0.25) !important;
+        // color: rgba(51, 51, 51, 0.25);
+        .ant-select-selection-item-content {
+          color: rgba(51, 51, 51, 0.25);
+        }
+      }
+    }
+    .ant-input-number.ant-input-number-disabled {
+      .ant-input-number-input {
+        color: rgba(51, 51, 51, 0.25);
+      }
+    }
+  }
+}
+
+html[data-theme='dark'] {
+  .ant-form:not(.jeecg-form-detail-effect) {
+    .ant-input-number.ant-input-number-disabled {
+      .ant-input-number-input {
+        color:rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+}
+// update-end--author:liaozhiyang---date:20240605---for：【TV360X-189】统一只读样式

@@ -16,7 +16,7 @@
   </a-tree-select>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref, watch } from 'vue';
+  import { defineComponent, ref, unref, watch, nextTick } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { propTypes } from '/@/utils/propTypes';
   import { useAttrs } from '/@/hooks/core/useAttrs';
@@ -78,7 +78,7 @@
       const treeData = ref<any[]>([]);
       const treeValue = ref();
       const attrs = useAttrs();
-      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
+      const [state, , , formItemContext] = useRuleFormItem(props, 'value', 'change', emitData);
       watch(
         () => props.value,
         () => {
@@ -218,6 +218,11 @@
           backValue(value.value, value.label);
           treeValue.value = value;
         }
+        // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-9110】组件有值校验没消失
+        nextTick(() => {
+          formItemContext?.onFieldChange();
+        });
+        // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-9110】组件有值校验没消失
       }
 
       function getCurrTreeData() {

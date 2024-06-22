@@ -87,6 +87,8 @@
           style: { textAlign: 'left' },
         },
       },
+      // 【issues/1064】列设置的 cacheKey
+      tableSetting: { cacheKey: 'depart_user_userInfo' },
       // 请求之前对参数做处理
       beforeFetch(params) {
         params.depId = departId.value;

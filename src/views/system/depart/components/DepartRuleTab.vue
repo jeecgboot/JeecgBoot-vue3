@@ -53,6 +53,7 @@
   import DepartDataRuleDrawer from './DepartDataRuleDrawer.vue';
   import { queryRoleTreeList, queryDepartPermission, saveDepartPermission } from '../depart.api';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { translateTitle } from '/@/utils/common/compUtils';
 
   const { prefixCls } = useDesign('j-depart-form-content');
   const props = defineProps({
@@ -81,7 +82,9 @@
     try {
       loading.value = true;
       let { treeList } = await queryRoleTreeList();
-      treeData.value = treeList;
+      //update-begin---author:wangshuai---date:2024-04-08---for:【issues/1169】部门管理功能中的【部门权限】中未翻译 t('') 多语言---
+      treeData.value = translateTitle(treeList);
+      //update-end---author:wangshuai---date:2024-04-08---for:【issues/1169】部门管理功能中的【部门权限】中未翻译 t('') 多语言---
       await nextTick();
       toggleExpandAll(true);
     } finally {

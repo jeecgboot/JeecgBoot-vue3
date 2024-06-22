@@ -336,7 +336,20 @@
       function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
         if (props.record) {
           /* eslint-disable  */
-          isArray(props.record[cbs]) ? props.record[cbs]?.push(handle) : (props.record[cbs] = [handle]);
+          // update-begin--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
+          const { dataIndex, key } = props.column;
+          const field: any = dataIndex || key;
+          if (isArray(props.record[cbs])) {
+            const findItem = props.record[cbs]?.find((item) => item[field]);
+            if (findItem) {
+              findItem[field] = handle;
+            } else {
+              props.record[cbs]?.push({ [field]: handle });
+            }
+          } else {
+            props.record[cbs] = [{ [field]: handle }];
+          }
+          // update-end--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
         }
       }
 
@@ -351,14 +364,25 @@
         }
         /* eslint-disable  */
         props.record.onCancelEdit = () => {
-          isArray(props.record?.cancelCbs) && props.record?.cancelCbs.forEach((fn) => fn());
+          // update-begin--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
+          isArray(props.record?.cancelCbs) &&
+            props.record?.cancelCbs.forEach((item) => {
+              const [fn] = Object.values(item);
+              fn();
+            });
+           // update-end--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
         };
         /* eslint-disable */
         props.record.onSubmitEdit = async () => {
           if (isArray(props.record?.submitCbs)) {
             if (!props.record?.onValid?.()) return;
             const submitFns = props.record?.submitCbs || [];
-            submitFns.forEach((fn) => fn(false, false));
+            // update-begin--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
+            submitFns.forEach((item) => {
+              const [fn] = Object.values(item);
+              fn(false, false);
+            });
+            // update-end--author:liaozhiyang---date:20240424---for：【issues/1165】解决canResize为true时第一行校验不过
             table.emit?.('edit-row-end');
             return true;
           }

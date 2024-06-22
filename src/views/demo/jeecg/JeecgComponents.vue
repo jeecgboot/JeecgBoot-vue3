@@ -2,8 +2,8 @@
   <BasicForm
     ref="formElRef"
     :class="'jee-select-demo-form'"
-    :labelCol="{ span: 5 }"
-    :wrapperCol="{ span: 15 }"
+    :labelCol="{ span: 6 }"
+    :wrapperCol="{ span: 14 }"
     :showResetButton="false"
     :showSubmitButton="false"
     :schemas="schemas"
@@ -35,6 +35,9 @@
     </template>
     <template #superQuery="{ model, field }">
       <super-query :config="superQueryConfig" @search="(value)=>handleSuperQuery(value, model, field)"/>
+    </template>
+    <template #superQuery1="{ model, field }">
+      <super-query :config="superQueryConfig" @search="(value)=>handleSuperQuery(value, model, field)" :isCustomSave="true" :saveSearchData="saveSearchData" :save="handleSuperQuerySave"/>
     </template>
   </BasicForm>
 </template>
@@ -92,7 +95,34 @@
           model[field] = str
         }
       }
-
+      const saveSearchData = ref([
+        {
+          content: '[{"field":"age","rule":"eq","val":14}]',
+          title: '豆蔻年华',
+          type: 'and',
+        },
+        {
+          content: '[{"field":"name","rule":"eq","val":"张三"}]',
+          title: '项目经理',
+          type: 'and',
+        },
+      ]);
+      const handleSuperQuerySave = (data) => {
+        // 高级查询保存后的信息
+        return new Promise<void>((resolve, reject) => {
+          // 模拟接口
+          setTimeout(() => {
+            if (Math.random() > 0.5) {
+              console.log('接口成功~');
+              saveSearchData.value = data;
+              resolve();
+            } else {
+              console.log('接口失败~');
+              reject();
+            }
+          }, 1e3);
+        });
+      }
       return {
         schemas,
         formElRef,
@@ -111,6 +141,8 @@
           createMessage.success('click search,values:' + JSON.stringify(values));
         },
         check,
+        handleSuperQuerySave,
+        saveSearchData,
       };
     },
   });

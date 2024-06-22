@@ -3,12 +3,12 @@
     v-bind="getBindValues"
     :activeName="activeName"
     :openNames="getOpenKeys"
-    :class="prefixCls"
+    :class="`${prefixCls} ${isThemeBright ? 'bright' : ''}`"
     :activeSubMenuNames="activeSubMenuNames"
     @select="handleSelect"
   >
     <template v-for="item in items" :key="item.path">
-      <SimpleSubMenu :item="item" :parent="true" :collapsedShowTitle="collapsedShowTitle" :collapse="collapse" />
+      <SimpleSubMenu :isThemeBright="isThemeBright" :item="item" :parent="true" :collapsedShowTitle="collapsedShowTitle" :collapse="collapse" />
     </template>
   </Menu>
 </template>
@@ -29,6 +29,7 @@
 
   import { useOpenKeys } from './useOpenKeys';
   import { URL_HASH_TAB } from '/@/utils';
+  import { useAppStore } from '/@/store/modules/app';
 
   export default defineComponent({
     name: 'SimpleMenu',
@@ -56,6 +57,8 @@
     setup(props, { attrs, emit }) {
       const currentActiveMenu = ref('');
       const isClickGo = ref(false);
+      const appStore = useAppStore();
+      const isThemeBright = ref(false);
 
       const menuState = reactive<MenuState>({
         activeName: '',
@@ -93,7 +96,15 @@
         },
         { flush: 'post' }
       );
-
+      // update-begin--author:liaozhiyang---date:20240408---for：【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
+      watch(
+        () => appStore.getProjectConfig.menuSetting,
+        (menuSetting) => {
+          isThemeBright.value = !!menuSetting?.isThemeBright;
+        },
+        { immediate: true, deep: true }
+      );
+      // update-end--author:liaozhiyang---date:20240408---for：【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
       listenerRouteChange((route) => {
         if (route.name === REDIRECT_NAME) return;
 
@@ -127,6 +138,14 @@
           // update-begin--author:sunjianlei---date:20220408---for: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
           return;
         }
+        // update-begin--author:liaozhiyang---date:20240227---for：【QQYUN-6366】内部路由也可以支持采用新浏览器tab打开
+        const findItem = getMatchingMenu(props.items, key);
+        if (findItem?.internalOrExternal == true) {
+          window.open(location.origin + key);
+          return;
+        }
+        // update-end--author:liaozhiyang---date:20240227---for：【QQYUN-6366】内部路由也可以支持采用新浏览器tab打开
+
         const { beforeClickFn } = props;
         if (beforeClickFn && isFunction(beforeClickFn)) {
           const flag = await beforeClickFn(key);
@@ -140,12 +159,33 @@
         menuState.activeName = key;
       }
 
+      /**
+       * 2024-02-27
+       * liaozhiyang
+       * 获取菜单中匹配的path所在的项
+       */
+      const getMatchingMenu = (menus, path) => {
+        for (let i = 0, len = menus.length; i < len; i++) {
+          const item = menus[i];
+          if (item.path === path && !item.redirect && !item.paramPath) {
+            return item;
+          } else if (item.children?.length) {
+            const result = getMatchingMenu(item.children, path);
+            if (result) {
+              return result;
+            }
+          }
+        }
+        return '';
+      }
+
       return {
         prefixCls,
         getBindValues,
         handleSelect,
         getOpenKeys,
         ...toRefs(menuState),
+        isThemeBright,
       };
     },
   });

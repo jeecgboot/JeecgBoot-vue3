@@ -19,6 +19,7 @@
     toRaw,
     watch,
     onMounted,
+    nextTick,
   } from 'vue';
   import TreeHeader from './components/TreeHeader.vue';
   import { Tree, Spin, Empty } from 'ant-design-vue';
@@ -68,6 +69,7 @@
           ...fieldNames,
         };
       });
+      const treeRef = ref<any>(null);
 
       const getBindValues = computed(() => {
         let propsData = {
@@ -88,28 +90,35 @@
             emit('update:selectedKeys', v);
           },
           onCheck: (v: CheckKeys, e) => {
-            let currentValue = toRaw(state.checkedKeys) as KeyType[];
-            if (isArray(currentValue) && searchState.startSearch) {
-             //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效--- 
-              const value = e.node.eventKey;
-              currentValue = difference(currentValue, getChildrenKeys(value));
-              if (e.checked) {
-                  currentValue.push(value);
-              }
-             //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
-              state.checkedKeys = currentValue;
-            } else {
-              state.checkedKeys = v;
-            }
-
-            const rawVal = toRaw(state.checkedKeys);
-            emit('update:value', rawVal);
-            emit('check', rawVal, e);
+            handleCheck(v, e);
           },
           onRightClick: handleRightClick,
         };
         return omit(propsData, 'treeData', 'class');
       });
+      /**
+       * 2024-04-26
+       * liaozhiyang
+       * 【issues/1151】层级独立时勾选了父级，然后点击层级关联子级视觉上勾选了，但是保存子级没存上(把函数独立出来复用)
+       * */
+      const handleCheck = (v: CheckKeys, e?) => {
+        let currentValue = toRaw(state.checkedKeys) as KeyType[];
+        if (isArray(currentValue) && searchState.startSearch && e) {
+          // update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
+          const value = e.node.eventKey;
+          currentValue = difference(currentValue, getChildrenKeys(value));
+          if (e.checked) {
+            currentValue.push(value);
+          }
+          // update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
+          state.checkedKeys = currentValue;
+        } else {
+          state.checkedKeys = v;
+        }
+        const rawVal = toRaw(state.checkedKeys);
+        emit('update:value', rawVal);
+        emit('check', rawVal, e);
+      };
 
       const getTreeData = computed((): TreeItem[] =>
         searchState.startSearch ? searchState.searchData : unref(treeDataRef),
@@ -317,10 +326,18 @@
           emit('change', v);
         },
       );
-
-      watchEffect(() => {
-        state.checkStrictly = props.checkStrictly;
-      });
+      // update-begin--author:liaozhiyang---date:20240426---for：【issues/1151】层级独立时勾选了父级，然后点击层级关联子级视觉上勾选了，但是保存子级没存上
+      watch(
+        () => props.checkStrictly,
+        () => {
+          state.checkStrictly = props.checkStrictly;
+          nextTick(() => {
+            const value = treeRef.value?.checkedKeys;
+            handleCheck([...value]);
+          });
+        }
+      );
+      // update-end--author:liaozhiyang---date:20240426---for：【issues/1151】层级独立时勾选了父级，然后点击层级关联子级视觉上勾选了，但是保存子级没存上
 
       const instance: TreeActionType = {
         setExpandedKeys,
@@ -444,7 +461,7 @@
             )}
             <Spin spinning={unref(props.loading)} tip="加载中...">
               <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
-                <Tree {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
+                <Tree ref={treeRef} {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
               </ScrollContainer>
               <Empty
                 v-show={unref(getNotFound)}

@@ -52,6 +52,7 @@
 
   import DepartRoleDataRuleDrawer from './DepartRoleDataRuleDrawer.vue';
   import { queryTreeListForDeptRole, queryDeptRolePermission, saveDeptRolePermission } from '../depart.user.api';
+  import { translateTitle } from "@/utils/common/compUtils";
 
   defineEmits(['register']);
   const { createMessage } = useMessage();
@@ -83,7 +84,9 @@
       if (ids.length > 0) {
         allTreeKeys.value = ids;
         expandedKeys.value = ids;
-        treeData.value = treeList;
+        //update-begin---author:wangshuai---date:2024-04-08---for:【issues/1169】我的部门功能中的【部门权限】中未翻译 t('') 多语言---
+        treeData.value = translateTitle(treeList);
+        //update-end---author:wangshuai---date:2024-04-08---for:【issues/1169】我的部门功能中的【部门权限】中未翻译 t('') 多语言---
         // 查询角色授权
         checkedKeys.value = await queryDeptRolePermission({ roleId: roleId.value });
         lastCheckedKeys.value = [checkedKeys.value];

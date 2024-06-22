@@ -74,7 +74,8 @@
     clickToRowSelect: false,
     bordered: true,
     showIndexColumn: false,
-    tableSetting: { fullScreen: true },
+    // 【issues/1064】列设置的 cacheKey
+    tableSetting: { fullScreen: true, cacheKey: 'role_user_table' },
     canResize: false,
     rowKey: 'id',
     actionColumn: {

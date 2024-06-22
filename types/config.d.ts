@@ -24,6 +24,9 @@ export interface MenuSetting {
   mode: MenuModeEnum;
   type: MenuTypeEnum;
   theme: ThemeEnum;
+  // update-begin--author:liaozhiyang---date:20240408---for：【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
+  isThemeBright: boolean;
+  // update-end--author:liaozhiyang---date:20240408---for：【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
   topMenuAlign: 'start' | 'center' | 'end';
   trigger: TriggerEnum;
   accordion: boolean;
@@ -48,18 +51,20 @@ export interface HeaderSetting {
   fixed: boolean;
   show: boolean;
   theme: ThemeEnum;
-  // Turn on full screen
+  // 是否显示全屏按钮
   showFullScreen: boolean;
-  // Whether to show the lock screen
+  // 是否显示锁屏按钮
   useLockPage: boolean;
-  // Show document button
+  // 是否显示文档连接
   showDoc: boolean;
-  // Show message center button
+  // 是否显示消息图标
   showNotice: boolean;
+  // 是否显示搜索按钮
   showSearch: boolean;
 }
 
 export interface LocaleSetting {
+  // 是否显示国际化切换按钮
   showPicker: boolean;
   // Current language
   locale: LocaleType;
@@ -153,6 +158,8 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
+  // 短标题
+  shortTitle: string;
 }
 export interface GlobEnvConfig {
   // Site title

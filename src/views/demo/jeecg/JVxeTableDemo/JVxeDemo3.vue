@@ -17,6 +17,8 @@
       sortKey="sortNum"
       :sortBegin="3"
       rowSelection
+      dragSortFixed="none"
+      rowSelectionFixed="none"
       :maxHeight="580"
       :columns="table1.columns"
       :dataSource="table1.data"
@@ -62,7 +64,7 @@
       {
         title: '字段长度',
         key: 'dbLength',
-        width: 240,
+        width: 2400,
         type: JVxeTypes.inputNumber,
         defaultValue: 32,
       },

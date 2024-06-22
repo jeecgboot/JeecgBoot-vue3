@@ -1,6 +1,6 @@
 <template>
   <div class="comment-tabs-warp" v-if="showStatus">
-    <a-tabs @change="handleChange" :animated="false">
+    <a-tabs v-if="show" @change="handleChange" :animated="false">
       <a-tab-pane v-if="showComment" tab="评论" key="comment" class="comment-list-tab">
         <comment-list :tableName="tableName" :dataId="dataId" :datetime="datetime1" :otherHeight="otherHeight"></comment-list>
       </a-tab-pane>
@@ -20,7 +20,7 @@
    * 评论区域
    */
   import { propTypes } from '/@/utils/propTypes';
-  import { computed, ref } from 'vue';
+  import { computed, ref, nextTick } from 'vue';
   import CommentList from './CommentList.vue';
   import CommentFiles from './CommentFiles.vue';
   import DataLogList from './DataLogList.vue';
@@ -55,6 +55,7 @@
       const datetime1 = ref(1);
       const datetime2 = ref(1);
       const datetime3 = ref(1);
+      const show = ref(true);
       function handleChange(e) {
         let temp = new Date().getTime();
         if (e == 'comment') {
@@ -72,6 +73,13 @@
         datetime1.value = temp;
         datetime2.value = temp;
         datetime3.value = temp;
+        // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-486】再次打开重置组件内的状态
+        // 再次打开重置组件内的状态
+        show.value = false;
+        nextTick(() => {
+          show.value = true;
+        });
+        // update-end--author:liaozhiyang---date:20240527---for：【TV360X-486】再次打开重置组件内的状态
       }
 
       return {
@@ -80,7 +88,8 @@
         datetime1,
         datetime2,
         datetime3,
-        reload
+        reload,
+        show,
       };
     },
   };

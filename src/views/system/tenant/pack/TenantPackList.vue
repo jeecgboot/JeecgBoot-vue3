@@ -24,7 +24,7 @@
   import { reactive, ref, unref } from 'vue';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { packColumns, userColumns, packFormSchema } from '../tenant.data';
-  import { getTenantUserList, leaveTenant, packList, deletePackPermissions } from '../tenant.api';
+  import { getTenantUserList, leaveTenant, packList, deleteTenantPack } from '../tenant.api';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { BasicTable, TableAction } from '/@/components/Table';
   import TenantPackMenuModal from './TenantPackMenuModal.vue';
@@ -130,7 +130,7 @@
        return;
     }
     //update-end---author:wangshuai ---date:20230222  for：系统默认产品包不允许删除------------
-    await deletePackPermissions({ ids: record.id }, success);
+    await deleteTenantPack({ ids: record.id }, success);
   }
 
   /**
@@ -152,7 +152,7 @@
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
-        await deletePackPermissions({ ids: selectedRowKeys.value.join(',')}, success);
+        await deleteTenantPack({ ids: selectedRowKeys.value.join(',')}, success);
       }
     })
   }

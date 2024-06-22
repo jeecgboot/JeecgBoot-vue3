@@ -45,16 +45,52 @@
 
       useWindowSizeFn(setModalHeight.bind(null, false));
 
-      useMutationObserver(
-        spinRef,
+      // update-begin--author:liaozhiyang---date:2024-04-18---for：【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
+      // update-begin--author:liaozhiyang---date:2024-05-30---for：【TV360X-145】将弹窗还原全屏后，关闭再打开窗口变小了
+      let observer,
+        recordCount: any = {};
+      watch(
+        () => props.visible,
         () => {
-          setModalHeight();
+          if (props.visible && !observer && !(props.maxHeight || props.height)) {
+            recordCount = {};
+            observer = useMutationObserver(
+              spinRef,
+              () => {
+                setModalHeight({
+                  source: 'muob',
+                  callBack: (height) => {
+                    const count = recordCount[height];
+                    if (count) {
+                      recordCount[height] = ++recordCount[height];
+                      if (count > 10) {
+                        observer.stop();
+                        recordCount = {};
+                        observer = null;
+                      }
+                    } else {
+                      recordCount = {};
+                      recordCount[height] = 1;
+                    }
+                  },
+                });
+              },
+              {
+                attributes: true,
+                subtree: true,
+              }
+            );
+          } else {
+            if (observer) {
+              observer.stop();
+              observer = null;
+            }
+          }
         },
-        {
-          attributes: true,
-          subtree: true,
-        }
+        { immediate: true }
       );
+      // update-end--author:liaozhiyang---date:2024-05-30---for：【TV360X-145】将弹窗还原全屏后，关闭再打开窗口变小了
+      // update-end--author:liaozhiyang---date:2024-04-18---for：【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
 
       createModalContext({
         redoModalHeight: setModalHeight,
@@ -124,16 +160,21 @@
         });
       }
 
-      async function setModalHeight() {
+      async function setModalHeight(option?) {
+        console.log("---------性能监控--------setModalHeight----------")
+        const options = option || {};
+        const source = options.source;
+        const callBack = options.callBack;
         // 解决在弹窗关闭的时候监听还存在,导致再次打开弹窗没有高度
         // 加上这个,就必须在使用的时候传递父级的visible
         if (!props.visible) return;
         const wrapperRefDom = unref(wrapperRef);
         if (!wrapperRefDom) return;
-
-        const bodyDom = wrapperRefDom.$el.parentElement;
+        // update-begin--author:liaozhiyang---date:20240320---for：【QQYUN-8573】BasicModal组件在非全屏的情况下最大高度获取异常，不论内容高度是否超出屏幕高度，都等于内容高度
+        const bodyDom = wrapperRefDom.$el.parentElement?.parentElement?.parentElement;
+        // update-end--author:liaozhiyang---date:20240320---for：BasicModal组件在非全屏的情况下最大高度获取异常，不论内容高度是否超出屏幕高度，都等于内容高度
         if (!bodyDom) return;
-        bodyDom.style.padding = '0';
+        // bodyDom.style.padding = '0';
         await nextTick();
 
         try {
@@ -162,6 +203,12 @@
           } else {
             realHeightRef.value = props.height ? props.height : realHeight > maxHeight ? maxHeight : realHeight;
           }
+          // update-begin--author:liaozhiyang---date:2024-04-18---for：【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
+          if (source == 'muob') {
+            callBack(realHeightRef.value);
+          }
+          // update-end--author:liaozhiyang---date:2024-04-18---for：【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
+          
           emit('height-change', unref(realHeightRef));
         } catch (error) {
           console.log(error);

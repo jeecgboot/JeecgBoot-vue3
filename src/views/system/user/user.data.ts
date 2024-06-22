@@ -147,6 +147,9 @@ export const formSchema: FormSchema[] = [
     label: '登录密码',
     field: 'password',
     component: 'StrengthMeter',
+    componentProps:{
+      autocomplete: 'new-password',
+    },
     rules: [
       {
         required: true,
@@ -217,6 +220,12 @@ export const formSchema: FormSchema[] = [
               componentProps: { options },
             },
           ]);
+          //update-begin---author:wangshuai---date:2024-05-11---for:【issues/1222】用户编辑界面“所属部门”与“负责部门”联动出错整---
+          if(!values){
+            formModel.departIds = [];
+            return;
+          }
+          //update-end---author:wangshuai---date:2024-05-11---for:【issues/1222】用户编辑界面“所属部门”与“负责部门”联动出错整---
           //所属部门修改后更新负责部门数据
           formModel.departIds && (formModel.departIds = formModel.departIds.filter((item) => values.value.indexOf(item) > -1));
         },
@@ -289,6 +298,7 @@ export const formSchema: FormSchema[] = [
     label: '邮箱',
     field: 'email',
     component: 'Input',
+    required: true,
     dynamicRules: ({ model, schema }) => {
       return [
         { ...rules.duplicateCheckRule('sys_user', 'email', model, schema, true)[0], trigger: 'blur' },
@@ -300,6 +310,7 @@ export const formSchema: FormSchema[] = [
     label: '手机号码',
     field: 'phone',
     component: 'Input',
+    required: true,
     dynamicRules: ({ model, schema }) => {
       return [
         { ...rules.duplicateCheckRule('sys_user', 'phone', model, schema, true)[0], trigger: 'blur' },
@@ -441,7 +452,7 @@ export const formQuitAgentSchema: FormSchema[] = [
   {
     field: 'agentUserName',
     label: '交接人员',
-    required: true,
+    //required: true,
     component: 'JSelectUser',
     componentProps: {
       rowKey: 'username',
@@ -453,7 +464,7 @@ export const formQuitAgentSchema: FormSchema[] = [
     field: 'startTime',
     label: '交接开始时间',
     component: 'DatePicker',
-    required: true,
+    //required: true,
     componentProps: {
       showTime: true,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -465,7 +476,7 @@ export const formQuitAgentSchema: FormSchema[] = [
     field: 'endTime',
     label: '交接结束时间',
     component: 'DatePicker',
-    required: true,
+    //required: true,
     componentProps: {
       showTime: true,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',

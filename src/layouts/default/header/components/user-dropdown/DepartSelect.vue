@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="config" :title="currTitle" v-model:visible="visible" wrapClassName="loginSelectModal">
+  <BasicModal v-bind="config" :maxHeight="500" :title="currTitle" v-model:visible="visible" wrapClassName="loginSelectModal">
     <a-form ref="formRef" v-bind="layout" :colon="false" class="loginSelectForm">
       <a-form-item v-if="isMultiTenant" :validate-status="validate_status">
         <!--label内容-->

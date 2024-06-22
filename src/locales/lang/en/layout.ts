@@ -17,11 +17,14 @@ export default {
     tooltipExitFull: 'Exit Full Screen',
 
     // lock
-    lockScreenPassword: 'Lock screen password',
+    lockScreenPassword: 'Password',
     lockScreen: 'Lock screen',
     lockScreenBtn: 'Locking',
 
     home: 'Home',
+    welcomeIn: 'Welcome in',
+    refreshCacheComplete: 'Refresh cache complete',
+    refreshCacheFailure: 'Refresh cache failure',
   },
   multipleTab: {
     reload: 'Refresh current',
@@ -118,5 +121,12 @@ export default {
     triggerClick: 'Click',
 
     mixSidebarFixed: 'Fixed expanded menu',
+  },
+  changePassword: {
+    changePassword: 'Change password',
+    oldPassword: 'Old password',
+    newPassword: 'New password',
+    confirmNewPassword: 'Confirm new password',
+    pleaseEnterNewPassword: 'Please enter new password',
   },
 };

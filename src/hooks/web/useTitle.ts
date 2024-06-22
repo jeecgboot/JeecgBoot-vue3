@@ -1,4 +1,5 @@
-import { watch, unref } from 'vue';
+import type {Menu} from "@/router/types";
+import { ref, watch, unref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useTitle as usePageTitle } from '@vueuse/core';
 import { useGlobSetting } from '/@/hooks/setting';
@@ -18,9 +19,11 @@ export function useTitle() {
 
   const pageTitle = usePageTitle();
 
+  const menus = ref<Menu[] | null>(null)
+
   watch(
     [() => currentRoute.value.path, () => localeStore.getLocale],
-    () => {
+    async () => {
       const route = unref(currentRoute);
 
       if (route.name === REDIRECT_NAME) {
@@ -28,16 +31,17 @@ export function useTitle() {
       }
       // update-begin--author:liaozhiyang---date:20231110---for：【QQYUN-6938】online菜单名字和页面title不一致
       if (route.params && Object.keys(route.params).length) {
-        getMenus().then((menus) => {
-          const getTitle = getMatchingRouterName(menus, route.fullPath);
-          let tTitle = '';
-          if (getTitle) {
-            tTitle = t(getTitle);
-          } else {
-            tTitle = t(route?.meta?.title as string);
-          };
-          pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
-        });
+        if (!menus.value) {
+          menus.value = await getMenus();
+        }
+        const getTitle = getMatchingRouterName(menus.value, route.fullPath);
+        let tTitle = '';
+        if (getTitle) {
+          tTitle = t(getTitle);
+        } else {
+          tTitle = t(route?.meta?.title as string);
+        }
+        pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
       } else {
         const tTitle = t(route?.meta?.title as string);
         pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;

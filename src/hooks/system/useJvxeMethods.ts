@@ -65,7 +65,9 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
           if(e.paneKey){
             activeKey.value = e.paneKey
           }else{
-            activeKey.value = e.index == null ? unref(activeKey) : refKeys.value[e.index];
+            //update-begin-author:liusq date:2024-06-12 for: TV360X-478 一对多tab，校验未通过时，tab没有跳转
+            activeKey.value = e.subIndex == null ? (e.index == null ? unref(activeKey) : refKeys.value[e.index]) : Object.keys(tableRefs)[e.subIndex];
+            //update-end-author:liusq date:2024-06-12  for: TV360X-478 一对多tab，校验未通过时，tab没有跳转
           }
           //update-end-author:taoyan date:2022-11-22 for: VUEN-2866【代码生成】Tab风格 一对多子表校验不通过时，点击提交表单空白了，流程附加页面也有此问题
         } else {

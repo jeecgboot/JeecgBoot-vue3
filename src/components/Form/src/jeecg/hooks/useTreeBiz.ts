@@ -3,7 +3,7 @@ import { inject, reactive, ref, computed, unref, watch, nextTick } from 'vue';
 import { TreeActionType } from '/@/components/Tree';
 import { listToTree } from '/@/utils/common/compUtils';
 
-export function useTreeBiz(treeRef, getList, props, realProps) {
+export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   //接收下拉框选项
   const selectOptions = inject('selectOptions', ref<Array<object>>([]));
   //接收已选择的值
@@ -199,7 +199,7 @@ export function useTreeBiz(treeRef, getList, props, realProps) {
       const options = <any[]>[];
       optionData.forEach((item) => {
         //update-begin-author:taoyan date:2022-7-4 for: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
-        options.push({ label: item[props.titleKey], value: item[props.rowKey] });
+        options.push({ label: item[props.labelKey], value: item[props.rowKey] });
         //update-end-author:taoyan date:2022-7-4 for: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
       });
       selectOptions.value = options;
@@ -252,6 +252,9 @@ export function useTreeBiz(treeRef, getList, props, realProps) {
       await onLoadData(null, null);
     } else {
       openModal.value = false;
+      // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-414】部门设置了默认值，查询重置变成空了(同步JSelectUser组件改法)
+      emit?.('close');
+      // update-end--author:liaozhiyang---date:20240527---for：【TV360X-414】部门设置了默认值，查询重置变成空了(同步JSelectUser组件改法)
     }
   }
 

@@ -28,7 +28,7 @@
               </template>
             </template>
 
-            <a-col :md="8" :sm="8">
+            <a-col :md="8" :sm="8" v-if="showAdvancedButton">
               <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
                 <a-col :lg="6">
                   <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset">重置</a-button>
@@ -82,7 +82,7 @@
         loading: true,
       }),
     },
-    props: ['multi', 'code', 'sorter', 'groupId', 'param'],
+    props: ['multi', 'code', 'sorter', 'groupId', 'param','showAdvancedButton'],
     emits: ['ok', 'register'],
     setup(props, { emit, refs }) {
       const { createMessage } = useMessage();

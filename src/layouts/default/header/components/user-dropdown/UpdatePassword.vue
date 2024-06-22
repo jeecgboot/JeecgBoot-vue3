@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="修改密码" @ok="handleSubmit" width="600px">
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="title" @ok="handleSubmit" width="600px">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -11,43 +11,52 @@
   import BasicForm from '/@/components/Form/src/BasicForm.vue';
   import { useForm } from '/@/components/Form/src/hooks/useForm';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { useLocaleStore } from '/@/store/modules/locale';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  const localeStore = useLocaleStore();
+  const { t } = useI18n();
   // 声明Emits
   const emit = defineEmits(['register']);
   const $message = useMessage();
   const formRef = ref();
   const username = ref('');
+  // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+  const title = ref(t('layout.changePassword.changePassword'));
   //表单配置
   const [registerForm, { resetFields, validate, clearValidate }] = useForm({
     schemas: [
       {
-        label: '旧密码',
+        label: t('layout.changePassword.oldPassword'),
         field: 'oldpassword',
         component: 'InputPassword',
         required: true,
       },
       {
-        label: '新密码',
+        label: t('layout.changePassword.newPassword'),
         field: 'password',
         component: 'StrengthMeter',
         componentProps: {
-          placeholder: '请输入新密码',
+          placeholder: t('layout.changePassword.pleaseEnterNewPassword'),
         },
         rules: [
           {
             required: true,
-            message: '请输入新密码',
+            message: t('layout.changePassword.pleaseEnterNewPassword'),
           },
         ],
       },
       {
-        label: '确认新密码',
+        label: t('layout.changePassword.confirmNewPassword'),
         field: 'confirmpassword',
         component: 'InputPassword',
         dynamicRules: ({ values }) => rules.confirmPassword(values, true),
       },
     ],
     showActionButtonGroup: false,
+    wrapperCol: null,
+    labelWidth: localeStore.getLocale == 'zh_CN' ? 100 : 160,
   });
+  // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
   //表单赋值
   const [registerModal, { setModalProps, closeModal }] = useModalInner();
 
@@ -85,6 +94,7 @@
   }
 
   defineExpose({
+    title,
     show,
   });
 </script>

@@ -102,7 +102,7 @@
       rules: [
         {
           required: true,
-          message: '请输入aa',
+          message: '请输入规则',
           type: 'array',
         },
       ],

@@ -105,14 +105,23 @@
   @prefix-cls: ~'@{namespace}-tinymce-img-upload';
 
   .@{prefix-cls} {
-    position: absolute;
-    top: 4px;
-    right: 10px;
-    z-index: 20;
-
+    background-color: @primary-color;
+    margin: 0 3px;
     &.fullscreen {
       position: fixed;
       z-index: 10000;
     }
+    // update-begin--author:liaozhiyang---date:20230326---for：【QQYUN-8647】online tinymce组件上传图片按遮挡了控件栏的全屏按钮
+    .ant-btn {
+      padding: 2px 4px;
+      font-size: 12px;
+      height: 24px;
+      // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-235】富文本禁用状态下图片上传按钮文字看不清
+      &.is-disabled {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      // update-end--author:liaozhiyang---date:20240524---for：【TV360X-235】富文本禁用状态下图片上传按钮文字看不清
+    }
+    // update-end--author:liaozhiyang---date:20230326---for：【QQYUN-8647】online tinymce组件上传图片按遮挡了控件栏的全屏按钮
   }
 </style>

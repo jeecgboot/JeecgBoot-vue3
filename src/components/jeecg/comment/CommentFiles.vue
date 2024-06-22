@@ -145,6 +145,9 @@
       }
       
       function onSelectFileOk(temp) {
+        // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-935】从知识库选择文件判断下是否没选
+        if (temp.id === '') return;
+        // update-end--author:liaozhiyang---date:20240603---for：【TV360X-935】从知识库选择文件判断下是否没选
         let arr = selectFileList.value;
         arr.push({
           ...temp,

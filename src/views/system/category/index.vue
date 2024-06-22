@@ -161,7 +161,9 @@
           await expandTreeNode(values.pid);
         //update-end-author:liusq---date:20230411--for: [issue/4550]分类字典数据量过多会造成数据查询时间过长--- 
         }else{
-          expandedRowKeys.value = [];
+          //update-begin-author:wangshuai---date:20240319--for: 字典树删除之后其他节点出现loading---
+          //expandedRowKeys.value = [];
+          //update-end-author:wangshuai---date:20240319--for: 字典树删除之后其他节点出现loading--- 
           for (let key of unref(expandedArr)) {
             await expandTreeNode(key);
           }

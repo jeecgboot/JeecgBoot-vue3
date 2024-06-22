@@ -29,7 +29,7 @@
     <TenantPackList @register="registerPackModal" />
   </div>
 </template>
-<script lang="ts" name="my-tenant-list" setup>
+<script lang="ts" name="tenant-my-tenant-list" setup>
   import { onMounted, ref, unref } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';

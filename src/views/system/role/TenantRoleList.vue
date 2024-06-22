@@ -29,7 +29,7 @@
   <!--角色详情-->
   <RoleDesc @register="registerDesc"></RoleDesc>
 </template>
-<script lang="ts" name="system-role" setup>
+<script lang="ts" name="tenant-role-list" setup>
   import { onMounted, ref } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useDrawer } from '/@/components/Drawer';

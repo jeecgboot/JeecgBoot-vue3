@@ -253,16 +253,12 @@
       changeOwenUserTenant({ userId:userId, tenantId:unref(tenantId) }).then((res) =>{
         if(res.success){
           createMessage.success("交接成功");
-          //update-begin---author:wangshuai ---date:20230721  for：【QQYUN-5847】租户管理员办理交接，不是创建者不需要刷新浏览器------------
-          let username = userStore.userInfo?.username;
+          let username = userStore.getUserInfo?.username;
           if(username == handOverUserName.value){
-            //update-begin---author:wangshuai ---date:20230724  for：如果登录人和被交接人是一个人,直接退出登录------------
             userStore.logout(true);
-            //update-end---author:wangshuai ---date:20230724  for：如果登录人和被交接人是一个人，直接退出登录------------
           }else{
             reload();
           }
-          //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5847】租户管理员办理交接，不是创建者不需要刷新浏览器------------
         } else {
           createMessage.warning(res.message);
         }

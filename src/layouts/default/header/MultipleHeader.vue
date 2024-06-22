@@ -19,8 +19,9 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useLayoutHeight } from '../content/useContentViewHeight';
   import { TabsThemeEnum } from '/@/enums/appEnum';
-
-  const HEADER_HEIGHT = 48;
+  // update-begin--author:liaozhiyang---date:20240407---for：【QQYUN-8774】网站header区域加高
+  const HEADER_HEIGHT = 60;
+  // update-begin--author:liaozhiyang---date:20240407---for：【【QQYUN-8774】网站header区域加高
 
   // updateBy:sunjianlei---updateDate:2021-09-03---修改tab切换栏样式：更改高度
   const TABS_HEIGHT = 32;

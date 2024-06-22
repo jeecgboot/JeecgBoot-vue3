@@ -19,11 +19,15 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { JDragConfigEnum } from '/@/enums/jeecgEnum';
 import { useSso } from '/@/hooks/web/useSso';
 import { isOAuth2AppEnv } from "/@/views/sys/login/useLogin";
+import { getUrlParam } from "@/utils";
+interface dictType {
+  [key: string]: any;
+}
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
-  dictItems?: [];
+  dictItems?: dictType | null;
   sessionTimeout?: boolean;
   lastUpdateTime: number;
   tenantid?: string | number;
@@ -41,7 +45,7 @@ export const useUserStore = defineStore({
     // 角色列表
     roleList: [],
     // 字典
-    dictItems: [],
+    dictItems: null,
     // session过期时间
     sessionTimeout: false,
     // Last fetch time
@@ -56,6 +60,9 @@ export const useUserStore = defineStore({
   }),
   getters: {
     getUserInfo(): UserInfo {
+      if(this.userInfo == null){
+        this.userInfo = getAuthCache<UserInfo>(USER_INFO_KEY)!=null ? getAuthCache<UserInfo>(USER_INFO_KEY) : null;
+      }
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
     getLoginInfo(): LoginInfo {
@@ -106,6 +113,16 @@ export const useUserStore = defineStore({
       this.dictItems = dictItems;
       setAuthCache(DB_DICT_DATA_KEY, dictItems);
     },
+    setAllDictItemsByLocal() {
+      // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+      if (!this.dictItems) {
+        const allDictItems = getAuthCache(DB_DICT_DATA_KEY);
+        if (allDictItems) {
+          this.dictItems = allDictItems;
+        }
+      }
+      // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+    },
     setTenant(id) {
       this.tenantid = id;
       setAuthCache(TENANT_ID, id);
@@ -118,7 +135,7 @@ export const useUserStore = defineStore({
     },
     resetState() {
       this.userInfo = null;
-      this.dictItems = [];
+      this.dictItems = null;
       this.token = '';
       this.roleList = [];
       this.sessionTimeout = false;
@@ -169,15 +186,19 @@ export const useUserStore = defineStore({
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
-        const permissionStore = usePermissionStore();
-        if (!permissionStore.isDynamicAddedRoute) {
-          const routes = await permissionStore.buildRoutesAction();
-          routes.forEach((route) => {
-            router.addRoute(route as unknown as RouteRecordRaw);
-          });
-          router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
-          permissionStore.setDynamicAddedRoute(true);
-        }
+        //update-begin---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
+        // // 构建后台菜单路由
+        // const permissionStore = usePermissionStore();
+        // if (!permissionStore.isDynamicAddedRoute) {
+        //   const routes = await permissionStore.buildRoutesAction();
+        //   routes.forEach((route) => {
+        //     router.addRoute(route as unknown as RouteRecordRaw);
+        //   });
+        //   router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+        //   permissionStore.setDynamicAddedRoute(true);
+        // }
+        //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
+        
         await this.setLoginInfo({ ...data, isLogin: true });
         //update-begin-author:liusq date:2022-5-5 for:登录成功后缓存拖拽模块的接口前缀
         localStorage.setItem(JDragConfigEnum.DRAG_BASE_URL, useGlobSetting().domainUrl);
@@ -190,18 +211,29 @@ export const useUserStore = defineStore({
         if (redirect && goHome) {
         //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
           // update-begin--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
-          const publicPath = import.meta.env.VITE_PUBLIC_PATH;
+          let publicPath = import.meta.env.VITE_PUBLIC_PATH;
           if (publicPath && publicPath != '/') {
+            // update-begin--author:liaozhiyang---date:20240509---for：【issues/1147】登录跳转时去掉发布路径的最后一个/以解决404问题
+            if (publicPath.endsWith('/')) {
+              publicPath = publicPath.slice(0, -1);
+            }
             redirect = publicPath + redirect;
           }
-          // update-end--author:liaozhiyang---date:20240104---for：【QQYUN-7804】部署生产环境，登录跳转404问题
+          // update-end--author:liaozhiyang---date:20240509---for：【issues/1147】登录跳转时去掉发布路径的最后一个/以解决404问题
           // 当前页面打开
           window.open(redirect, '_self')
           return data;
         }
         // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
 
-        goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        //update-begin---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
+        let ticket = getUrlParam('ticket');
+        if(ticket){
+          goHome && (window.location.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        }else{
+          goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
+        }
+        //update-end---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
       }
       return data;
     },
@@ -281,6 +313,11 @@ export const useUserStore = defineStore({
       this.setUserInfo(null);
       this.setLoginInfo(null);
       this.setTenant(null);
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-23】退出登录后会提示「Token时效，请重新登录」
+      setTimeout(() => {
+        this.setAllDictItems(null);
+      }, 1e3);
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-23】退出登录后会提示「Token时效，请重新登录」
       //update-begin-author:liusq date:2022-5-5 for:退出登录后清除拖拽模块的接口前缀
       localStorage.removeItem(JDragConfigEnum.DRAG_BASE_URL);
       //update-end-author:liusq date:2022-5-5 for: 退出登录后清除拖拽模块的接口前缀

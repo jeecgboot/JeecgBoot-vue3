@@ -32,7 +32,7 @@ export const settingList = [
   },
   {
     key: '2',
-    name: '我的租户',
+    name: '我的组织',
     component: 'TenantSetting',
     isSlot:false,
     icon:'ant-design:team-outlined',

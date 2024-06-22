@@ -65,12 +65,15 @@
   import { useFullScreen } from './hooks/useModalFullScreen';
   import { omit } from 'lodash-es';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useAppInject } from '/@/hooks/web/useAppInject';
+
+
   export default defineComponent({
     name: 'BasicModal',
     components: { Modal, ModalWrapper, ModalClose, ModalFooter, ModalHeader },
     inheritAttrs: false,
     props: basicProps,
-    emits: ['visible-change', 'open-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'update:open', 'fullScreen'],
+    emits: ['visible-change', 'open-change', 'height-change', 'cancel', 'ok', 'register', 'update:visible', 'update:open', 'fullScreen','comment-open'],
     setup(props, { emit, attrs , slots}) {
       const visibleRef = ref(false);
       const propsRef = ref<Partial<ModalProps> | null>(null);
@@ -94,13 +97,21 @@
       if (instance) {
         emit('register', modalMethods, instance.uid);
       }
+      const { getIsMobile } = useAppInject();
 
       // Custom title component: get title
       const getMergeProps = computed((): Recordable => {
-        return {
+        const result = {
           ...props,
           ...(unref(propsRef) as any),
         };
+        // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        if (getIsMobile.value) {
+          result.canFullscreen = false;
+          result.defaultFullscreen = true;
+        }
+        // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        return result;
       });
         //update-begin-author:liusq date:2023-05-25 for:【issues/4856】Modal控件设置 :title = null 无效
         //是否未设置标题
@@ -153,6 +164,11 @@
 
       watchEffect(() => {
         fullScreenRef.value = !!props.defaultFullscreen;
+        // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+        if (getIsMobile.value) {
+          fullScreenRef.value = true
+        }
+        // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
       });
 
       watchEffect(() => {
@@ -167,6 +183,7 @@
         () => unref(visibleRef),
         (v) => {
           emit('visible-change', v);
+          emit('open-change', v);
           emit('update:visible', v);
           emit('update:open', v);
           instance && modalMethods.emitVisible?.(v, instance.uid);
@@ -210,6 +227,11 @@
         }
         if (Reflect.has(props, 'defaultFullscreen')) {
           fullScreenRef.value = !!props.defaultFullscreen;
+           // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
+          if (getIsMobile.value) {
+            fullScreenRef.value = true
+          }
+          // update-end--author:liaozhiyang---date:20240326---for：【QQYUN-8643】弹窗移动端弹窗统一全屏
         }
       }
 
@@ -242,6 +264,9 @@
         }else{
           commentSpan.value = 0
         }
+        // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+        emit('comment-open', commentSpan.value === 0, commentSpan.value);
+        // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
       }
       //update-end-author:taoyan date:2022-7-18 for: modal支持评论 slot
 
@@ -294,5 +319,10 @@
   .jeecg-modal-wrapper,
   .jeecg-modal-content {
     height: 100%;
+  }
+  html[data-theme='dark'] {
+    .jeecg-comment-outer {
+      border-left: 1px solid rgba(253, 253, 253, 0.12);
+    }
   }
 </style>

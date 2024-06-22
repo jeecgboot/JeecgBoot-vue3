@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'comment-active': commentActive}" style="border: 1px solid #eee; margin: 0; position: relative" @click="handleClickBlank">
+  <div :class="{'comment-active': commentActive}" class="comment-main" @click="handleClickBlank">
     <textarea ref="commentRef" v-model="myComment" @keyup.enter="sendComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="请输入你的评论，可以@成员" />
     <div class="comment-content comment-html-shower" :class="{'no-content':noConent, 'top-div': showHtml, 'bottom-div': showHtml == false }" v-html="commentHtml" @click="handleClickHtmlShower"></div>
     <div class="comment-buttons" v-if="commentActive">
@@ -24,7 +24,7 @@
     </div>
     <upload-chunk ref="uploadRef" :visible="uploadVisible" @select="selectFirstFile"></upload-chunk>
   </div>
-  <UserSelectModal labelKey="realname" rowKey="username" @register="registerModal" @getSelectResult="setValue" isRadioSelection></UserSelectModal>
+  <UserSelectModal  rowKey="username" @register="registerModal" @selected="setValue" :multi="false"></UserSelectModal>
   <a-modal v-model:open="visibleEmoji" :footer="null" wrapClassName="emoji-modal" :closable="false" :width="490">
     <template #title>
       <span></span>
@@ -49,7 +49,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { UserAddOutlined, PaperClipOutlined, SmileOutlined } from '@ant-design/icons-vue';
   import { Tooltip } from 'ant-design-vue';
-  import UserSelectModal from '/@/components/Form/src/jeecg/components/modal/UserSelectModal.vue';
+  import UserSelectModal from '/@/components/Form/src/jeecg/components/userSelect/UserSelectModal.vue';
   import { useModal } from '/@/components/Modal';
   import UploadChunk from './UploadChunk.vue';
   import 'emoji-mart-vue-fast/css/emoji-mart.css';
@@ -91,7 +91,7 @@
       const uploadVisible = ref(false);
       const uploadRef = ref();
       //注册model
-      const [registerModal, { openModal }] = useModal();
+      const [registerModal, { openModal, closeModal }] = useModal();
       const buttonLoading = ref(false);
       const myComment = ref<string>('');
       function sendComment() {
@@ -149,21 +149,27 @@
       function setValue(options) {
         console.log('setValue', options);
         if (options && options.length > 0) {
-          const { label, value } = options[0];
-          if (label && value) {
-            let str = `${label}[${value}]`;
+          const { realname, username } = options[0];
+          if (realname && username) {
+            let str = `${realname}[${username}]`;
             let temp = myComment.value;
             if (!temp) {
               myComment.value = '@' + str;
             } else {
               if (temp.endsWith('@')) {
-                myComment.value = temp + str;
+                myComment.value = temp + str +' ';
               } else {
-                myComment.value = '@' + str + ' ' + temp;
+                myComment.value = '@' + str + ' ' + temp + ' ';
               }
             }
+            //update-begin---author:wangshuai---date:2024-01-22---for:【QQYUN-8002】选完人，鼠标应该放到后面并在前面加上空格---
+            showHtml.value = false;
+            commentRef.value.focus();
+            commentActive.value = true;
+            //update-end---author:wangshuai---date:2024-01-22---for:【QQYUN-8002】选完人，鼠标应该放到后面并在前面加上空格---
           }
         }
+        closeModal();        
       }
 
       function handleCommentChange() {
@@ -193,7 +199,13 @@
         if (str.indexOf('::') > 0) {
           str = str.substring(0, str.indexOf(':') + 1);
         }
-        myComment.value = temp + str;
+        // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-931】评论表情插入光标位置
+        const index = commentRef.value?.selectionStart ?? temp.length;
+        // myComment.value = temp + str;
+        const startStr = temp.substring(0, index);
+        const endStr = temp.substring(index);
+        myComment.value = startStr + str + endStr;
+        // update-end--author:liaozhiyang---date:20240603---for：【TV360X-931】评论表情插入光标位置
         visibleEmoji.value = false;
         handleBlur();
       }
@@ -301,6 +313,13 @@
 </script>
 
 <style lang="less">
+  // update-begin--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
+  .comment-main {
+    border: 1px solid #eee;
+    margin: 0;
+    position: relative;
+  }
+  // update-end--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
   .comment-content {
     box-sizing: border-box;
     margin: 0;
@@ -369,8 +388,8 @@
   }
   
   .comment-active{
-    border-color: #1e88e5 !important;
-    box-shadow: 0 1px 1px 0 #90caf9, 0 1px 6px 0 #90caf9;
+    border-color: @primary-color !important;
+    // box-shadow: 0 1px 1px 0 #90caf9, 0 1px 6px 0 #90caf9;
   }
   .no-content{
     color: #a1a1a1
@@ -380,4 +399,22 @@
   .emoji-type-image.emoji-set-apple {
     background-image: url("./image/emoji.png");
   }
+  // update-begin--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
+  html[data-theme='dark'] {
+    .emoji-type-image.emoji-set-apple {
+      background-image: url("./image/emoji_native.png");
+    }
+    .comment-main {
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+    .comment-content {
+      background-color: #141414;
+      color: rgba(255, 255, 255, 0.85);
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+    .comment-buttons{
+      border-color: rgba(253, 253, 253, 0.12);
+    }
+  }
+  // update-end--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
 </style>

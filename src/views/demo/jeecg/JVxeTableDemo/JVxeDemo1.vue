@@ -24,6 +24,7 @@
     @removed="onJVxeRemove"
     @valueChange="handleValueChange"
     @blur="handleBlur"
+    :custom="true"
   >
     <template #toolbarSuffix>
       <a-button @click="handleTableCheck">表单验证</a-button>

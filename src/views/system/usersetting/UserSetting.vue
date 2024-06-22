@@ -86,6 +86,11 @@ export default defineComponent({
       }
       //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
     }
+    
+    onMounted(()=>{
+      goToMyTeantPage();
+    })
+    
     return {
       prefixCls,
       settingList,

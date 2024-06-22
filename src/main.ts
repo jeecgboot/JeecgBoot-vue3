@@ -22,7 +22,8 @@ import { registerPackages } from '/@/utils/monorepo/registerPackages';
 async function bootstrap() {
   // 创建应用实例
   const app = createApp(App);
-
+  // 【QQYUN-6329】
+  window.appRootInstance = app;
   // 多语言配置,异步情况:语言文件可以从服务器端获得
   await setupI18n(app);
 

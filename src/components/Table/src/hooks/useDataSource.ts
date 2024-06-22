@@ -133,6 +133,11 @@ export function useDataSource(
     if (row) {
       for (const field in row) {
         if (Reflect.has(record, field)) row[field] = record[field];
+        //update-begin---author:wangshuai---date:2024-06-11---for:【TV360X-437】树表 部分组件编辑完后，列表未刷新---
+        if (Reflect.has(record, field + '_dictText')) {
+          row[field + '_dictText'] = record[field + '_dictText'];
+        }
+        //update-end---author:wangshuai---date:2024-06-11---for:【TV360X-437】树表 部分组件编辑完后，列表未刷新---
       }
       return row;
     }
@@ -248,7 +253,14 @@ export function useDataSource(
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
-
+      // update-begin--author:liaozhiyang---date:20240227---for：【QQYUN-8316】table查询条件,请求剔除空字符串字段
+      for (let item of Object.entries(params)) {
+        const [key, val] = item;
+        if (val === '') {
+          delete params[key];
+        };
+      };
+      // update-end--author:liaozhiyang---date:20240227---for：【QQYUN-8316】table查询条件,请求剔除空字符串字段
       const res = await api(params);
       rawDataSourceRef.value = res;
 

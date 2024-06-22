@@ -11,7 +11,7 @@
       />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
       <!-- 欢迎语 -->
-      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> 欢迎进入 {{ title }} </span>
+      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> {{t('layout.header.welcomeIn')}} {{ title }} </span>
     </div>
     <!-- left end -->
 
@@ -38,6 +38,8 @@
       <UserDropDown :theme="getHeaderTheme" />
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
+      <!-- ai助手 -->
+      <!--<Aide></Aide>-->
     </div>
   </Header>
   <LoginSelect ref="loginSelectRef" @success="loginSelectOk"></LoginSelect>
@@ -71,6 +73,9 @@
 
   import LoginSelect from '/@/views/sys/login/LoginSelect.vue';
   import { useUserStore } from '/@/store/modules/user';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  import Aide from "@/views/dashboard/ai/components/aide/index.vue"
+  const { t } = useI18n();
 
   export default defineComponent({
     name: 'LayoutHeader',
@@ -91,6 +96,7 @@
       SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
         loading: true,
       }),
+      Aide
     },
     props: {
       fixed: propTypes.bool,
@@ -208,7 +214,8 @@
         getUseLockPage,
         loginSelectOk,
         loginSelectRef,
-        title
+        title,
+        t
       };
     },
   });
@@ -222,7 +229,9 @@
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
-    height: 48px;
+    // update-begin--author:liaozhiyang---date:20240407---for：【QQYUN-8762】顶栏高度
+    height: @header-height;
+    // update-end--author:liaozhiyang---date:20240407---for：【QQYUN-8762】顶栏高度
     align-items: center;
     
     .headerIntroductionClass {
@@ -234,16 +243,16 @@
     
     &--light {
       .headerIntroductionClass {
-        color: @breadcrumb-item-normal-color;
+        color: #000;
       }
     }
 
     &--dark {
       .headerIntroductionClass {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 1);
       }
       .anticon, .truncate {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 1);
       }
     }
     //update-end---author:scott ---date::2022-09-30  for：默认隐藏顶部菜单面包屑--------------

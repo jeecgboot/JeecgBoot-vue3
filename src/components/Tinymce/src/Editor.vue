@@ -1,13 +1,16 @@
 <template>
-  <div :class="prefixCls" :style="{ width: containerWidth }">
-    <ImgUpload
-      :fullscreen="fullscreen"
-      @uploading="handleImageUploading"
-      @done="handleDone"
-      v-if="showImageUpload"
-      v-show="editorRef"
-      :disabled="disabled"
-    />
+  <div ref="editorRootRef" :class="prefixCls" :style="{ width: containerWidth }">
+    <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-35】富文本，图片上传遮挡其他按钮 -->
+    <Teleport v-if="imgUploadShow" :to="targetElem">
+      <ImgUpload
+        :fullscreen="fullscreen"
+        @uploading="handleImageUploading"
+        @done="handleDone"
+        v-show="editorRef"
+        :disabled="disabled"
+      />
+    </Teleport>
+    <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-35】富文本，图片上传遮挡其他按钮 -->
     <Editor :id="tinymceId" ref="elRef" :disabled="disabled" :init="initOptions" :style="{ visibility: 'hidden' }" v-if="!initOptions.inline"></Editor>
     <slot v-else></slot>
   </div>
@@ -27,7 +30,7 @@
   import 'tinymce/plugins/lists';
   import 'tinymce/plugins/preview';
   import 'tinymce/plugins/image';
-  import { defineComponent, computed, nextTick, ref, unref, watch, onDeactivated, onBeforeUnmount } from 'vue';
+  import { defineComponent, computed, nextTick, ref, unref, watch, onDeactivated, onBeforeUnmount, onMounted } from 'vue';
   import ImgUpload from './ImgUpload.vue';
   import {simpleToolbar, menubar, simplePlugins} from './tinymce';
   import { buildShortUUID } from '/@/utils/uuid';
@@ -39,6 +42,7 @@
   import { useAppStore } from '/@/store/modules/app';
   import { uploadFile } from '/@/api/common/api';
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
+  import { ThemeEnum } from '/@/enums/appEnum';
   const tinymceProps = {
     options: {
       type: Object as PropType<Partial<RawEditorSettings>>,
@@ -92,6 +96,9 @@
       const fullscreen = ref(false);
       const tinymceId = ref<string>(buildShortUUID('tiny-vue'));
       const elRef = ref<Nullable<HTMLElement>>(null);
+      const editorRootRef = ref<Nullable<HTMLElement>>(null);
+      const imgUploadShow = ref(false);
+      const targetElem = ref<null | HTMLDivElement>(null);
 
       const { prefixCls } = useDesign('tinymce-container');
 
@@ -118,7 +125,12 @@
 
       const initOptions = computed(() => {
         const { height, options, toolbar, plugins, menubar } = props;
-        const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+        let publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+        // update-begin--author:liaozhiyang---date:20240320---for：【QQYUN-8571】发布路径不以/结尾资源会加载失败
+        if (!publicPath.endsWith('/')) {
+          publicPath += '/';
+        }
+        // update-end--author:liaozhiyang---date:20240320---for：【QQYUN-8571】发布路径不以/结尾资源会加载失败
         return {
           selector: `#${unref(tinymceId)}`,
           height,
@@ -226,6 +238,7 @@
         tinymce
           .init(unref(initOptions))
           .then((editor) => {
+            changeColor();
             emit('inited', editor);
           })
           .catch((err) => {
@@ -306,7 +319,60 @@
       function getUploadingImgName(name: string) {
         return `[uploading:${name}]`;
       }
-
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-35】富文本，图片上传遮挡其他按钮
+      let executeCount = 0;
+      watch(
+        () => props.showImageUpload,
+        () => {
+          mountElem();
+        }
+      );
+      onMounted(() => {
+        mountElem();
+      });
+      const mountElem = () => {
+        if (executeCount > 20) return;
+        setTimeout(() => {
+          if (targetElem.value) {
+            imgUploadShow.value = props.showImageUpload;
+          } else {
+            const toxToolbar = editorRootRef.value?.querySelector('.tox-toolbar__group');
+            if (toxToolbar) {
+              const divElem = document.createElement('div');
+              divElem.setAttribute('style', `width:64px;height:39px;display:flex;align-items:center;`);
+              toxToolbar!.appendChild(divElem);
+              targetElem.value = divElem;
+              imgUploadShow.value = props.showImageUpload;
+              executeCount = 0;
+            } else {
+              mountElem();
+            }
+          }
+          executeCount++;
+        }, 100);
+      };
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-35】富文本，图片上传遮挡其他按钮
+      // update-begin--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
+      function changeColor() {
+        setTimeout(() => {
+          const iframe = editorRootRef.value?.querySelector('iframe');
+          const body = iframe?.contentDocument?.querySelector('body');
+          if (body) {
+            if (appStore.getDarkMode == ThemeEnum.DARK) {
+              body.style.color = '#fff';
+            } else {
+              body.style.color = '#000';
+            }
+          }
+        }, 300);
+      }
+      watch(
+        () => appStore.getDarkMode,
+        () => {
+          changeColor();
+        }
+      );
+      // update-end--author:liaozhiyang---date:20240327---for：【QQYUN-8639】暗黑主题适配
       return {
         prefixCls,
         containerWidth,
@@ -319,6 +385,9 @@
         editorRef,
         fullscreen,
         disabled,
+        editorRootRef,
+        imgUploadShow,
+        targetElem,
       };
     },
   });
@@ -336,6 +405,23 @@
     textarea {
       z-index: -1;
       visibility: hidden;
+    }
+    .tox:not(.tox-tinymce-inline) .tox-editor-header {
+      padding:0;
+    }
+    // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-329】富文本禁用状态下工具栏划过边框丢失
+    .tox .tox-tbtn--disabled,
+    .tox .tox-tbtn--disabled:hover,
+    .tox .tox-tbtn:disabled,
+    .tox .tox-tbtn:disabled:hover {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg height='39px' viewBox='0 0 40 39px' width='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='38px' width='100' height='1' fill='%23d9d9d9'/%3E%3C/svg%3E");
+      background-position: left 0;
+    }
+    // update-end--author:liaozhiyang---date:20240527---for：【TV360X-329】富文本禁用状态下工具栏划过边框丢失
+  }
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
+      .tox .tox-edit-area__iframe {background-color: #141414;}
     }
   }
 </style>

@@ -44,7 +44,9 @@
       watch(
         () => props.params,
         () => {
-          !unref(isFirstLoaded) && fetch();
+          //update-begin---author:wangshuai---date:2024-02-28---for:【QQYUN-8346】 ApiTreeSelect组件入参变化时，不及时刷新数据 #1054---
+          unref(isFirstLoaded) && fetch();
+          //update-end---author:wangshuai---date:2024-02-28---for:【QQYUN-8346】 ApiTreeSelect组件入参变化时，不及时刷新数据 #1054---
         },
         { deep: true }
       );

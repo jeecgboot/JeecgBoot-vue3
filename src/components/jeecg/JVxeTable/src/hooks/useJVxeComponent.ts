@@ -22,7 +22,16 @@ export function useJVxeCompProps() {
 }
 
 export function useJVxeComponent(props: JVxeComponent.Props) {
-  const value = computed(() => props.params.row[props.params.column.property]);
+  const value = computed(() => {
+    // update-begin--author:liaozhiyang---date:20240430---for：【QQYUN-9125】oracle数据库日期类型字段会默认带上时分秒
+    const val = props.params.row[props.params.column.property];
+    if (props.type === 'date' && typeof val === 'string') {
+      return val.split(' ').shift();
+    } else {
+      return val;
+    }
+    // update-end--author:liaozhiyang---date:20240430---for：【QQYUN-9125】oracle数据库日期类型字段会默认带上时分秒
+  });
   const innerValue = ref(value.value);
   const row = computed(() => props.params.row);
   const rows = computed(() => props.params.data);
@@ -57,9 +66,19 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     if (renderOptions.isDisabledRow(row.value, rowIndex.value)) {
       cellProps['disabled'] = true;
     }
+    // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-291】没勾选同步数据库禁用排序功能
+    if (col.props && col.props.isDisabledCell) {
+      if (col.props.isDisabledCell({ row: row.value, rowIndex: rowIndex.value, column: col, columnIndex: columnIndex.value })) {
+        cellProps['disabled'] = true;
+      }
+    }
+    // update-end--author:liaozhiyang---date:20240528---for：【TV360X-291】没勾选同步数据库禁用排序功能
     // 判断是否禁用所有组件
     if (renderOptions.disabled === true) {
       cellProps['disabled'] = true;
+      // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-1068】行编辑整体禁用时上传按钮不显示
+      cellProps['disabledTable'] = true;
+      // update-end--author:liaozhiyang---date:20240607---for：【TV360X-1068】行编辑整体禁用时上传按钮不显示
     }
     //update-begin-author:taoyan date:2022-5-25 for: VUEN-1111 一对多子表 部门选择 不应该级联
     if (col.checkStrictly === true) {
@@ -121,6 +140,14 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
         vModel(newValue, row, column);
       }
       innerValue.value = enhanced.setValue(newValue, ctx);
+      // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+      if (props.type === 'date' && props.renderType === JVxeRenderType.spaner && enhanced.translate.enabled === true) {
+        if (isFunction(enhanced.translate.handler)) {
+          innerValue.value = enhanced.translate.handler(newValue, ctx);
+        }
+        return;
+      }
+      // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
       // 判断是否启用翻译
       if (props.renderType === JVxeRenderType.spaner && enhanced.translate.enabled === true) {
         if (isFunction(enhanced.translate.handler)) {

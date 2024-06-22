@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <BasicTable @register="registerTable" :dataSource="dataSource">
+    <BasicTable @register="registerTable" :dataSource="dataSource" @change="handlerTableChange">
       <template #tableTitle>
         <div slot="message">
           共追踪到 {{ dataSource.length }} 条近期HTTP请求记录
@@ -8,7 +8,13 @@
           <a @click="loadDate">立即刷新</a>
         </div>
       </template>
-
+      <template #toolbar>
+        <a-radio-group class="http-status-choose" size="small" v-model:value="query" @change="loadDate">
+          <a-radio-button value="all">全部</a-radio-button>
+          <a-radio-button value="success">成功</a-radio-button>
+          <a-radio-button value="error">错误</a-radio-button>
+        </a-radio-group>
+      </template>
     </BasicTable>
   </div>
 </template>
@@ -21,6 +27,8 @@
 
   const dataSource = ref([]);
   const { createMessage } = useMessage();
+  const query = ref('all');
+  const order = ref('');
 
   const [registerTable, { reload }] = useTable({
     columns,
@@ -30,7 +38,7 @@
   });
 
   function loadDate() {
-    getActuatorList().then((res) => {
+    getActuatorList(query.value,order.value).then((res) => {
       let filterData = [];
       for (let d of res.traces) {
         if (d.request.method !== 'OPTIONS' && d.request.uri.indexOf('httptrace') === -1) {
@@ -41,7 +49,24 @@
     });
   }
 
+  const handlerTableChange = (args, arg1, sort, action) => {
+    if ('sort' == action.action && sort.field) {
+      order.value = sort.field;
+      if (sort.order) {
+        order.value += sort.order == 'ascend' ? '/asc' : '/desc';
+      } else {
+        order.value = '';
+      }
+    }
+    loadDate();
+  };
+
   onMounted(() => {
     loadDate();
   });
 </script>
+<style scoped>
+  :deep(.jeecg-basic-table-header__toolbar) {
+    width: 150px;
+  }
+</style>

@@ -6,7 +6,9 @@
     v-bind="$attrs"
     @ok="handleSubmit"
   >
-    <BasicForm @register="registerForm"/>
+    <div class="content"> 
+      <BasicForm  @register="registerForm"/>
+    </div>
   </BasicModal>
 </template>
 
@@ -21,7 +23,8 @@ const emit = defineEmits(['register', 'success']);
 const isUpdate = ref(true);
 //表单配置
 const [registerForm, {resetFields, setFieldsValue, validate}] = useForm({
-  labelWidth: 150,
+  labelWidth: 120,
+  wrapperCol: null,
   schemas: formSchema,
   showActionButtonGroup: false,
 });
@@ -63,5 +66,7 @@ async function handleSubmit(v) {
 </script>
 
 <style lang="less" scoped>
-
+  .content {
+    padding: 20px 8% 0 4%;
+  }
 </style>

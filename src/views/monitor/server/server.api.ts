@@ -28,6 +28,8 @@ enum Api {
   tomcatSessionsActiveCurrent = '/actuator/metrics/tomcat.sessions.active.current',
   tomcatSessionsActiveMax = '/actuator/metrics/tomcat.sessions.active.max',
   tomcatSessionsRejected = '/actuator/metrics/tomcat.sessions.rejected',
+
+  memoryInfo = '/sys/actuator/memory/info',
 }
 
 /**
@@ -205,6 +207,13 @@ export const getTomcatSessionsRejected = () => {
   return defHttp.get({ url: Api.tomcatSessionsRejected }, { isTransformResponse: false });
 };
 
+/**
+ * 内存信息
+ */
+export const getMemoryInfo = () => {
+  return defHttp.get({ url: Api.memoryInfo }, { isTransformResponse: false });
+};
+
 export const getMoreInfo = (infoType) => {
   if (infoType == '1') {
     return {};
@@ -217,6 +226,9 @@ export const getMoreInfo = (infoType) => {
       'tomcat.global.request': ['.count', '.totalTime'],
       'tomcat.servlet.request': ['.count', '.totalTime'],
     };
+  }
+  if (infoType == '5') {
+    return {};
   }
 };
 
@@ -268,6 +280,19 @@ export const getTextInfo = (infoType) => {
       'tomcat.threads.config.max': { color: 'pink', text: 'tomcat 配置的线程最大数', unit: '个' },
     };
   }
+  if (infoType == '5') {
+    return {
+      'memory.physical.total': { color: 'green', text: '总物理内存', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.used': { color: 'green', text: '已使用物理内存', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.free': { color: 'green', text: '可用物理内存', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.usage': { color: 'green', text: '物理内存使用率', unit: '%', valueType: 'Number' },
+      'memory.runtime.total': { color: 'purple', text: 'JVM总内存', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.used': { color: 'purple', text: 'JVM已使用内存', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.max': { color: 'purple', text: 'JVM最大内存', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.free': { color: 'purple', text: 'JVM可用内存', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.usage': { color: 'purple', text: 'JVM内存使用率', unit: '%', valueType: 'Number' },
+    };
+  }
 };
 
 /**
@@ -305,5 +330,8 @@ export const getServerInfo = (infoType) => {
       getTomcatSessionsExpired(),
       getTomcatSessionsRejected(),
     ]);
+  }
+  if (infoType == '5') {
+    return Promise.all([getMemoryInfo()]);
   }
 };

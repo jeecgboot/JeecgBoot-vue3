@@ -35,6 +35,7 @@
   import { basicProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useAttrs } from '/@/hooks/core/useAttrs';
+  import { cloneDeep } from 'lodash-es';
 
   export default defineComponent({
     components: { Drawer, ScrollContainer, DrawerFooter, DrawerHeader },
@@ -59,7 +60,9 @@
       instance && emit('register', drawerInstance, instance.uid);
 
       const getMergeProps = computed((): DrawerProps => {
-        return deepMerge(toRaw(props), unref(propsRef));
+        // update-begin--author:liaozhiyang---date:20240320---for：【QQYUN-8389】vue3.4以上版本导致角色抽屉隐藏footer逻辑错误（toRaw改成cloneDeep，否则props的变化不会触发computed）
+        return { ...deepMerge(cloneDeep(props), unref(propsRef)) };
+        // update-end--author:liaozhiyang---date:20240320---for：【QQYUN-8389】vue3.4以上版本导致角色抽屉隐藏footer逻辑错误（toRaw改成cloneDeep，否则props的变化不会触发computed）
       });
 
       const getProps = computed((): DrawerProps => {
@@ -86,6 +89,7 @@
             opt.getContainer = `.${prefixVar}-layout-content` as any;
           }
         }
+        console.log('getProps:opt',opt);
         return opt as DrawerProps;
       });
 

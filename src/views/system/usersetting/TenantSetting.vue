@@ -1,7 +1,7 @@
 <template>
   <div class="tenant-padding" :class="[`${prefixCls}`]">
     <div class="my-tenant">
-      <span style="flex: 1">我的租户</span>
+      <span style="flex: 1">我的组织</span>
       <span class="invited" @click="invitedClick">我的受邀信息<span class="approved-count" v-if="invitedCount>0">{{invitedCount}}</span></span>
     </div>
     <div class="tenant-list" v-if="dataSource.length>0">

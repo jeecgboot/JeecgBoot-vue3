@@ -49,6 +49,19 @@ export async function registerAsyncComponent(type: JVxeTypes, promise: Promise<a
 }
 
 /**
+ * 2024-03-08
+ * liaozhiyang
+ * 异步注册vxe自定义组件
+ * 【QQYUN-8241】
+ * @param type
+ * @param promise
+ */
+export function registerASyncComponentReal(type: JVxeTypes, component) {
+  addComponent(type, component);
+  registerOneComponent(type);
+}
+
+/**
  * 安装所有vxe组件
  */
 export function registerAllComponent() {

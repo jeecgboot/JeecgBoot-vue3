@@ -89,6 +89,8 @@
       </div>
     </div>
   </div>
+  <!-- 图片验证码弹窗 -->
+  <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 <script lang="ts" name="mini-forgotpad" setup>
   import { reactive, ref, toRaw, unref } from 'vue';
@@ -99,6 +101,10 @@
   import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png'
   import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png'
   import successImg from '/@/assets/loginmini/icon/icon-success.png'
+  import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
+  import { useModal } from "@/components/Modal";
+  import { ExceptionEnum } from "@/enums/exceptionEnum";
+  const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
 
   //下一步控制
   const activeKey = ref<number>(1);
@@ -235,7 +241,13 @@
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.FORGET_PASSWORD });
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) =>{
+      if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
+        openCaptchaModal(true, {});
+      }
+    });
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {
