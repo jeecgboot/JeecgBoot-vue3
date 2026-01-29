@@ -151,7 +151,9 @@
           // update-end--author:liaozhiyang---date:20240520---for：【TV360X-146】Markdown组件去掉录音选项
           mode: 'sv',
           // cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6',
-          cdn: 'https://unpkg.com/vditor@3.10.1',
+          // fix #9316: 支持本地部署，优先使用本地资源，无网络时不依赖CDN
+          // 如需完全离线，请将vditor资源复制到public/vditor目录
+          cdn: import.meta.env.VITE_VDITOR_CDN || 'https://unpkg.com/vditor@3.10.1',
           fullscreen: {
             index: 520,
           },

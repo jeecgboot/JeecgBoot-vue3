@@ -119,12 +119,44 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     plugins: createVitePlugins(viteEnv, isBuild),
     // 预加载构建配置（首屏性能)
     optimizeDeps: {
+      // 启用缓存以提升构建速度
+      cacheDir: 'node_modules/.vite',
       esbuildOptions: {
         target: 'es2020',
+        // 启用 tree shaking
+        treeShaking: true,
       },
+      // 预构建依赖列表 - 提升后续启动速度
+      include: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'axios',
+        'dayjs',
+        'lodash-es',
+        'ant-design-vue',
+        '@ant-design/icons-vue',
+        '@ant-design/colors',
+        '@vueuse/core',
+        'vxe-table',
+        'vxe-table-plugin-antd',
+        'xe-utils',
+        'echarts',
+        'sortablejs',
+        'vue-cropper',
+        'vue-print-nb-jeecg',
+        'qrcode',
+        'xss',
+        'nprogress',
+        'path-to-regexp',
+        'qs',
+      ],
       exclude: [
         //升级vite4后，需要排除online依赖
         '@jeecg/online',
+        // tinymce 改为异步加载，排除出预构建
+        'tinymce',
+        '@tinymce/tinymce-vue',
       ],
     },
   };

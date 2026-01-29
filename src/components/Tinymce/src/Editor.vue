@@ -17,19 +17,6 @@
 </template>
 
 <script lang="ts">
-  import tinymce from 'tinymce/tinymce';
-  import Editor from '@tinymce/tinymce-vue'
-  import 'tinymce/themes/silver';
-  import 'tinymce/icons/default/icons';
-  import 'tinymce/models/dom';
-
-  // tinymce插件可按自己的需要进行导入
-  // 更多插件参考：https://www.tiny.cloud/docs/plugins/
-  import 'tinymce/plugins/fullscreen';
-  import 'tinymce/plugins/link';
-  import 'tinymce/plugins/lists';
-  import 'tinymce/plugins/preview';
-  import 'tinymce/plugins/image';
   import { defineComponent, computed, nextTick, ref, unref, watch, onDeactivated, onBeforeUnmount, onMounted } from 'vue';
   import ImgUpload from './ImgUpload.vue';
   import {simpleToolbar, menubar, simplePlugins} from './tinymce';
@@ -224,8 +211,13 @@
         destory();
       });
 
+      // 存储异步加载的 tinymce 实例
+      let asyncTinymce = null;
+
       function destory() {
-        if (tinymce !== null) {
+        if (asyncTinymce !== null) {
+          asyncTinymce?.remove?.(unref(initOptions).selector!);
+        } else if (typeof tinymce !== 'undefined' && tinymce !== null) {
           tinymce?.remove?.(unref(initOptions).selector!);
         }
       }
@@ -235,15 +227,33 @@
         if (el && el?.style && el?.style?.visibility) {
           el.style.visibility = '';
         }
-        tinymce
-          .init(unref(initOptions))
-          .then((editor) => {
-            changeColor();
-            emit('inited', editor);
-          })
-          .catch((err) => {
-            emit('init-error', err);
-          });
+        // 异步加载 tinymce 以提升启动速度
+        import('tinymce/tinymce').then(async (tinymceModule) => {
+          const tinymce = tinymceModule.default;
+          asyncTinymce = tinymce;
+          
+          // 异步加载主题和插件
+          await Promise.all([
+            import('tinymce/themes/silver'),
+            import('tinymce/icons/default/icons'),
+            import('tinymce/models/dom'),
+            import('tinymce/plugins/fullscreen'),
+            import('tinymce/plugins/link'),
+            import('tinymce/plugins/lists'),
+            import('tinymce/plugins/preview'),
+            import('tinymce/plugins/image'),
+          ]);
+          
+          tinymce
+            .init(unref(initOptions))
+            .then((editor) => {
+              changeColor();
+              emit('inited', editor);
+            })
+            .catch((err) => {
+              emit('init-error', err);
+            });
+        });
       }
 
       function initSetup(e) {
